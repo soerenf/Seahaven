@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="d.sfischer.sensorcollector">
+
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
+    <uses-permission android:name="android.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.NFC_TRANSACTION_EVENT" />
+
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+
+    <uses-permission android:name="android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND" />
+    <uses-permission android:name="android.permission.REQUEST_COMPANION_USE_DATA_IN_BACKGROUND" />
+
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
+    <uses-permission android:name="android.permission.TRANSMIT_IR" />
+
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ba_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ba_icon_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".DataCollectionActivity">
+            android:launchMode="singleTop"
+        </activity>
+        <service android:name=".ActivityRecognizedService" />
+        <receiver android:name=".NotificationReceiver">
+            <intent-filter>
+                <action android:name="YES_ACTION"/>
+                <action android:name="NO_ACTION"/>
+                <action android:name="MAYBE_ACTION"/>
+
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
+
