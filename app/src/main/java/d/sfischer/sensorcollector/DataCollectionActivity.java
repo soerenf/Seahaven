@@ -60,16 +60,29 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     private float lastZ = 0;
 
     private SensorManager sensorManager;
-    private Sensor accelerometer, light;
+    private Sensor accelerometer, light, proximity, magnet, barometer;
 
     private float deltaXMax = 0;
     private float deltaYMax = 0;
     private float deltaZMax = 0;
 
     private float lumenMax = 0; //Grenzwert sinnvoll?
-    private float lumenMin = 1000; //s.o.
+    private float lumenMin = 9000; //s.o.
+
+    private float closenessMax = 0;
+    private float closenessMin = 9000;
+
+    private float magneticityMax = 0;
+    private float magneticityMin = 9000;
+
+    private float pressureMax = 0;
+    private float pressureMin = 9000;
+
 
     private float lumen = 0;
+    private float closeness = 0;
+    private float magneticity = 0;
+    private float pressure = 0;
 
     private float deltaX = 0;
     private float deltaY = 0;
@@ -263,6 +276,59 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 }
         }
 
+
+
+        if (sensorManager != null) {
+            if (sensorManager.getDefaultSensor (Sensor.TYPE_PROXIMITY) != null)
+            {
+                // success! we have a proximity sensor
+                proximity = sensorManager.getDefaultSensor (Sensor.TYPE_PROXIMITY);
+                sensorManager.registerListener (this, proximity, SensorManager.SENSOR_DELAY_NORMAL);
+
+            }
+            else
+            {
+                System.out.println("fai! no proximity-sensor");
+            }
+        }
+
+
+
+        if (sensorManager != null) {
+            if (sensorManager.getDefaultSensor (Sensor.TYPE_MAGNETIC_FIELD) != null)
+            {
+                // success! we have a magnet sensor
+                magnet = sensorManager.getDefaultSensor (Sensor.TYPE_MAGNETIC_FIELD);
+                sensorManager.registerListener (this, magnet, SensorManager.SENSOR_DELAY_NORMAL);
+
+            }
+            else
+            {
+                System.out.println("fai! no magnet-sensor");
+            }
+        }
+
+
+        if (sensorManager != null) {
+            if (sensorManager.getDefaultSensor (Sensor.TYPE_PRESSURE) != null)
+            {
+                // success! we have a barometer
+                barometer = sensorManager.getDefaultSensor (Sensor.TYPE_PRESSURE);
+                sensorManager.registerListener (this, barometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+            }
+            else
+            {
+                System.out.println("fai! no barometer");
+            }
+        }
+
+
+
+
+
+
+
         //initialize vibration
         v = (Vibrator) this.getSystemService (Context.VIBRATOR_SERVICE);
 
@@ -300,11 +366,17 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         currentUnLockTime = findViewById (R.id.time_screen_unlocked);
     }
 
-    //onResume() register the accelerometer for listening the events
+    //onResume() register the Sensor-Manager for listening the events
+    // was wenn hier fail mit no Sensor?
+
+
     protected void onResume ( ) {
         super.onResume ();
         sensorManager.registerListener (this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener (this, light, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener (this, proximity, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener (this, magnet, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener (this, barometer, SensorManager.SENSOR_DELAY_NORMAL);
 
 
 
@@ -422,7 +494,61 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
         }
 
+        if (event.sensor.getType() == Sensor.TYPE_PROXIMITY)
+        {
+            closeness = event.values[0];
+
+            if (closeness > closenessMax) {
+                closenessMax = closeness;
+                System.out.println ("New closeness Max: "+ closenessMax);
+            }
+
+            if (closeness < closenessMin) {
+                closenessMin = closeness;
+                System.out.println ("New closeness Min: "+ closenessMin);
+            }
+
+        }
+
+        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
+        {
+            magneticity = event.values[0];
+
+            if (magneticity > magneticityMax) {
+                magneticityMax = magneticity;
+                System.out.println ("New magneticity Max: "+ magneticityMax);
+            }
+
+            if (magneticity < magneticityMin) {
+                magneticityMin = magneticity;
+                System.out.println ("New magneticity Min: "+ magneticityMin);
+            }
+
+        }
+
+        if (event.sensor.getType() == Sensor.TYPE_PRESSURE)
+        {
+            pressure = event.values[0];
+
+            if (pressure > pressureMax) {
+                pressureMax = pressure;
+                System.out.println ("New pressure Max: "+ pressureMax);
+            }
+
+            if (pressure < pressureMin) {
+                pressureMin = pressure;
+                System.out.println ("New pressure Min: "+ pressureMin);
+            }
+
+        }
+
+
+
+
+
     }
+
+
 
 
 
@@ -641,7 +767,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
 
-                WifiManager myWM = (WifiManager) context.getSystemService(context.WIFI_SERVICE);
+                WifiManager myWM = (WifiManager) context.getApplicationContext().getSystemService(WIFI_SERVICE);
 
                 //sehr viele Infos und möglichkeiten...SSIDS + weitere Infos zu den Netzen und evtl anderes?
                 //List <WifiConfiguration> netConfig = myWM.getConfiguredNetworks ();
@@ -809,8 +935,11 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                  * TelecomManager?
                  */
 
-                TelephonyManager myTM = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
-                String telephoneProvider = myTM.getSimOperatorName (); //z.B. telekom.de und NetMobil
+                TelephonyManager myTM = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+                String telephoneProvider = null; //z.B. telekom.de und NetMobil
+                if (myTM != null) {
+                    telephoneProvider = myTM.getSimOperatorName ();
+                }
                 System.out.println(telephoneProvider);
 
 
