@@ -1,7 +1,8 @@
-# SensorCollector
-Just for educational purpose
+# Sensor Collector
+###### (Working title)
+###Just for educational purpose!
 
-I am builduing this app with the purpose to educate users relating to possible information leaks he or she has just by using any app.
+I am building this app with the purpose to educate users relating to possible information leaks he or she has just by using any app.
 So don´t mess with the code and only use it to help people!
 
 The main goal is to outline the course of the day of the user with an app without permissions that are classified as dangerous.
@@ -10,5 +11,5 @@ This actions are saved in a database within the app and the assumptions can get 
 
 This verification process is needed for evaluation if the chosen approach is correct.
 
-The databse is not build to it´s end and needs more testing.
-Diffrent logged actions need to be grouped and classfied as "daily actions". This is supposed to happen by diffrent queries of the database.
+The database is not build to it´s end and needs more testing.
+Different logged actions need to be grouped and classified as "daily actions". This is supposed to happen by different queries of the database.
