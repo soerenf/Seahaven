@@ -55,28 +55,22 @@ import okhttp3.OkHttpClient;
 
 public class DataCollectionActivity extends Activity implements SensorEventListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private float lastX = 0;
-    private float lastY = 0;
-    private float lastZ = 0;
 
     private SensorManager sensorManager;
     private Sensor accelerometer, light, proximity, magnet, barometer;
+
+
+    private float lastX = 0;
+    private float lastY = 0;
+    private float lastZ = 0;
 
     private float deltaXMax = 0;
     private float deltaYMax = 0;
     private float deltaZMax = 0;
 
-    private float lumenMax = 0; //Grenzwert sinnvoll?
-    private float lumenMin = 9000; //s.o.
-
-    private float closenessMax = 0;
-    private float closenessMin = 9000;
-
-    private float magneticityMax = 0;
-    private float magneticityMin = 9000;
-
-    private float pressureMax = 0;
-    private float pressureMin = 9000;
+    private float deltaX = 0;
+    private float deltaY = 0;
+    private float deltaZ = 0;
 
 
     private float lumen = 0;
@@ -84,12 +78,22 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     private float magneticity = 0;
     private float pressure = 0;
 
-    private float deltaX = 0;
-    private float deltaY = 0;
-    private float deltaZ = 0;
+    private float lumenMax = 0; //Grenzwert sinnvoll?
+    private float lumenMin = 9001; //s.o. OVER nine thousand
+
+    private float closenessMax = 0;
+    private float closenessMin = 9001;
+
+    private float magneticityMax = 0;
+    private float magneticityMin = 9001;
+
+    private float pressureMax = 0;
+    private float pressureMin = 9001;
+
 
     private float times_unlocked = 0;
     private float screen_checked = 0;
+
 
     private float vibrateThreshold = 0;
 
@@ -98,9 +102,13 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     private TextView currentX, currentY, currentZ, maxX, maxY, maxZ, currentUnLocks, currentScreenChecks, currentScreenTime, currentUnLockTime;
 
     public Vibrator v;
+
     public String oldScreenDateString;
+
     public String newssid = "dummy SSID";
+
     public boolean isConnected;
+
     private static Context context;
 
 
@@ -108,29 +116,16 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     //für activity recog von: https://code.tutsplus.com/tutorials/how-to-recognize-user-activity-with-activity-recognition--cms-25851
 
     public GoogleApiClient mApiClient;
-    //neu?: public ActivityRecognitionClient mApiClient;
+      //neu?: public ActivityRecognitionClient mApiClient;
 
-
-    // bis hier
-
-
-    /**
-     *
-     * für https
-     *
-     */
-
+    // für https
     OkHttpClient client = new OkHttpClient();
-
-
-
-
 
 
     /**
      * Button für Start Big Data?
      * Zeitpunkt des sammelns und ende festhalten bei on exit oder destroy?
-     * was ist wenn phone leer geht?
+     * was ist wenn phone leer geht? <---dürfte durch datenbank behoben sein...auto restart noch?? wenn sowas geht
      *
      * */
 

@@ -13,3 +13,5 @@ This verification process is needed for evaluation if the chosen approach is cor
 
 The database is not build to it´s end and needs more testing.
 Different logged actions need to be grouped and classified as "daily actions". This is supposed to happen by different queries of the database.
+
+Please consider that some comments might be in german and are for debugging or future implementations.
