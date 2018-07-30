@@ -32,8 +32,10 @@ public class Happening {
     @ColumnInfo(name = "end_date")
     private long endDate;
 
+
+    // three values, yes, no and maybe
     @ColumnInfo(name = "user_approved")
-    private boolean userApproved;
+    private int userApproved;
 
 
 
@@ -94,11 +96,11 @@ public class Happening {
         this.endDate = endDate;
     }
 
-    public boolean getUserApproved() {
+    public int getUserApproved() {
         return userApproved;
     }
 
-    public void setUserApproved(boolean userApproved) {
+    public void setUserApproved(int userApproved) {
         this.userApproved = userApproved;
     }
 

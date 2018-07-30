@@ -187,56 +187,42 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
 
-        //System.out.println (());
-
-        //String url= "https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&netid=c8:0e:14:1c:a3:3c";
-
-
-        // da es ohne internet fehler wirft nach unten verschoben
-        // noch alternative adressen?
-        //String url= "https://ipapi.com/json/";
-
-
-
-        //OkHttpHandler okHttpHandler= new OkHttpHandler();
-        //okHttpHandler.execute(url);
-
         //new MakeNetworkCall ().execute ("http://ipecho.net/plain", "Get");
 
 
 
+        /**
+         *
+         *
+         * http://api.openweathermap.org/data/2.5/forecast?id=  {City ID}  &units=metric &APPID= {API Key}
+         * my API Key auf seite
+         * ID für Köln = 2886242
+         *
+         * geht aber auch mit:
+         *
+         * "http://api.openweathermap.org/data/2.5/forecast?zip=    {City ZIP,Country Code}    &units=metric   &APPID=   ";
+         *
+         * City ZIP,Country Code = z.B. 50674,de
+         *
+         * Link zu File mit adressen IDs http://bulk.openweathermap.org/sample/
+         *
+         *
+         **Funktioniert, aber strenge richtlinien nur einmal alle 10 minuten und aus JSON noch zu parsen die response....
+         */
+
+        //String urlWeather = "http://api.openweathermap.org/data/2.5/forecast?id=2886242&APPID=695c223bff9c8cb1baa8a600456b08c3";
+
+        //String urlWeather = "http://api.openweathermap.org/data/2.5/forecast?zip=50674,de&units=metric&APPID=695c223bff9c8cb1baa8a600456b08c3";
+        //OkHttpHandler okHttpHandlerWeather= new OkHttpHandler();
+        //okHttpHandlerWeather.execute(urlWeather);
 
 
 
+        //new MakeNetworkCall ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&netid="entfernt aus gründen"", "Get"); //wirft leider fehler wahrscheinlich noch ne tls klasse
+        //ipstack http://api.ipstack.com/ Parameter noch holen....
 
-
-
-
-        //new MakeNetworkCall ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&netid=c8%3A0e%3A14%3A1c%3Aa3%3A3d", "Get"); //wirft leider fehler wahrscheinlich noch ne tls klasse
-        //ipstack http://api.ipstack.com/87.79.105.127?access_key=d935baa6586ab5420baad6747fc34763
-
-        //new MakeNetworkCall().execute ("http://api.ipstack.com/87.79.105.127?access_key=d935baa6586ab5420baad6747fc34763","Get");
+        //new MakeNetworkCall().execute ("http://api.ipstack.com/  da Fehlen jetzt Parameter  ,"Get");
         //new MakeNetworkCall().execute ("https://ipapi.co/json/", "Post"); // funktioniert so nicht auch nciht als Get
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -317,10 +303,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 System.out.println("fai! no barometer");
             }
         }
-
-
-
-
 
 
 
@@ -511,12 +493,12 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
             if (magneticity > magneticityMax) {
                 magneticityMax = magneticity;
-                System.out.println ("New magneticity Max: "+ magneticityMax);
+                //System.out.println ("New magneticity Max: "+ magneticityMax);
             }
 
             if (magneticity < magneticityMin) {
                 magneticityMin = magneticity;
-                System.out.println ("New magneticity Min: "+ magneticityMin);
+                //System.out.println ("New magneticity Min: "+ magneticityMin);
             }
 
         }
@@ -784,16 +766,18 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                  * https://wigle.net/account für Infos
                  *
                  * Brauch basic auth bei wigle für query mit
-                 * API NAME: AID0a1ca0e4cd975279df7567aa58a31248
-                 * API TOKEN: fe7f2e1290272ddeefc26b61547f395a
+                 * API NAME:
+                 * API TOKEN:
                  *
                  * brauch iche auch wohl ein Post für...
                  */
 
 
                 //String url= "http://ip-api.com/json"; //alternativen?
-                String url= "https://ipapi.co/json/";
-                String url2= "http://api.ipstack.com/check?access_key=d935baa6586ab5420baad6747fc34763";
+
+
+                String urlIpapi= "https://ipapi.co/json/";
+                String urlIpstack= "http://api.ipstack.com/check?access_key=d935baa6586ab5420baad6747fc34763";
 
                 // nur wenn WIFI enabled weil sonst rest keinen Sinn macht
                 if(myWM.isWifiEnabled ()){
@@ -833,11 +817,11 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             //System.out.println("old SSID: "+ ssid+ " new SSID: "+ newssid);
                             newssid = ssid;
                         }
-                        OkHttpHandler okHttpHandler= new OkHttpHandler();
-                        okHttpHandler.execute(url);
+                        OkHttpHandler okHttpHandlerIpapi= new OkHttpHandler();
+                        okHttpHandlerIpapi.execute(urlIpapi);
 
-                        OkHttpHandler okHttpHandler2= new OkHttpHandler();
-                        okHttpHandler2.execute(url2);
+                        OkHttpHandler okHttpHandlerIpstack= new OkHttpHandler();
+                        okHttpHandlerIpstack.execute(urlIpstack);
 
 
                         // limit beachten...
@@ -856,12 +840,12 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             isConnected = true;
                             System.out.println ("Yes, we have internetz! =)");
 
-                            //OkHttpHandler okHttpHandler3= new OkHttpHandler();
-                            //okHttpHandler3.execute(url);
+                            //OkHttpHandler okHttpHandlerIpapi2= new OkHttpHandler();
+                            //okHttpHandlerIpapi2.execute(urlIpapi);
                             //sehr häufig
 
-                            //OkHttpHandler okHttpHandler4= new OkHttpHandler();
-                            //okHttpHandler4.execute(url2);
+                            //OkHttpHandler okHttpHandlerIpstack2= new OkHttpHandler();
+                            //okHttpHandlerIpstack2.execute(urlIpstack);
 
 
                         }
@@ -1208,22 +1192,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         return DataCollectionActivity.context;
     }
 
-
-
-
-
-
-    /* scheint nicht von nöten zu sein
-
-
-    @Override
-    protected void onNewIntent(Intent intent)
-    {
-        super.onNewIntent(intent);
-        setIntent(intent);
-    }
-
-     */
 }
 
 
