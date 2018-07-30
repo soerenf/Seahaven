@@ -1,6 +1,5 @@
-# Sensor Collector
-###### (Working title)
-###Just for educational purpose!
+# Sensor Collector (Working title)
+###### Just for educational purpose!
 
 I am building this app with the purpose to educate users relating to possible information leaks he or she has just by using any app.
 So don´t mess with the code and only use it to help people!
