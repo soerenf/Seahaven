@@ -39,7 +39,6 @@ public class Happening {
 
 
 
-
     public int getUid() {
         return uid;
     }
