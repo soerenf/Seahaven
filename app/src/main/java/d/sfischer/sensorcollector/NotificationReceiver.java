@@ -81,8 +81,8 @@ public class NotificationReceiver extends BroadcastReceiver {
 
 
                     // zum testen -> Funktioniert
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Zweiter","Test",13);
-                    DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (context),"Zweiter","Test");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Still",date,0);
+                    DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (context),"Still");
                 }
 
                 if (extras.containsKey ("Tilting")) {
@@ -130,13 +130,21 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Plugged USB")) {
                     System.out.println ("USB ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+
+                    Long date = extras.getLong ("timing");
+                    SimpleDateFormat sdf = new SimpleDateFormat ("dd.MM.yyyy kk:mm:ss");
+                    String timing = sdf.format (date);
+                    System.out.println (timing);
+
                     if (manager != null) {
                         manager.cancel (14);
                     }
-                    // zum testen -> Funktioniert?
 
-                    DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (context),"Zweiter","Test");
-                    DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (context),"Dritter","Test");
+
+                    // zum testen -> Funktionierte
+
+                    //DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (context),"Zweiter","Test");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"USB",date, 0);
                 }
             }
         }

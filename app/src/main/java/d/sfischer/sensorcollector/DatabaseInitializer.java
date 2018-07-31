@@ -43,18 +43,16 @@ public class DatabaseInitializer {
 
 
 
-
-
-    public static void getfromAsync(@NonNull final AppDatabase db,String firstName, String lastName) {
-        GetFromDbAsync task = new GetFromDbAsync (db, firstName, lastName);
+    public static void getfromAsync(@NonNull final AppDatabase db,String happeningName) {
+        GetFromDbAsync task = new GetFromDbAsync (db, happeningName);
         task.execute();
     }
 
-    private static void getFromDb (AppDatabase db,String firstName, String lastName){
-        Happening happening = db.happeningDao().findByName (firstName, lastName);
+    private static void getFromDb (AppDatabase db,String happeningName){
+        Happening happening = db.happeningDao().findByName (happeningName);
         if(happening != null)
         {
-            System.out.println ("############################# Name und Alter :  "+ happening.getFirstName ()+" "+ happening.getLastName ()+" "+ happening.getAge ());
+            System.out.println ("############################# Happening Name :  "+ happening.getHappeningName ());
         }
         else
             {
@@ -64,28 +62,49 @@ public class DatabaseInitializer {
 
      }
 
-
-
-
-
-
-
-    public static void addToAsync(@NonNull final AppDatabase db, String firstName, String lastName, int age) {
-        AddToDbAsync task = new AddToDbAsync (db, firstName,lastName,age);
+    public static void getAllfromAsync(@NonNull final AppDatabase db) {
+        GetAllFromDbAsync task = new GetAllFromDbAsync (db);
         task.execute();
     }
 
-    private static void addToDb (AppDatabase db, String firstName, String lastName, int age){
-        Happening happening = new Happening ();
-        happening.setFirstName (firstName);
-        happening.setLastName (lastName);
-        happening.setAge (age);
-        addHappening (db, happening);
-        System.out.println ("############################# Name:  "+ happening.getFirstName ()+" "+ happening.getLastName ());
+    private static void getAllFromDb (AppDatabase db){
+        List<Happening> happeningList = db.happeningDao().getAll ();
+        if(happeningList != null)
+        {
+            System.out.println ("############################# Happening List size "+ happeningList.size ());
+            DatabaseListDisplay.databaseList = happeningList;
+            for (int i = 0; i < happeningList.size (); i++)
+            {
+                Happening test= (happeningList.get (i));
+                System.out.println (test.getHappeningName ());
+            }
+        }
+        else
+        {
+            System.out.println ("############################# No such happening List found!");
+
+        }
+
     }
 
 
+    public static void addToAsync(@NonNull final AppDatabase db, String happeningName, long startDate, int userApproved) {
+        AddToDbAsync task = new AddToDbAsync (db, happeningName,startDate,userApproved);
+        task.execute();
+    }
 
+    private static void addToDb (AppDatabase db, String happeningName, long startDate, int userApproved){
+        Happening happening = new Happening ();
+        //happening.setFirstName (firstName);
+        //happening.setLastName (lastName);
+        //happening.setAge (age);
+        happening.setHappeningName (happeningName);
+        happening.setStartDate (startDate);
+        //happening.setEndDate ();
+        happening.setUserApproved (userApproved);
+        addHappening (db, happening);
+        System.out.println ("############################# Happening Name:  "+ happening.getHappeningName ()+" Happening Start: "+ happening.getStartDate ());
+    }
 
 
 
@@ -110,26 +129,43 @@ public class DatabaseInitializer {
 
 
 
-
-
-
     private static class GetFromDbAsync extends AsyncTask<Void, Void,Void>{
 
         private final AppDatabase mDb;
-        private final String mFirstName;
-        private final String mLastName;
+        //private final String mFirstName;
+        //private final String mLastName;
+        private final String mHappening;
 
 
-        GetFromDbAsync(AppDatabase db, String firstName, String lastName) {
+
+        GetFromDbAsync(AppDatabase db, String happening) {
             mDb = db;
-            mFirstName = firstName;
-            mLastName = lastName;
+            //mFirstName = firstName;
+            //mLastName = lastName;
+            mHappening = happening;
 
         }
 
         @Override
         protected Void doInBackground(final Void... params) {
-            getFromDb (mDb, mFirstName, mLastName);
+            getFromDb (mDb, mHappening);
+            return null;
+        }
+
+    }
+
+
+    private static class GetAllFromDbAsync extends AsyncTask<Void, Void,Void>{
+
+        private final AppDatabase mDb;
+
+        GetAllFromDbAsync(AppDatabase db) {
+            mDb = db;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            getAllFromDb (mDb);
             return null;
         }
 
@@ -137,30 +173,33 @@ public class DatabaseInitializer {
 
 
 
-
-
-
-
-
-
     private static class AddToDbAsync extends AsyncTask<String, Void,Void>{
 
         private final AppDatabase mDb;
-        private final String mFirstName;
-        private final String mLastName;
-        private final int mAge;
+        //private final String mFirstName;
+        //private final String mLastName;
+        //private final int mAge;
+        private final String mHappening;
+        private final long mStartDate;
+        //private final long mEndDate;
+        private final int mUserApproved;
 
-        AddToDbAsync ( AppDatabase db, String firstName, String lastName, int age ) {
+
+        AddToDbAsync ( AppDatabase db, String happeningName, long startDate, int userApproved  ) {       // long endDate // ,String firstName, String lastName, int age
             mDb = db;
-            mFirstName = firstName;
-            mLastName = lastName;
-            mAge = age;
+            //mFirstName = firstName;
+            //mLastName = lastName;
+            //mAge = age;
+            mHappening = happeningName;
+            mStartDate = startDate;
+            //mEndDate = endDate;
+            mUserApproved = userApproved;
 
         }
 
         @Override
         protected Void doInBackground(final String... params) {
-            addToDb (mDb, mFirstName, mLastName, mAge);
+            addToDb (mDb, mHappening, mStartDate, mUserApproved);                                     //  mHappening, mStartDate, mEndDate, mUserApproved
             return null;
         }
 

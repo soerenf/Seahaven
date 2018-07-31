@@ -180,9 +180,11 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
  *
  */
 
-        DatabaseInitializer.populateAsync(AppDatabase.getAppDatabase(this));
-        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this), "Test","Name",2);
-        DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (this), "Test","Name");
+        //DatabaseInitializer.populateAsync(AppDatabase.getAppDatabase(this));
+        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this), "Test","Name",2);
+        //DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (this), "Test","Name");
+
+
 
 
 
@@ -239,7 +241,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 }
             else
                 {
-                    System.out.println("fai! no accelerometer!");
+                    System.out.println("******************** no accelerometer!");
                 }
         }
 
@@ -253,7 +255,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 }
             else
                 {
-                    System.out.println("fai! no light-sensor");
+                    System.out.println("******************** no light-sensor");
                 }
         }
 
@@ -269,7 +271,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
             }
             else
             {
-                System.out.println("fai! no proximity-sensor");
+                System.out.println("******************** no proximity-sensor");
             }
         }
 
@@ -285,7 +287,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
             }
             else
             {
-                System.out.println("fai! no magnet-sensor");
+                System.out.println("******************** no magnet-sensor");
             }
         }
 
@@ -300,20 +302,20 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
             }
             else
             {
-                System.out.println("fai! no barometer");
+                System.out.println("******************** no barometer");
             }
         }
 
 
 
-        //initialize vibration
-        v = (Vibrator) this.getSystemService (Context.VIBRATOR_SERVICE);
+
+        //v = (Vibrator) this.getSystemService (Context.VIBRATOR_SERVICE);
 
 
 
         registerBroadcastReceiver();
 
-        //v.vibrate(1000); //Test
+
 
 
         Button buttonSensorList = findViewById (R.id.button_sensor_list);
@@ -322,9 +324,21 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
             @Override
             public void onClick ( View view ) {
 
-                finish ();
+                launchActivity (MainActivity.class);
             }
         });
+
+
+        Button buttonDatabaseList = findViewById (R.id.button_database_list);
+
+        buttonDatabaseList.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick ( View view ) {
+
+                launchActivity (DatabaseListDisplay.class);
+            }
+        });
+
     }
 
 
@@ -344,7 +358,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     }
 
     //onResume() register the Sensor-Manager for listening the events
-    // was wenn hier fail mit no Sensor?
+    // was wenn hier fail mit no Sensor? vorher noch abfrage impl.
 
 
     protected void onResume ( ) {
@@ -362,51 +376,12 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
     protected void onPause ( ) {
 
-        //onPause() unregister the accelerometer for stop listening the events
         super.onPause ();
+        //onPause() unregister the accelerometer for stop listening the events
         //sensorManager.unregisterListener(this);
-
-        /*
-
-        // von: https://stackoverflow.com/questions/3170563/android-detect-phone-lock-event
-
-        // If the screen is off then the device has been locked
-        PowerManager powerManager = (PowerManager) getSystemService (POWER_SERVICE);
-        boolean isLockOn;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            isLockOn = powerManager.isInteractive ();
-        } else {
-            isLockOn = powerManager.isScreenOn ();
-        }
-
-        if (! isLockOn) {
-
-            times_locked = times_locked + 1;
-            //locked_Time = Calendar.getInstance().getTime();
-
-
-            currentLocks.setText (Float.toString (times_locked));
-            //currentTime.setText (locked_Time);
-
-
-
-
-            //set currentTime
-
-            // do stuff...
-        } */
-
-
-        //from: https://stackoverflow.com/questions/8317331/detecting-when-screen-is-locked/8668648#8668648
-
-        // this war context
-
-
-
-
-
-
     }
+
+
 
     @Override
     public void onAccuracyChanged ( Sensor sensor, int accuracy ) {
@@ -437,22 +412,28 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 deltaY = 0;
             if (( deltaZ > vibrateThreshold ) || ( deltaY > vibrateThreshold ) || ( deltaZ > vibrateThreshold )) {
                 // v.vibrate (400);
-                System.out.println ("new high");
+                System.out.println ("significant motion detected");
+                //stark device abhängig....
             }
         }
 
 
-        // wann sind hier die werte interessant normaler Wert bei normalem Tageslicht etwa 70-90 im Testen
+        // wann sind hier die werte interessant
+        // normalem Tageslicht etwa 70-90 im Testen
+        // gedimmter Raum kleiner als 10 die Werte....
+        // hell beleuteter Raum richtung fenster gehalten werte von um die 300-700
+        // Hosentasche 5 oder weniger
+
         // fehlen noch Werte für:
-        // - gedimmter Raum
-        // - hell beleuteter Raum richtung fenster gehalten werte von um die 300-400
+        //
         // - abgedunkelt
         // - draußen?
-        // - Hosentasche 5 oder weniger
 
 
-        // wenn wenig licht z.B. unter 50? und tilting -> Handy im Bett benutzt?
+
+        // wenn wenig licht z.B. unter 5? und tilting -> Handy im Bett benutzt?
         // wenn wenig auch zeichen für telefonieren bzw wenn nicht und active call dann sehr wahrscheinlich freisprech oder lautsprecher
+        //proximity aber sinnvoller...gehen aber hand in hand...
 
 
         if (event.sensor.getType() == Sensor.TYPE_LIGHT)
@@ -528,15 +509,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
 
-
-
-
-    // von: https://stackoverflow.com/questions/8317331/detecting-when-screen-is-locked/8668648#8668648
-
-
-
-
-    /** noch dringend überdenken wann aufruf stattfinden sollte */
+    /** evtl überdenken ob aufruf woanders stattfinden sollte, nach testen aber eher gut so in onCreate */
 
     private void registerBroadcastReceiver() {
 
@@ -589,14 +562,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         theFilter.addAction (Intent.ACTION_LOCALE_CHANGED);
 
 
-
-
-
-
-
-
-
-
         BroadcastReceiver IntentReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -625,10 +590,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                 }
 
-                /**
-                 * Bluetooth bisher nicht
-                 */
-
 
 
 
@@ -637,7 +598,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                  *
                  * Call Handling
                  *
-                 * funktioniert aber nicht zuverlässig? also um genau zu sein zeitversetzt
+                 * funktioniert aber nicht zuverlässig? bzw. zeitversetzt liegt am loop?
                  * Telephony Manager scheint permissions zu brauchen die dangerous sind
                  *
                  * Inspiration: https://stackoverflow.com/questions/45708441/how-to-detect-in-call-mode-android-java
@@ -799,10 +760,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     if (internetConnectionAvailable(1000)) isConnected = true;
                     else isConnected = false;
 
-                    //System.out.println(isConnected);
-
-                    //System.out.println (ssid);
-                    //System.out.println (newssid);
 
                     // testen ob internet verbindung da ist und ob die SSID gewechselt hat
 
@@ -868,16 +825,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
 
-
-
-
-
-
-
-
-
-
-
                 //myWM.startScan (); // funktioniert?
                 //myWM.disconnect (); // funktioniert!
                 //myWM.reconnect (); // ?
@@ -892,14 +839,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                 //List scanResults = myWM.getScanResults (); // brauch Permissions
                 //System.out.println(scanResults);
-
-                // external IP bekommen ist komplexer als gedacht..,..
-
-                // was damit? NETWORK_STATE_CHANGED_ACTION
-
-
-
-
 
 
 
@@ -922,15 +861,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 System.out.println(telephoneProvider);
 
 
-                /**
-                 *CALL_Button funktioniert nicht
-                 */
-
-
-                if (strAction != null && strAction.equals (Intent.ACTION_CALL_BUTTON)) {
-                    System.out.println ("Call Button pressed!");
-                }
-
                 //AIRPLANE MODE -> funktioniert evtl auch toggle dazu
 
                 if (strAction != null && strAction.equals (Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
@@ -938,8 +868,21 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 }
 
 
+
                 /**
-                 * CAMERA Button funktioniert nicht
+                 *CALL_Button, kein Gerät zum Testen
+                 */
+
+
+                if (strAction != null && strAction.equals (Intent.ACTION_CALL_BUTTON)) {
+                    System.out.println ("Call Button pressed!");
+                }
+
+
+
+
+                /**
+                 * CAMERA Button, kein Gerät zum Testen
                  */
 
 
@@ -1005,33 +948,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                 }
 
-                 /*
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (myBM != null && myBM.isCharging ())
-
-                    {
-                        int remain = intent.getIntExtra (BatteryManager.EXTRA_LEVEL, 0);
-                        String remainString = Integer.toString (remain) + "%";
-                        System.out.println (remainString);
-
-                        int plugIn = intent.getIntExtra (BatteryManager.EXTRA_PLUGGED, 0);
-                        switch (plugIn) {
-                            case 0:
-                                System.out.println ("No Connection");
-
-                                // noch nicht sicher was mir die Info bringen soll
-                                break;
-
-                            case BatteryManager.BATTERY_PLUGGED_AC:
-                                System.out.println ("Adapter Connected");
-                                break;
-
-                            case BatteryManager.BATTERY_PLUGGED_USB:
-                                System.out.println ("USB Connected");
-                                break;
-                        }
-                    }
-                } */
 
 
 
@@ -1047,11 +963,28 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                  * */
 
                 KeyguardManager myKM = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+
+
+                if (myKM != null) {
                 if (strAction != null && ( strAction.equals (Intent.ACTION_USER_PRESENT) || strAction.equals (Intent.ACTION_SCREEN_OFF) || strAction.equals (Intent.ACTION_SCREEN_ON) ))
-                    if (myKM != null) {
+
                         if (myKM.inKeyguardRestrictedInputMode ()) {
-                            System.out.println ("Screen off " + "LOCKED");
-                            screen_checked = (float) ( screen_checked + 0.5 );
+
+
+                           if( strAction.equals (Intent.ACTION_USER_PRESENT) || strAction.equals (Intent.ACTION_SCREEN_OFF))
+                            {
+                               System.out.println ("#+#+#+#+#+#+#+#+#+#+#+Screen off " + "LOCKED");
+                            }
+
+
+
+
+
+                        if (strAction.equals (Intent.ACTION_SCREEN_ON))
+
+                        {
+                            System.out.println ("#+#+#+#+#+#+#+#+#+#+#+Screen on");
+                            screen_checked = screen_checked + 1;
                             currentScreenChecks.setText (Float.toString (screen_checked));
 
                             long date = System.currentTimeMillis ();
@@ -1072,8 +1005,11 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             oldScreenDateString = screenDateString;
 
 
-                        } else {
-                            //System.out.println("Screen off " + "UNLOCKED");
+                        }
+                        }
+
+                        else {
+                            System.out.println("#+#+#+#+#+#+#+#+#+#+#+UNLOCKED");
 
                             // von: https://stackoverflow.com/questions/12934661/android-get-current-date-and-show-it-in-textview
                             long date = System.currentTimeMillis ();
@@ -1090,7 +1026,13 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             currentUnLocks.setText (Float.toString (times_unlocked));
                             //currentTime.setText ((CharSequence) locked_Time);
 
-                            /** time screen checked auf Null und neue variable mit times screen checked since unlock auf screen_checked setzen */
+                            //damit unlock nicht zu screen check zählt
+                            screen_checked = screen_checked -1 ;
+                            currentScreenChecks.setText (Float.toString (screen_checked));
+
+                            /** time screen checked auf Null und neue variable mit times screen checked since unlock auf screen_checked setzen
+                             * oder einfach in db schreiben.....
+                             * */
 
                         }
                     }
@@ -1099,6 +1041,9 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         };
 
         getApplicationContext().registerReceiver(IntentReceiver, theFilter);
+
+        //immer wenn was passiert ist datenbank-view updaten
+        DatabaseInitializer.getAllfromAsync (AppDatabase.getAppDatabase (this));
     }
 
     public void displayCleanValues ( ) {
@@ -1192,6 +1137,203 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         return DataCollectionActivity.context;
     }
 
+
+    private void launchActivity(Class placeholder) {
+
+        Intent intent = new Intent(this, placeholder);
+        startActivity(intent);
+    }
 }
+
+
+
+
+/*
+ *
+ * BluetoothManager...
+ *
+ */
+
+
+
+/*
+ *
+ * PreferenceManager
+ *
+ */
+
+/*
+ *
+ * AccountManager interessant!
+ *
+ */
+
+/*
+ *
+ * FragmentManager
+ *
+ */
+
+
+/*
+ *
+ * Package Manager interessant!
+ * z.B. getInstalledPackages
+ *
+ */
+
+/*
+ *
+ * UsageStatsManager
+ *
+ * für Auswertung evtl interessant...
+ *
+ */
+
+
+/*
+ *
+ * AssetManager, scheint uninteressant
+ *
+ */
+
+
+/*
+ *
+ * ShortcutManager
+ *
+ */
+
+
+/*
+ *
+ * SmsManager auch Sachen ohne Permissions?
+ *
+ */
+
+/*
+ *
+ * WallpaperManager, trolling? Rick roll wallpaper?
+ *
+ */
+
+/*
+ *
+ * ConsumerIrManager
+ * inkl. hasIrEmitter () und transmit()
+ *
+ */
+
+
+/*
+ *
+ * SearchManager, was wie wo suchen?
+ *
+ */
+
+
+/*
+ *
+ * WifiP2pManager ??
+ *
+ */
+
+
+/*
+ *
+ * SubscriptionManager
+ *
+ */
+
+
+/*
+ *
+ * NsdManager
+ * Network service discovery
+ * z.B. printer detection in Network!!!!!!!
+ *
+ */
+
+/*
+ *
+ * FingerprintManager -> BiometricPrompt
+ *
+ */
+
+/*
+ *
+ * TelecomManager
+ * nicht alles mit permission
+ * z.B. getPhoneAccount
+ *
+ */
+
+/*
+ *
+ * NfcAdapter einiges mit möglich...
+ *
+ */
+
+/*
+ *
+ * UsbManager, für connected devices
+ *
+ */
+
+
+/*
+ *
+ * InputManager RubberDucky oder allgemein Tastatur erkennen?
+ *
+ */
+
+/*
+ *
+ * AccessibilityManager
+ *
+ */
+
+/*
+ *
+ * RingtoneManager
+ * Standard ringtone holen und dann abspielen?
+ *
+ */
+
+
+/*
+ *
+ * KeyguardManager
+ * z.T. schon genutzt aber weitere Möglichkeiten wie. z.B. isDeviceSecure ()
+ *
+ */
+
+
+/*
+ *
+ * MediaSessionManager
+ *
+ */
+
+
+/*
+ *
+ * SipManager Sip calls?????
+ *
+ */
+
+/*
+ *
+ * ClipboardManager
+ * z.B. setPrimaryClip
+ *
+ */
+
+/*
+ *
+ * PrintManager, no Permissions.....
+ *
+ */
+
 
 

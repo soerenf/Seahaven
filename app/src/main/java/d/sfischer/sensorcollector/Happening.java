@@ -23,17 +23,17 @@ public class Happening {
     @ColumnInfo(name = "age")
     private int age;
 
-    @ColumnInfo(name = "happening")
-    private String happening;
+    @ColumnInfo(name = "happening_name")
+    private String happeningName;
 
     @ColumnInfo(name = "start_date")
     private long startDate;
 
-    @ColumnInfo(name = "end_date")
-    private long endDate;
+    // wie feststellen? durch nächste neue Aktion? oder gar nicht als eintrag sondern über query? -> wird ungenau sein
+    //@ColumnInfo(name = "end_date")
+    //private long endDate;
 
-
-    // three values, yes, no and maybe
+    // three values, yes= 1, no? 0 and maybe= 3  -> default value = no???
     @ColumnInfo(name = "user_approved")
     private int userApproved;
 
@@ -72,12 +72,12 @@ public class Happening {
         this.age = age;
     }
 
-    public String getHappening() {
-        return happening;
+    public String getHappeningName() {
+        return happeningName;
     }
 
-    public void setHappening(String happening) {
-        this.happening = happening;
+    public void setHappeningName(String happening) {
+        this.happeningName = happening;
     }
 
     public long getStartDate() {
@@ -88,13 +88,9 @@ public class Happening {
         this.startDate = startDate;
     }
 
-    public long getEndDate() {
-        return startDate;
-    }
+    //public long getEndDate() {return startDate; }
 
-    public void setEndDate(long endDate) {
-        this.endDate = endDate;
-    }
+    //public void setEndDate(long endDate) { this.endDate = endDate; }
 
     public int getUserApproved() {
         return userApproved;

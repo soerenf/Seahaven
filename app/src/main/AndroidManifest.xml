@@ -73,6 +73,8 @@
         <activity android:name=".DataCollectionActivity">
             android:launchMode="singleTop"
         </activity>
+        <activity android:name=".DatabaseListDisplay">
+        </activity>
         <service android:name=".ActivityRecognizedService" />
         <receiver android:name=".NotificationReceiver">
             <intent-filter>

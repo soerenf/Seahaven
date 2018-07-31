@@ -25,6 +25,14 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>
 
+    <Button
+        android:id="@+id/button_database_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to database list"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+
     <TextView
 
         android:layout_width="wrap_content"

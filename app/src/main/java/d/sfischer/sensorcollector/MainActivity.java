@@ -70,14 +70,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                launchActivity();
+                launchActivity(DataCollectionActivity.class);
             }
         });
     }
 
-    private void launchActivity() {
+    public void launchActivity(Class placeholder) {
 
-        Intent intent = new Intent(this, DataCollectionActivity.class);
+        Intent intent = new Intent(this, placeholder);
         startActivity(intent);
     }
 }

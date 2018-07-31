@@ -17,13 +17,17 @@ public interface HappeningDao {
     @Query("SELECT * FROM Happening")
     List<Happening> getAll();
 
-    @Query("SELECT * FROM Happening where first_name LIKE  :firstName AND last_name LIKE :lastName")
-    Happening findByName( String firstName, String lastName);
+    @Query("SELECT * FROM Happening where happening_name LIKE  :happeningName")
+    Happening findByName( String happeningName);
 
     @Query("SELECT COUNT(*) from Happening")
     int countHappenings();
 
-    //@Query ("SELECT * FROM Happening ")
+    //@Query ("SELECT * FROM Happening where happening LIKE :happenIng")
+    //Happening findByHappeningName( String happenIng);
+
+    //@Query ("SELECT * FROM Happening where happening LIKE :happenIng and end_date < :actualDate ")
+    //Happening findByHappeningNameAndEndDate( String happenIng, long actualDate);
 
     @Insert
     void insertAll(Happening... happenings );
