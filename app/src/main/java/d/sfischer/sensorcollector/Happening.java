@@ -33,7 +33,7 @@ public class Happening {
     //@ColumnInfo(name = "end_date")
     //private long endDate;
 
-    // three values, yes= 1, no? 0 and maybe= 3  -> default value = no???
+    // three values, yes = 1, no = 0 and maybe = 2  -> default value = no ??
     @ColumnInfo(name = "user_approved")
     private int userApproved;
 

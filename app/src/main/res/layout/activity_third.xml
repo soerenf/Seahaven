@@ -15,13 +15,25 @@
         android:layout_height="wrap_content"
         android:text="Go to data collection"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/button_refresh_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="refresh"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"/>
 
     <TextView
         android:id="@+id/text_database_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(placeholder)"/>
+        android:layout_gravity="center"
+        android:text="(placeholder)"
+        android:textSize="10dp" />
 
 </LinearLayout>
 </ScrollView>

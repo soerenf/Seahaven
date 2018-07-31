@@ -10,11 +10,12 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class DatabaseListDisplay extends Activity{
+public class DatabaseListDisplay extends Activity implements View.OnClickListener {
 
 
-    private Button ButtonSensorData;
+    private Button ButtonSensorData, ButtonRefreshData;
     static List<Happening> databaseList;
+    static TextView databaseTextView;
 
     @Override
     public void onCreate ( Bundle savedInstanceState ) {
@@ -26,28 +27,47 @@ public class DatabaseListDisplay extends Activity{
 
 
         setContentView (R.layout.activity_third);
+
         ButtonSensorData = findViewById(R.id.button_sensor_data);
 
-        ButtonSensorData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                launchActivity(DataCollectionActivity.class);
-            }
-        });
+        ButtonSensorData.setOnClickListener(this);
 
 
+        ButtonRefreshData = findViewById(R.id.button_refresh_data);
 
-        //funktioniert aber verzögert und nicht live....
+        ButtonRefreshData.setOnClickListener (this);
+
+
+        databaseTextView = findViewById(R.id.text_database_list);
 
 
 
+        databaseTextView.setText(initDatabaseView ());
 
+
+
+
+
+
+
+    }
+
+
+    private void launchActivity(Class className) {
+
+        Intent intent = new Intent(this, className);
+        startActivity(intent);
+    }
+
+
+
+    private StringBuilder initDatabaseView ()
+    {
         StringBuilder databaseText = new StringBuilder();
 
         databaseText.append("Liste der Datenbankinhalte: \n \n");
 
-         if (databaseList != null) {
+        if (databaseList != null) {
             for (Happening currentHappening : databaseList ) {
 
                 SimpleDateFormat sdf = new SimpleDateFormat ("dd.MM.yyyy kk:mm:ss");
@@ -59,22 +79,33 @@ public class DatabaseListDisplay extends Activity{
 
             }
         }
-
-        TextView sensorTextView = findViewById(R.id.text_database_list);
-        sensorTextView.setText(databaseText);
-
-
-
-
+        return databaseText;
 
 
     }
 
+    @Override
+    public void onClick ( View view ) {
+        switch (view.getId()) {
 
-    private void launchActivity(Class placeholder) {
+            case R.id.button_sensor_data:
+                launchActivity(DataCollectionActivity.class);
+                break;
 
-        Intent intent = new Intent(this, placeholder);
-        startActivity(intent);
+            case R.id.button_refresh_data:
+
+
+                databaseTextView.setText(initDatabaseView ());
+                System.out.println ("Refresh pressed");
+
+
+                break;
+
+
+            default:
+                break;
+        }
+
     }
 }
 

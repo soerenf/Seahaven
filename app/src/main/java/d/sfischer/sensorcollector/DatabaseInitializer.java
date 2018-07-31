@@ -36,7 +36,7 @@ public class DatabaseInitializer {
         addHappening(db, happening);
 
         List<Happening> happeningList = db.happeningDao().getAll();
-        System.out.println ("############################# Happening-List:  "+ happeningList.get (0));
+        //System.out.println ("############################# Happening-List:  "+ happeningList.get (0));
         Log.d(DatabaseInitializer.TAG, "Rows Count: " + happeningList.size());
     }
 
@@ -71,13 +71,13 @@ public class DatabaseInitializer {
         List<Happening> happeningList = db.happeningDao().getAll ();
         if(happeningList != null)
         {
-            System.out.println ("############################# Happening List size "+ happeningList.size ());
+            //System.out.println ("############################# Happening List size "+ happeningList.size ());
             DatabaseListDisplay.databaseList = happeningList;
-            for (int i = 0; i < happeningList.size (); i++)
+           /* for (int i = 0; i < happeningList.size (); i++)
             {
                 Happening test= (happeningList.get (i));
                 System.out.println (test.getHappeningName ());
-            }
+            } */
         }
         else
         {
@@ -103,7 +103,7 @@ public class DatabaseInitializer {
         //happening.setEndDate ();
         happening.setUserApproved (userApproved);
         addHappening (db, happening);
-        System.out.println ("############################# Happening Name:  "+ happening.getHappeningName ()+" Happening Start: "+ happening.getStartDate ());
+        //System.out.println ("############################# Happening Name:  "+ happening.getHappeningName ()+" Happening Start: "+ happening.getStartDate ());
     }
 
 

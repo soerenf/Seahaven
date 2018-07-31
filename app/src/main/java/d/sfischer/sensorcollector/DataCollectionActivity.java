@@ -502,6 +502,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
 
+        DatabaseInitializer.getAllfromAsync (AppDatabase.getAppDatabase (this));
 
 
     }
@@ -1043,7 +1044,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         getApplicationContext().registerReceiver(IntentReceiver, theFilter);
 
         //immer wenn was passiert ist datenbank-view updaten
-        DatabaseInitializer.getAllfromAsync (AppDatabase.getAppDatabase (this));
+
     }
 
     public void displayCleanValues ( ) {
