@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         TextView sensorTextView = findViewById(R.id.text_sensor_list);
         sensorTextView.setText(sensorText);
 
+        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"App started",gettime (), 0, 0, "");
+
 
         ButtonSensorData = findViewById(R.id.button_sensor_data);
 
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 launchActivity(DataCollectionActivity.class);
+                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Data Collection started",gettime (), 0, 0, "");
             }
         });
     }

@@ -10,6 +10,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.Route;
 
+import static d.sfischer.sensorcollector.DataCollectionActivity.gettime;
 
 
 //von: https://howtoprogram.xyz/2016/11/03/basic-authentication-okhttp-example/
@@ -46,7 +47,13 @@ public class WebUtils {
             if (! response.isSuccessful ()) {
                 throw new IOException ("Unexpected code " + response);
             }
-            System.out.println (response.body ().string ());
+
+            //System.out.println (response.body ().string ());
+            //response.body ().string () can only be called ONCE!
+            //String returnvalue = response.body ().string ();
+            //System.out.println (returnvalue);
+
+            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"WebUtils",gettime (), 0, 0, response.body ().string ());
             return response;
         }
     }

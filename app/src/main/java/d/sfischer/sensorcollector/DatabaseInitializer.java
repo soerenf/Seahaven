@@ -88,12 +88,12 @@ public class DatabaseInitializer {
     }
 
 
-    public static void addToAsync(@NonNull final AppDatabase db, String happeningName, long startDate, int userApproved) {
-        AddToDbAsync task = new AddToDbAsync (db, happeningName,startDate,userApproved);
+    public static void addToAsync(@NonNull final AppDatabase db, String happeningName, String startDate, int value, int userApproved, String info) {
+        AddToDbAsync task = new AddToDbAsync (db, happeningName,startDate, value,userApproved,info);
         task.execute();
     }
 
-    private static void addToDb (AppDatabase db, String happeningName, long startDate, int userApproved){
+    private static void addToDb (AppDatabase db, String happeningName, String startDate, int value, int userApproved, String info){
         Happening happening = new Happening ();
         //happening.setFirstName (firstName);
         //happening.setLastName (lastName);
@@ -101,7 +101,9 @@ public class DatabaseInitializer {
         happening.setHappeningName (happeningName);
         happening.setStartDate (startDate);
         //happening.setEndDate ();
+        happening.setValue (value);
         happening.setUserApproved (userApproved);
+        happening.setInfo (info);
         addHappening (db, happening);
         //System.out.println ("############################# Happening Name:  "+ happening.getHappeningName ()+" Happening Start: "+ happening.getStartDate ());
     }
@@ -180,12 +182,14 @@ public class DatabaseInitializer {
         //private final String mLastName;
         //private final int mAge;
         private final String mHappening;
-        private final long mStartDate;
+        private final String mStartDate;
         //private final long mEndDate;
+        private final int mValue;
         private final int mUserApproved;
+        private final String mInfo;
 
 
-        AddToDbAsync ( AppDatabase db, String happeningName, long startDate, int userApproved  ) {       // long endDate // ,String firstName, String lastName, int age
+        AddToDbAsync ( AppDatabase db, String happeningName, String startDate,int value, int userApproved, String info  ) {       // long endDate // ,String firstName, String lastName, int age
             mDb = db;
             //mFirstName = firstName;
             //mLastName = lastName;
@@ -193,13 +197,15 @@ public class DatabaseInitializer {
             mHappening = happeningName;
             mStartDate = startDate;
             //mEndDate = endDate;
+            mValue = value;
             mUserApproved = userApproved;
+            mInfo = info;
 
         }
 
         @Override
         protected Void doInBackground(final String... params) {
-            addToDb (mDb, mHappening, mStartDate, mUserApproved);                                     //  mHappening, mStartDate, mEndDate, mUserApproved
+            addToDb (mDb, mHappening, mStartDate, mValue, mUserApproved, mInfo);                                     //  mHappening, mStartDate, mEndDate, mUserApproved
             return null;
         }
 

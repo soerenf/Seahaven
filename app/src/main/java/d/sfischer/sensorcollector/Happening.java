@@ -27,7 +27,7 @@ public class Happening {
     private String happeningName;
 
     @ColumnInfo(name = "start_date")
-    private long startDate;
+    private String startDate;
 
     // wie feststellen? durch nächste neue Aktion? oder gar nicht als eintrag sondern über query? -> wird ungenau sein
     //@ColumnInfo(name = "end_date")
@@ -36,6 +36,17 @@ public class Happening {
     // three values, yes = 1, no = 0 and maybe = 2  -> default value = no ??
     @ColumnInfo(name = "user_approved")
     private int userApproved;
+
+
+    //z.B. Activity Confidence oder Sensor Value
+    @ColumnInfo(name = "value")
+    private int value;
+
+    //z.B. Activity Confidence oder Sensor Value
+    @ColumnInfo(name = "info")
+    private String info;
+
+
 
 
 
@@ -79,11 +90,11 @@ public class Happening {
         this.happeningName = happening;
     }
 
-    public long getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(long startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
@@ -97,6 +108,22 @@ public class Happening {
 
     public void setUserApproved(int userApproved) {
         this.userApproved = userApproved;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 
 

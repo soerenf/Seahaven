@@ -2,15 +2,17 @@ package d.sfischer.sensorcollector;
 
 import android.app.IntentService;
 import android.content.Intent;
-//import android.support.v4.app.NotificationCompat;
-//import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.android.gms.location.ActivityRecognitionResult;
 import com.google.android.gms.location.DetectedActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
+
+import static d.sfischer.sensorcollector.DataCollectionActivity.gettime;
+
+//import android.support.v4.app.NotificationCompat;
+//import android.support.v4.app.NotificationManagerCompat;
 
 
 
@@ -43,68 +45,78 @@ public class ActivityRecognizedService extends IntentService {
     private void handleDetectedActivities(List<DetectedActivity> probableActivities) {
         for( DetectedActivity activity : probableActivities ) {
 
-            //ui = ui +1;
-            long date = System.currentTimeMillis();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
-            String time = sdf.format(date);
+            //long date = System.currentTimeMillis();
+
+            //SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
+            //String time = sdf.format(date);
+            String time = DataCollectionActivity.gettime ();
 
             switch( activity.getType() )
 
             {
                 case DetectedActivity.IN_VEHICLE: {
                     Log.e( "ActivityRecogition", "In Vehicle: " + activity.getConfidence() );
-                    if( activity.getConfidence() >= 75 ) {
-                        Hedwig.deliverNotification("Driving "+ activity.getConfidence()+"% at: "+time, 0, this, "Driving");                    }
+                    if( activity.getConfidence() >= 60 ) {
+                        //Hedwig.deliverNotification("Driving "+ activity.getConfidence()+"% at: "+time, 0, this, "Driving");
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Driving",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                    }
                     break;
                 }
                 case DetectedActivity.ON_BICYCLE: {
                     Log.e( "ActivityRecogition", "On Bicycle: " + activity.getConfidence() );
-                    if( activity.getConfidence() >= 75 ) {
-                        Hedwig.deliverNotification("On Bicycle "+ activity.getConfidence()+"% at: "+time, 1, this, "Bicycle");
+                    if( activity.getConfidence() >= 60 ) {
+                        //Hedwig.deliverNotification("On Bicycle "+ activity.getConfidence()+"% at: "+time, 1, this, "Bicycle");
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Bicycle",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
                 case DetectedActivity.ON_FOOT: {
                     // debugging System.out.println("On Foot");
                     Log.e( "ActivityRecogition", "On Foot: " + activity.getConfidence() );
-                    if( activity.getConfidence() >= 75 ) {
-                        Hedwig.deliverNotification("on Foot "+ activity.getConfidence()+"% at: "+time, 2, this, "Foot");
+                    if( activity.getConfidence() >= 60 ) {
+                        //Hedwig.deliverNotification("on Foot "+ activity.getConfidence()+"% at: "+time, 2, this, "Foot");
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Foot",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
                 case DetectedActivity.RUNNING: {
                     Log.e( "ActivityRecogition", "Running: " + activity.getConfidence() );
-                    if( activity.getConfidence() >= 75 ) {
-                        Hedwig.deliverNotification("Running "+ activity.getConfidence()+"% at: "+time, 3, this,"Running");
+                    if( activity.getConfidence() >= 60 ) {
+                        //Hedwig.deliverNotification("Running "+ activity.getConfidence()+"% at: "+time, 3, this,"Running");
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Running",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
                 case DetectedActivity.STILL: {
                     Log.e( "ActivityRecogition", "Still: " + activity.getConfidence() );
-                    if( activity.getConfidence() >= 75 ) {
-                        Hedwig.deliverNotification("Standing still "+ activity.getConfidence()+"% at: "+time, 4, this,"Still");
+                    if( activity.getConfidence() >= 60 ) {
+                        //Hedwig.deliverNotification("Standing still "+ activity.getConfidence()+"% at: "+time, 4, this,"Still");
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Still",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
                 case DetectedActivity.TILTING: {
                     Log.e( "ActivityRecogition", "Tilting: " + activity.getConfidence() );
-                    if( activity.getConfidence() >= 75 ) {
-                        Hedwig.deliverNotification("Tilting "+ activity.getConfidence()+"% at: "+time, 5, this,"Tilting");
+                    if( activity.getConfidence() >= 60 ) {
+                        //Hedwig.deliverNotification("Tilting "+ activity.getConfidence()+"% at: "+time, 5, this,"Tilting");
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Tilting",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
                 case DetectedActivity.WALKING: {
                     Log.e( "ActivityRecogition", "Walking: " + activity.getConfidence() );
-                    if( activity.getConfidence() >= 75 ) {
-                        Hedwig.deliverNotification("Walking "+ activity.getConfidence()+"% at: "+time, 6, this, "Walking");
+                    if( activity.getConfidence() >= 60 ) {
+                        //Hedwig.deliverNotification("Walking "+ activity.getConfidence()+"% at: "+time, 6, this, "Walking");
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Walking",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
                 case DetectedActivity.UNKNOWN: {
                     Log.e( "ActivityRecogition", "Unknown: " + activity.getConfidence() );
-                    if( activity.getConfidence() >= 75 ) {
-                        Hedwig.deliverNotification("WTF "+ activity.getConfidence()+"% at: "+time, 7, this,"WTF");
+                    if( activity.getConfidence() >= 60 ) {
+                        //Hedwig.deliverNotification("WTF "+ activity.getConfidence()+"% at: "+time, 7, this,"WTF");
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"WTF",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }

@@ -20,7 +20,11 @@ public class Hedwig {
     public static void deliverNotification ( String message, int id, Context context, String caller)
 
     {
-        //funktionierte auch ohne CLEAR_TOP.....
+        /**
+         *
+         * als extra noch DB primary key wie caller mitgeben zum tracken des user approved?
+         *
+         */
 
         //Yes intent
         Intent yesReceive = new Intent();

@@ -50,5 +50,6 @@ public class MakeNetworkCall extends AsyncTask<String, Void, String> {
         QueryURL.DisplayMessage(result);
         // hier könnte jetzt wenn result die ip ist mit dem result neuer aufruf gestarted werden? oder in DisplayMessage.....
        System.out.println("QueryURL "+ "Result: " + result);
+       //Eintrag in DB geschieht in Query URL Display Message
     }
 }

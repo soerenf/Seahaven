@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class DatabaseListDisplay extends Activity implements View.OnClickListener {
@@ -70,9 +69,9 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
         if (databaseList != null) {
             for (Happening currentHappening : databaseList ) {
 
-                SimpleDateFormat sdf = new SimpleDateFormat ("dd.MM.yyyy kk:mm:ss");
-                String timing = sdf.format (currentHappening.getStartDate ());
-                databaseText.append(currentHappening.getHappeningName ()).append(" event started at: ").append(timing).append(" User approved: ").append (currentHappening.getUserApproved ()).append(
+                //SimpleDateFormat sdf = new SimpleDateFormat ("dd.MM.yyyy kk:mm:ss");
+                //String timing = sdf.format (currentHappening.getStartDate ());
+                databaseText.append(currentHappening.getHappeningName ()).append(" || ").append(currentHappening.getStartDate ()).append(" || ").append (currentHappening.getInfo ()).append(" || ").append (currentHappening.getValue ()).append(
                         System.getProperty("line.separator"));;
 
 

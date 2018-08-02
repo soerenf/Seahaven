@@ -5,8 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import java.text.SimpleDateFormat;
 //import android.widget.Toast;
 
 public class NotificationReceiver extends BroadcastReceiver {
@@ -69,10 +67,12 @@ public class NotificationReceiver extends BroadcastReceiver {
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
 
                     //funktioniert, Zeit der Aktion wird festgehalten und nicht Zeit des klickens
-                    Long date = extras.getLong ("timing");
-                    SimpleDateFormat sdf = new SimpleDateFormat ("dd.MM.yyyy kk:mm:ss");
-                    String timing = sdf.format (date);
-                    System.out.println (timing);
+                    //Long date = extras.getLong ("timing");
+
+
+                    //SimpleDateFormat sdf = new SimpleDateFormat ("dd.MM.yyyy kk:mm:ss");
+                    //String timing = sdf.format (date);
+                   // System.out.println (timing);
 
 
                     if (manager != null) {
@@ -81,8 +81,8 @@ public class NotificationReceiver extends BroadcastReceiver {
 
 
                     // zum testen -> Funktioniert
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Still",date,0);
-                    DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (context),"Still");
+                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Still",date,0);
+                    //DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (context),"Still");
                 }
 
                 if (extras.containsKey ("Tilting")) {
@@ -131,10 +131,11 @@ public class NotificationReceiver extends BroadcastReceiver {
                     System.out.println ("USB ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
 
-                    Long date = extras.getLong ("timing");
-                    SimpleDateFormat sdf = new SimpleDateFormat ("dd.MM.yyyy kk:mm:ss");
-                    String timing = sdf.format (date);
-                    System.out.println (timing);
+                    //Long date = extras.getLong ("timing");
+                    //SimpleDateFormat sdf = new SimpleDateFormat ("dd.MM.yyyy kk:mm:ss");
+                    //String timing = sdf.format (date);
+
+                    //System.out.println (timing);
 
                     if (manager != null) {
                         manager.cancel (14);
@@ -144,7 +145,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     // zum testen -> Funktionierte
 
                     //DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (context),"Zweiter","Test");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"USB",date, 0);
+                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"USB",date, 0);
                 }
             }
         }
