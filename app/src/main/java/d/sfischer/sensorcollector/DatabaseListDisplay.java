@@ -93,7 +93,12 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
 
             }
         }
-        System.out.println (databaseText);
+        //System.out.println (databaseText);
+        List<Happening> tail = databaseList.subList(Math.max(databaseList.size() - 10, 0), databaseList.size());
+        for (Happening currentHappening : tail )
+        {
+            System.out.println ("+++++++++++++++++++++++++++++" + currentHappening.getHappeningName() +(" || ")+ currentHappening.getStartDate ()+ " || "+ currentHappening.getInfo ()+" || "+currentHappening.getValue ());
+        }
         return databaseText;
 
 
@@ -114,7 +119,7 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
                 //databaseTextButton.append("Liste der Datenbankinhalte: \n \n");
                 databaseText = initDatabaseView ();
                 databaseTextView.setText(databaseText);
-                System.out.println (databaseText);
+                //System.out.println (databaseText);
 
 
                 break;
