@@ -52,6 +52,7 @@ public class ActivityRecognizedService extends IntentService {
             //String time = sdf.format(date);
             String time = DataCollectionActivity.gettime ();
 
+
             switch( activity.getType() )
 
             {
@@ -59,7 +60,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "In Vehicle: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("Driving "+ activity.getConfidence()+"% at: "+time, 0, this, "Driving");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Driving",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Driving",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -67,7 +68,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "On Bicycle: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("On Bicycle "+ activity.getConfidence()+"% at: "+time, 1, this, "Bicycle");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Bicycle",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Bicycle",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -76,7 +77,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "On Foot: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("on Foot "+ activity.getConfidence()+"% at: "+time, 2, this, "Foot");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Foot",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Foot",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -84,7 +85,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "Running: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("Running "+ activity.getConfidence()+"% at: "+time, 3, this,"Running");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Running",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Running",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -92,7 +93,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "Still: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("Standing still "+ activity.getConfidence()+"% at: "+time, 4, this,"Still");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Still",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Still",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -100,7 +101,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "Tilting: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("Tilting "+ activity.getConfidence()+"% at: "+time, 5, this,"Tilting");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Tilting",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Tilting",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -108,7 +109,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "Walking: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("Walking "+ activity.getConfidence()+"% at: "+time, 6, this, "Walking");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Walking",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Walking",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -116,7 +117,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "Unknown: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("WTF "+ activity.getConfidence()+"% at: "+time, 7, this,"WTF");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"WTF",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"WTF",gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }

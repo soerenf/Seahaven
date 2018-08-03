@@ -23,6 +23,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void onReceive ( Context context, Intent intent ) {
 
         String action = intent.getAction ();
+
         Bundle extras = intent.getExtras ();
 
         // cancel brauch die ID mit der deliverNotification aufgerufen wurde containsKey den String aus add Extra also caller
@@ -69,20 +70,10 @@ public class NotificationReceiver extends BroadcastReceiver {
                     //funktioniert, Zeit der Aktion wird festgehalten und nicht Zeit des klickens
                     //Long date = extras.getLong ("timing");
 
-
-                    //SimpleDateFormat sdf = new SimpleDateFormat ("dd.MM.yyyy kk:mm:ss");
-                    //String timing = sdf.format (date);
-                   // System.out.println (timing);
-
-
                     if (manager != null) {
                         manager.cancel (4);
                     }
 
-
-                    // zum testen -> Funktioniert
-                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Still",date,0);
-                    //DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (context),"Still");
                 }
 
                 if (extras.containsKey ("Tilting")) {
@@ -130,22 +121,10 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Plugged USB")) {
                     System.out.println ("USB ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
-
-                    //Long date = extras.getLong ("timing");
-                    //SimpleDateFormat sdf = new SimpleDateFormat ("dd.MM.yyyy kk:mm:ss");
-                    //String timing = sdf.format (date);
-
-                    //System.out.println (timing);
-
                     if (manager != null) {
                         manager.cancel (14);
                     }
 
-
-                    // zum testen -> Funktionierte
-
-                    //DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (context),"Zweiter","Test");
-                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"USB",date, 0);
                 }
             }
         }

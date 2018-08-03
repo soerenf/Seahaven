@@ -14,10 +14,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    //@Override
+
     private Button ButtonSensorData;
     private SensorManager mSensorManager;
-    // The sensor manager is a system service that lets you access the device sensors.
+
 
 
 
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         TextView sensorTextView = findViewById(R.id.text_sensor_list);
         sensorTextView.setText(sensorText);
 
-        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"App started",gettime (), 0, 0, "");
+
 
 
         ButtonSensorData = findViewById(R.id.button_sensor_data);
@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 launchActivity(DataCollectionActivity.class);
-                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"Data Collection started",gettime (), 0, 0, "");
             }
         });
     }

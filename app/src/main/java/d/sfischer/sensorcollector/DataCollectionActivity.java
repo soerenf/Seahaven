@@ -154,13 +154,13 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
         initializeViews ();
 
-        currentUnLocks.setText ("0");
-        currentScreenChecks.setText ("0");
+        //currentUnLocks.setText ("0");
+        //currentScreenChecks.setText ("0");
 
 
-        String startDateString = gettime ();
+        //String startDateString = gettime ();
 
-        currentScreenTime.setText(startDateString);
+        //currentScreenTime.setText(startDateString);
 
 
         //für actvity recog von: https://code.tutsplus.com/tutorials/how-to-recognize-user-activity-with-activity-recognition--cms-25851

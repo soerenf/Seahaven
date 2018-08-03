@@ -64,17 +64,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+        </activity>
+        <activity android:name=".DataCollectionActivity" android:label="DataCollectionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DataCollectionActivity">
-            android:launchMode="singleTop"
-        </activity>
+
         <activity android:name=".DatabaseListDisplay">
         </activity>
+
+        <receiver
+            android:name=".StartMyServiceAtBootReceiver"
+            android:label="StartMyServiceAtBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <service android:name=".ActivityRecognizedService" />
         <receiver android:name=".NotificationReceiver">
             <intent-filter>

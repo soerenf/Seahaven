@@ -81,9 +81,9 @@ public class QueryURL {
                 HttpURLConnection cc = (HttpURLConnection)
                         url.openConnection ();
                 //set timeout for reading InputStream
-                cc.setReadTimeout (5000);
+                cc.setReadTimeout (15000);
                 // set timeout for connection
-                cc.setConnectTimeout (5000);
+                cc.setConnectTimeout (15000);
                 //set HTTP method to POST
                 cc.setRequestMethod ("POST");
                 //set it to true as we are connecting for input

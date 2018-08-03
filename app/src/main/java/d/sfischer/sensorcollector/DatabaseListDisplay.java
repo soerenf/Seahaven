@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseListDisplay extends Activity implements View.OnClickListener {
@@ -14,13 +15,17 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
 
     private Button ButtonSensorData, ButtonRefreshData;
     static List<Happening> databaseList;
-    static TextView databaseTextView;
+    public TextView databaseTextView;
+    static List<Integer> testList = new ArrayList <> ();
+    static StringBuilder databaseText = new StringBuilder();
 
     @Override
     public void onCreate ( Bundle savedInstanceState ) {
 
 
         //setup
+
+
 
         super.onCreate (savedInstanceState);
 
@@ -40,8 +45,11 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
         databaseTextView = findViewById(R.id.text_database_list);
 
 
-
-        databaseTextView.setText(initDatabaseView ());
+        //StringBuilder databaseText = new StringBuilder();
+        //databaseText.setLength (0);
+        //databaseText.append("Liste der Datenbankinhalte: \n \n");
+        databaseText = initDatabaseView ();
+        databaseTextView.setText(databaseText);
 
 
 
@@ -62,22 +70,30 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
 
     private StringBuilder initDatabaseView ()
     {
-        StringBuilder databaseText = new StringBuilder();
 
-        databaseText.append("Liste der Datenbankinhalte: \n \n");
 
         if (databaseList != null) {
+
             for (Happening currentHappening : databaseList ) {
 
-                //SimpleDateFormat sdf = new SimpleDateFormat ("dd.MM.yyyy kk:mm:ss");
-                //String timing = sdf.format (currentHappening.getStartDate ());
-                databaseText.append(currentHappening.getHappeningName ()).append(" || ").append(currentHappening.getStartDate ()).append(" || ").append (currentHappening.getInfo ()).append(" || ").append (currentHappening.getValue ()).append(
-                        System.getProperty("line.separator"));;
+                if (!testList.contains (currentHappening.getUid ()))
+                {
+                    testList.add (currentHappening.getUid ());
+                    databaseText.append(currentHappening.getHappeningName ()).append(" || ").append(currentHappening.getStartDate ()).append(" || ").append (currentHappening.getInfo ()).append(" || ").append (currentHappening.getValue ()).append(
+                            System.getProperty("line.separator"));
+
+                }
+
+
+
+
+
 
 
 
             }
         }
+        System.out.println (databaseText);
         return databaseText;
 
 
@@ -93,9 +109,12 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
 
             case R.id.button_refresh_data:
 
-
-                databaseTextView.setText(initDatabaseView ());
-                System.out.println ("Refresh pressed");
+                //StringBuilder databaseTextButton = new StringBuilder();
+                //databaseTextButton.setLength (0);
+                //databaseTextButton.append("Liste der Datenbankinhalte: \n \n");
+                databaseText = initDatabaseView ();
+                databaseTextView.setText(databaseText);
+                System.out.println (databaseText);
 
 
                 break;
