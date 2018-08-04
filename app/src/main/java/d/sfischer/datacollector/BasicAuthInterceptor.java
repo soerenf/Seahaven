@@ -1,4 +1,4 @@
-package d.sfischer.sensorcollector;
+package d.sfischer.datacollector;
 
 import java.io.IOException;
 import okhttp3.Credentials;

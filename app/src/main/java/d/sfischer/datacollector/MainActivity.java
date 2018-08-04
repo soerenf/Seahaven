@@ -1,4 +1,4 @@
-package d.sfischer.sensorcollector;
+package d.sfischer.datacollector;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
+
+import d.sfischer.sensorcollector.R;
 
 public class MainActivity extends AppCompatActivity {
 

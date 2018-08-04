@@ -1,4 +1,4 @@
-package d.sfischer.sensorcollector;
+package d.sfischer.datacollector;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -8,8 +8,6 @@ import com.google.android.gms.location.ActivityRecognitionResult;
 import com.google.android.gms.location.DetectedActivity;
 
 import java.util.List;
-
-import static d.sfischer.sensorcollector.DataCollectionActivity.gettime;
 
 //import android.support.v4.app.NotificationCompat;
 //import android.support.v4.app.NotificationManagerCompat;
@@ -24,7 +22,7 @@ public class ActivityRecognizedService extends IntentService {
 
 
     public ActivityRecognizedService() {
-        super("d.sfischer.sensorcollector.ActivityRecognizedService");
+        super("ActivityRecognizedService");
     }
 
     public ActivityRecognizedService(String name) {
@@ -60,7 +58,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "In Vehicle: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("Driving "+ activity.getConfidence()+"% at: "+time, 0, this, "Driving");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Driving",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Driving", DataCollectionActivity.gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -68,7 +66,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "On Bicycle: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("On Bicycle "+ activity.getConfidence()+"% at: "+time, 1, this, "Bicycle");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Bicycle",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Bicycle", DataCollectionActivity.gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -77,7 +75,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "On Foot: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("on Foot "+ activity.getConfidence()+"% at: "+time, 2, this, "Foot");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Foot",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Foot", DataCollectionActivity.gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -85,7 +83,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "Running: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("Running "+ activity.getConfidence()+"% at: "+time, 3, this,"Running");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Running",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Running", DataCollectionActivity.gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -93,7 +91,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "Still: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("Standing still "+ activity.getConfidence()+"% at: "+time, 4, this,"Still");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Still",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Still", DataCollectionActivity.gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -101,7 +99,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "Tilting: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("Tilting "+ activity.getConfidence()+"% at: "+time, 5, this,"Tilting");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Tilting",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Tilting", DataCollectionActivity.gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -109,7 +107,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "Walking: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("Walking "+ activity.getConfidence()+"% at: "+time, 6, this, "Walking");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Walking",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Walking", DataCollectionActivity.gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }
@@ -117,7 +115,7 @@ public class ActivityRecognizedService extends IntentService {
                     Log.e( "ActivityRecogition", "Unknown: " + activity.getConfidence() );
                     if( activity.getConfidence() >= 60 ) {
                         //Hedwig.deliverNotification("WTF "+ activity.getConfidence()+"% at: "+time, 7, this,"WTF");
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"WTF",gettime (), activity.getConfidence(), 0,"% sure = value" );
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"WTF", DataCollectionActivity.gettime (), activity.getConfidence(), 0,"% sure = value" );
                     }
                     break;
                 }

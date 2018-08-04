@@ -1,4 +1,4 @@
-package d.sfischer.sensorcollector;
+package d.sfischer.datacollector;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

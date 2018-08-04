@@ -1,10 +1,12 @@
-package d.sfischer.sensorcollector;
+package d.sfischer.datacollector;
 
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.List;
+
+import static d.sfischer.datacollector.DataCollectionActivity.gettime;
 
 
 // https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9
@@ -30,9 +32,9 @@ public class DatabaseInitializer {
 
     private static void populateWithTestData(AppDatabase db) {
         Happening happening = new Happening ();
-        happening.setFirstName("Ajay");
-        happening.setLastName("Saini");
-        happening.setAge(25);
+        happening.setHappeningName ("TestData");
+        happening.setStartDate (gettime());
+        happening.setValue (0);
         addHappening(db, happening);
 
         List<Happening> happeningList = db.happeningDao().getAll();

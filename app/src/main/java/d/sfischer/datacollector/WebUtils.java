@@ -1,4 +1,4 @@
-package d.sfischer.sensorcollector;
+package d.sfischer.datacollector;
 
 
 import java.io.IOException;
@@ -9,8 +9,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.Route;
-
-import static d.sfischer.sensorcollector.DataCollectionActivity.gettime;
 
 
 //von: https://howtoprogram.xyz/2016/11/03/basic-authentication-okhttp-example/
@@ -30,7 +28,7 @@ public class WebUtils {
                                                           final String password) {
         // build client with authentication information.
         OkHttpClient httpClient = new OkHttpClient.Builder().authenticator(new Authenticator() {
-            public Request authenticate(Route route, Response response) throws IOException {
+            public Request authenticate(Route route, Response response) {
                 String credential = Credentials.basic(username, password);
                 if (responseCount(response) >= 3) {
                     return null;
@@ -53,7 +51,7 @@ public class WebUtils {
             //String returnvalue = response.body ().string ();
             //System.out.println (returnvalue);
 
-            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"WebUtils",gettime (), 0, 0, response.body ().string ());
+            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"WebUtils", DataCollectionActivity.gettime (), 0, 0, response.body ().string ());
             return response;
         }
     }

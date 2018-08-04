@@ -1,4 +1,4 @@
-package d.sfischer.sensorcollector;
+package d.sfischer.datacollector;
 
 
 import android.app.Activity;
@@ -44,6 +44,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import d.sfischer.sensorcollector.R;
 import okhttp3.OkHttpClient;
 
 
@@ -555,7 +556,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
 
-        DatabaseInitializer.getAllfromAsync (AppDatabase.getAppDatabase (this));
+        //hier vielleicht zu viel
 
 
     }
@@ -635,11 +636,11 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     if (toggle == 1) {
                         System.out.println ("Headphone plugged in at: "+ gettime ());
                         toggle = 0;
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Headphone in",gettime (), (int) toggle, 0, "");
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Headphone in",gettime (), toggle, 0, "");
                     } else {
                         System.out.println ("Headphone plugged out at: "+ gettime ());
                         toggle = 1;
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Headphone out",gettime (), (int) toggle, 0, "");
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Headphone out",gettime (), toggle, 0, "");
 
                     }
 
@@ -894,8 +895,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     //mit neuem Netzwerk verbunden wenn neue
                     // bei neuer SSID checken ob vorher schon bekannt? also in liste enthalten also häufig besuchter ort wahrscheinlich?
 
-                    if (internetConnectionAvailable(1000)) isConnected = true;
-                    else isConnected = false;
+                    isConnected = internetConnectionAvailable (1000);
 
 
                     // testen ob internet verbindung da ist und ob die SSID gewechselt hat
@@ -1249,7 +1249,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
         getApplicationContext().registerReceiver(IntentReceiver, theFilter);
 
-        //immer wenn was passiert ist datenbank-view updaten
 
     }
 

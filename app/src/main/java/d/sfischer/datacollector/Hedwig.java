@@ -1,4 +1,4 @@
-package d.sfischer.sensorcollector;
+package d.sfischer.datacollector;
 
 
 import android.app.PendingIntent;
@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+
+import d.sfischer.sensorcollector.R;
 
 
 public class Hedwig {

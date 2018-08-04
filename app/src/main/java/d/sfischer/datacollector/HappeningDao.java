@@ -1,4 +1,4 @@
-package d.sfischer.sensorcollector;
+package d.sfischer.datacollector;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;

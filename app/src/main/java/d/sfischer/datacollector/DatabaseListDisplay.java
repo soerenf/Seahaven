@@ -1,4 +1,4 @@
-package d.sfischer.sensorcollector;
+package d.sfischer.datacollector;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import d.sfischer.sensorcollector.R;
 
 public class DatabaseListDisplay extends Activity implements View.OnClickListener {
 
@@ -48,8 +50,13 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
         //StringBuilder databaseText = new StringBuilder();
         //databaseText.setLength (0);
         //databaseText.append("Liste der Datenbankinhalte: \n \n");
+
+
         databaseText = initDatabaseView ();
         databaseTextView.setText(databaseText);
+
+        //String currentDBPath = getDatabasePath("happening-database").getAbsolutePath();
+        //System.out.println (currentDBPath);
 
 
 
@@ -72,6 +79,8 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
     {
 
 
+        DatabaseInitializer.getAllfromAsync (AppDatabase.getAppDatabase (this));
+
         if (databaseList != null) {
 
             for (Happening currentHappening : databaseList ) {
@@ -83,22 +92,21 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
                             System.getProperty("line.separator"));
 
                 }
-
-
-
-
-
-
-
-
             }
         }
         //System.out.println (databaseText);
-        List<Happening> tail = databaseList.subList(Math.max(databaseList.size() - 10, 0), databaseList.size());
-        for (Happening currentHappening : tail )
-        {
-            System.out.println ("+++++++++++++++++++++++++++++" + currentHappening.getHappeningName() +(" || ")+ currentHappening.getStartDate ()+ " || "+ currentHappening.getInfo ()+" || "+currentHappening.getValue ());
+        /* List<Happening> tail = null;
+        if (databaseList != null) {
+            tail = databaseList.subList(Math.max(databaseList.size() - 10, 0), databaseList.size());
         }
+        if (tail != null) {
+            for (Happening currentHappening : tail )
+            {
+                System.out.println ("+++++++++++++++++++++++++++++" + currentHappening.getHappeningName() +(" || ")+ currentHappening.getStartDate ()+ " || "+ currentHappening.getInfo ()+" || "+currentHappening.getValue ());
+            }
+        }*/
+
+
         return databaseText;
 
 
