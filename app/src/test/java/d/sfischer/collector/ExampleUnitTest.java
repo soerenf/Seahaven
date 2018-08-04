@@ -1,4 +1,4 @@
-package d.sfischer.sensorcollector;
+package d.sfischer.collector;
 
 import org.junit.Test;
 

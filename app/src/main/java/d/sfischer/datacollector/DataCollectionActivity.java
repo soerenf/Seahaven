@@ -44,7 +44,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import d.sfischer.sensorcollector.R;
 import okhttp3.OkHttpClient;
 
 
@@ -354,11 +353,32 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
     protected void onResume ( ) {
         super.onResume ();
-        sensorManager.registerListener (this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener (this, light, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener (this, proximity, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener (this, magnet, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener (this, barometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        if(accelerometer!= null)
+        {
+            sensorManager.registerListener (this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+        if(light!= null)
+        {
+            sensorManager.registerListener (this, light, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+        if(proximity!= null)
+        {
+            sensorManager.registerListener (this, proximity, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+        if(magnet!= null)
+        {
+            sensorManager.registerListener (this, magnet, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+        if(barometer!= null)
+        {
+            sensorManager.registerListener (this, barometer, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
 
 
 

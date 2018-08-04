@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import d.sfischer.sensorcollector.R;
-
 public class MainActivity extends AppCompatActivity {
 
 

@@ -9,8 +9,6 @@ import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
-import d.sfischer.sensorcollector.R;
-
 
 public class Hedwig {
 
