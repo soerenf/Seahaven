@@ -78,7 +78,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     private float pressure = 0;
 
     private float lumenMax = 0; //Grenzwert sinnvoll?
-    private float lumenMin = 9001; //s.o. OVER nine thousand
+    private float lumenMin = 9001; //OVER nine thousand
 
     private float closenessMax = 0;
     private float closenessMin = 9001;
@@ -109,6 +109,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     public String oldScreenDateString;
 
     public String oldssid = "dummy SSID";
+    public String connectedToSSID;
 
     public boolean isConnected;
 
@@ -118,7 +119,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     public DhcpInfo dhcpINFO;
 
     public  List<WifiConfiguration> netConfig;
-    public  List<WifiConfiguration> oldNetConfig;
+    public  List<WifiConfiguration> netConfig2;
 
     public List<String> ssidList = new ArrayList <> ();
 
@@ -813,6 +814,18 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "SSID: " + currentWifiConfiguration.SSID, gettime (), 0, 0, "networkId: " + currentWifiConfiguration.networkId);
                             DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "SSID: " + currentWifiConfiguration.SSID, gettime (), 0, 0, "hiddenSSID: " + currentWifiConfiguration.hiddenSSID);
 
+                                //natürlich auch für jede SSID möglich...
+                                if (currentWifiConfiguration.status == 0) {
+
+                                    isConnected = internetConnectionAvailable (1000);
+                                    if (isConnected) {
+                                        connectedToSSID = currentWifiConfiguration.SSID;
+                                        connectedToSSID = connectedToSSID.replace ("\"", "");
+                                        System.out.println ("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Query location via SSID: " + connectedToSSID);
+                                        new Authenticate ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&ssid=" + connectedToSSID, "AID9eec974665aa0c903b7e8b1a882e222b", "710edd26134760027e3d09739f0ecc4f");
+                                    }
+                                }
+
                         /*
                         DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "FQDN: "+ currentWifiConfiguration.FQDN);
                         DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "preSharedKey: "+ currentWifiConfiguration.preSharedKey);
@@ -904,8 +917,17 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     String ssid = connectionInfo.getSSID ();
                     String bssid = connectionInfo.getBSSID ();
                     // System.out.println("SSID: " +ssid+ " BSSID: "+bssid);
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Connected to SSID",gettime (), 0, 0, ssid);
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Connected to BSSID",gettime (), 0, 0, bssid);
+                    if(!ssid.equals ("<unknown ssid>") && !bssid.equals ("02:00:00:00:00:00"))
+                    {
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Connected to SSID",gettime (), 0, 0, ssid);
+                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Connected to BSSID",gettime (), 0, 0, bssid);
+                    }
+                    else
+                        {
+                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Connected via status to SSID",gettime (), 0, 0, connectedToSSID);
+                        }
+
+
 
 
 
@@ -923,13 +945,28 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     if (isConnected && (!ssid.equals (oldssid)) && (bssid != null))
                     {
 
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"New WIFI Network with Internet",gettime (), 0, 0, "old SSID: "+ oldssid+ " new SSID: "+ ssid);
+                        if(!ssid.equals ("<unknown ssid>"))
+                        {
+                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"New WIFI Network with Internet",gettime (), 0, 0, "old SSID: "+ oldssid+ " new SSID: "+ ssid);
+                        }
+                        else
+                        {
+                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"New WIFI Network with Internet",gettime (), 0, 0, "old SSID: "+ oldssid+ " new SSID: "+ connectedToSSID);
+                        }
                         //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ ssid);
 
                         if (!ssid.equals (oldssid))
                         {
-                            //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ ssid);
-                            oldssid = ssid;
+                            if(!ssid.equals ("<unknown ssid>"))
+                            {
+                                //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ ssid);
+                                oldssid = ssid;
+                            }
+                            else
+                                {
+                                    oldssid = connectedToSSID;
+                                }
+
                         }
                         OkHttpHandler okHttpHandlerIpapi= new OkHttpHandler();
                         okHttpHandlerIpapi.execute(urlIpapi);
@@ -938,9 +975,40 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         okHttpHandlerIpstack.execute(urlIpstack);
 
 
-                        // limit beachten...könnte auch mir einfach merken welche ssid bzw bssid wo ist...und nur anfragen bei neuen...
+                        // limit beachten...könnte auch mir einfach merken welche ssid bzw bssid wo ist...und nur anfragen bei neuen...bei höhere API nicht mehr möglich
+                        if(!ssid.equals ("<unknown ssid>") && !bssid.equals ("02:00:00:00:00:00"))
+                        {
+                            System.out.println("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Query location via BSSID: "+bssid);
+                            new Authenticate ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&netid="+bssid, "AID9eec974665aa0c903b7e8b1a882e222b", "710edd26134760027e3d09739f0ecc4f") ;
+                        }
 
-                        new Authenticate ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&netid="+bssid, "AID9eec974665aa0c903b7e8b1a882e222b", "710edd26134760027e3d09739f0ecc4f") ;
+                        //Besser direkt bei SSID Liste Erhebung
+                        /* else {
+
+                            netConfig2 = myWM.getConfiguredNetworks ();
+                            if (netConfig2 != null) {
+                                for (WifiConfiguration currentWifiConfiguration2 : netConfig2) {
+
+
+                                    /** status hinzugefügt falls ich mal hierrüber tracken will das mit anderem Netzwerk verbunden weil status die aus angibt
+                                     * Status:  CURRENT network currently connected to Value: 0, DISABLED supplicant will not attempt to use this network Value: 1, ENABLED supplicant will consider this network available for association  Value: 2
+
+
+                                    if (currentWifiConfiguration2.status == 0) {
+                                        String newSSID = currentWifiConfiguration2.SSID;
+                                        newSSID = newSSID.replace("\"", "");
+                                        System.out.println ("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ new SSID: " + newSSID);
+                                        new Authenticate ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&ssid="+newSSID, "AID9eec974665aa0c903b7e8b1a882e222b", "710edd26134760027e3d09739f0ecc4f");
+                                    }
+
+
+                                }
+
+
+                            }
+                        }*/
+
+
 
                         //hierhin verschoben da nur relevant wenn mit WIFI verbunden und dies neu ist
                         dhcpINFO = myWM.getDhcpInfo ();
