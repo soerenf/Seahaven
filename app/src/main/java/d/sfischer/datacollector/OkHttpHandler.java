@@ -35,7 +35,7 @@ public class OkHttpHandler extends AsyncTask <String, Void, String>{
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         //txtString.setText(s);
-        System.out.println(s);
+        //System.out.println(s);
         DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"OkHttpHandler",gettime (), 0, 0, s);
     }
 

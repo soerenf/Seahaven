@@ -8,6 +8,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -47,7 +50,11 @@ import java.util.concurrent.TimeoutException;
 import okhttp3.OkHttpClient;
 
 
-
+/**
+ *
+ * Name für das Programm Seaheaven - wie die Stadt in "Truman Show"
+ *
+ */
 
 // GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener von: https://code.tutsplus.com/tutorials/how-to-recognize-user-activity-with-activity-recognition--cms-25851
 
@@ -825,6 +832,11 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                         new Authenticate ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&ssid=" + connectedToSSID, "AID9eec974665aa0c903b7e8b1a882e222b", "710edd26134760027e3d09739f0ecc4f");
                                     }
                                 }
+                                if (currentWifiConfiguration.status == 1 ||currentWifiConfiguration.status == 2 ) {
+                                    if (connectedToSSID == currentWifiConfiguration.SSID){
+                                        connectedToSSID = "not connected";
+                                    }
+                                }
 
                         /*
                         DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "FQDN: "+ currentWifiConfiguration.FQDN);
@@ -949,7 +961,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         {
                             DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"New WIFI Network with Internet",gettime (), 0, 0, "old SSID: "+ oldssid+ " new SSID: "+ ssid);
                         }
-                        else
+                        else if (!connectedToSSID.equals (oldssid))
                         {
                             DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"New WIFI Network with Internet",gettime (), 0, 0, "old SSID: "+ oldssid+ " new SSID: "+ connectedToSSID);
                         }
@@ -1031,15 +1043,46 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     else if (!isConnected && (!ssid.equals (oldssid)) && (bssid != null)){
 
 
+                        if (!bssid.equals ("00:00:00:00:00:00"))
 
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"New WIFI Network without Internet",gettime (), 0, 0, "old SSID: "+ oldssid+ " new SSID: "+ ssid);
-                        //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ ssid);
+                        {
 
-                        if (!ssid.equals (oldssid))
+
+                            if(!ssid.equals ("<unknown ssid>")) {
+                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "New WIFI Network without Internet", gettime (), 0, 0, "old SSID: " + oldssid + " new SSID: " + ssid);
+                                //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ ssid);
+                            }
+                            else if (!oldssid.equals (connectedToSSID))
+                                {
+                                    if (connectedToSSID == null)
+                                    {
+                                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Wifi enabled but not connected", gettime (), 0, 0, "old SSID: " + oldssid + " new SSID: " + connectedToSSID);
+                                    }
+                                    else{
+                                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "New WIFI Network without Internet", gettime (), 0, 0, "old SSID: " + oldssid + " new SSID: " + connectedToSSID);
+                                        }
+
+                                }
+                        }
+                        else
+                        {
+                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"WIFI active but not connected to Network",gettime (), 0, 0, "old SSID: "+ oldssid+ " new SSID: "+ ssid+ "connected to SSID: "+connectedToSSID);
+                        }
+
+                        if(!ssid.equals ("<unknown ssid>"))
                         {
                             //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ ssid);
                             oldssid = ssid;
                         }
+                        else
+                        {
+                            //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ connectedToSSID);
+                            oldssid = connectedToSSID;
+                        }
+
+
+
+
 
 
 
@@ -1071,16 +1114,16 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 }
                 else
                     {
-                        System.out.println ("WIFI ist disabled");
+                        //System.out.println ("WIFI ist disabled");
                         DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"WIFI disabled",gettime (), 0, 0, "");
 
 
-                        System.out.println ("Checking if other internet connection is available");
+                        //System.out.println ("Checking if other internet connection is available");
 
                         if (internetConnectionAvailable(1000))
                         {
                             isConnected = true;
-                            System.out.println ("Yes, we have internetz! =)");
+                            //System.out.println ("Yes, we have internetz! =)");
 
                             DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Mobile Data active",gettime (), 0, 0, "");
 
@@ -1095,7 +1138,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         else
                             {
                                 isConnected = false;
-                                System.out.println ("No, we have no internetz. =(");
+                                //System.out.println ("No, we have no internetz. =(");
                                 DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"No Internet Connection",gettime (), 0, 0, "");
 
                             }
@@ -1128,14 +1171,14 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 if (myTM != null) {
                     telephoneProvider = myTM.getSimOperatorName ();
                 }
-                System.out.println(telephoneProvider);
+                //System.out.println(telephoneProvider);
                 DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefon Provider",gettime (), 0, 0, telephoneProvider);
 
 
                 //AIRPLANE MODE -> funktioniert evtl auch toggle dazu
 
                 if (strAction != null && strAction.equals (Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
-                    System.out.println ("AIRPLANE Mode!");
+                    //System.out.println ("AIRPLANE Mode!");
                     DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Airplane Mode",gettime (), 0, 0, "");
                 }
 
@@ -1147,7 +1190,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
                 if (strAction != null && strAction.equals (Intent.ACTION_CALL_BUTTON)) {
-                    System.out.println ("Call Button pressed!");
+                    //System.out.println ("Call Button pressed!");
                     DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Call Button",gettime (), 0, 0, "");
                 }
 
@@ -1160,7 +1203,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
                 if (strAction != null && strAction.equals (Intent.ACTION_CAMERA_BUTTON)) {
-                    System.out.println ("CAMERA_BUTTON pressed!");
+                    //System.out.println ("CAMERA_BUTTON pressed!");
                     DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Camera Button",gettime (), 0, 0, "");
                 }
 
@@ -1175,7 +1218,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 //BatteryManager myBM = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
 
                 if (strAction != null && strAction.equals (Intent.ACTION_BATTERY_OKAY)) {
-                    System.out.println ("Battery OKAY!");
+                    //System.out.println ("Battery OKAY!");
 
 
                     //Hedwig.deliverNotification("Battery OKAY", 10, DataCollectionActivity.this,"Battery Ok");
@@ -1183,7 +1226,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 }
 
                 if (strAction != null && strAction.equals (Intent.ACTION_BATTERY_LOW)) {
-                    System.out.println ("Battery LOW!");
+                    //System.out.println ("Battery LOW!");
                     //Hedwig.deliverNotification("Battery low low low", 12, DataCollectionActivity.this,"Battery Low");
                     DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery Low",gettime (), 0, 0, "");
                 }
@@ -1191,7 +1234,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 if (strAction != null && strAction.equals (Intent.ACTION_BATTERY_CHANGED)) {
 
 
-                    System.out.println ("Battery changed!");
+                    //System.out.println ("Battery changed!");
                     DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery changed",gettime (), 0, 0, "");
 
                     //meldet sich häufig beim laden
@@ -1205,7 +1248,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     int plugIn = intent.getIntExtra (BatteryManager.EXTRA_PLUGGED, 0);
                     switch (plugIn) {
                         case 0:
-                            System.out.println ("No Connection");
+                            //System.out.println ("No Connection");
                             DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"No Plug",gettime (), 0, 0, "");
 
                             // noch nicht sicher was mir die Info bringen soll 0 ist eigentlich battery....
@@ -1213,7 +1256,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             break;
 
                         case BatteryManager.BATTERY_PLUGGED_AC:
-                            System.out.println ("Adapter Connected");
+                            //System.out.println ("Adapter Connected");
                             //Hedwig.deliverNotification("Loading over AC", 13, DataCollectionActivity.this, "Plugged AC");
                             DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"AC Plug",gettime (), 0, 0, "");
                             break;
@@ -1221,7 +1264,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                         // auch bei deaktivierter Datenübertragung wird USB angezeigt
                         case BatteryManager.BATTERY_PLUGGED_USB:
-                            System.out.println ("USB Connected");
+                            //System.out.println ("USB Connected");
                             //Hedwig.deliverNotification("Loading over USB", 14, DataCollectionActivity.this,"Plugged USB");
                             DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"USB Plug",gettime (), 0, 0, "");
                             break;
@@ -1230,6 +1273,56 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 }
 
 
+                /***
+                 *
+                 * PaketManager
+                 *
+                 */
+
+                PackageManager myPM = getPackageManager ();
+
+                if (myPM != null)
+                {
+                    List <ApplicationInfo> packages = myPM.getInstalledApplications (PackageManager.GET_META_DATA);
+
+                    for (ApplicationInfo applicationInfo : packages) {
+
+
+                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Installed package : " + applicationInfo.packageName);
+
+
+                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Theme : " + applicationInfo.theme);
+
+                        // kein Erkenntnisgewinn und nicht überall hinterlegt
+                        // System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Class Name : " + applicationInfo.className);
+
+                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Process Name : " + applicationInfo.processName);
+
+                        if (applicationInfo.permission != null) {
+                            System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Permission : " + applicationInfo.permission);
+                        }
+
+                        // wirft harten Fehler ^^
+//                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Category : " + applicationInfo.category);
+
+                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Enabled : " + applicationInfo.enabled);
+
+                        if (applicationInfo.packageName != null) {
+                            System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Launch Activity : " + myPM.getLaunchIntentForPackage (applicationInfo.packageName));
+                            // eigentlich interessiert der genaue Intent ja nicht...
+                            // System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Launch Activity : true" );
+                        }
+
+                    }
+
+                    // Liste scheint leer zu sein?
+                    List <PackageInfo> preferredPackages = myPM.getPreferredPackages (PackageManager.GET_META_DATA);
+                    System.out.println ("########################################### Preferred package List : " + preferredPackages);
+                    for (PackageInfo packageInfo : preferredPackages) {
+                        System.out.println ("########################################### Preferred package : " + packageInfo.packageName);
+                    }
+
+                }
 
 
 
@@ -1254,7 +1347,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                            if( strAction.equals (Intent.ACTION_USER_PRESENT) || strAction.equals (Intent.ACTION_SCREEN_OFF))
                             {
-                               System.out.println ("#+#+#+#+#+#+#+#+#+#+#+Screen off " + "LOCKED");
+                               //System.out.println ("#+#+#+#+#+#+#+#+#+#+#+Screen off " + "LOCKED");
                                 DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Screen locked",gettime (), 0, 0, "");
                             }
 
@@ -1265,7 +1358,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         if (strAction.equals (Intent.ACTION_SCREEN_ON))
 
                         {
-                            System.out.println ("#+#+#+#+#+#+#+#+#+#+#+Screen on");
+                            //System.out.println ("#+#+#+#+#+#+#+#+#+#+#+Screen on");
                             screen_checked = screen_checked + 1;
                             currentScreenChecks.setText (Float.toString (screen_checked));
 
@@ -1292,7 +1385,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         }
 
                         else {
-                            System.out.println("#+#+#+#+#+#+#+#+#+#+#+UNLOCKED");
+                            //System.out.println("#+#+#+#+#+#+#+#+#+#+#+UNLOCKED");
 
                             // von: https://stackoverflow.com/questions/12934661/android-get-current-date-and-show-it-in-textview
                             //long date = System.currentTimeMillis ();
