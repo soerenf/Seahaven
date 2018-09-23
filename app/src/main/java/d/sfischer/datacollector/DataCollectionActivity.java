@@ -129,6 +129,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     public  List<WifiConfiguration> netConfig2;
 
     public List<String> ssidList = new ArrayList <> ();
+    public List<ApplicationInfo> packagesList = new ArrayList <> ();
 
 
 
@@ -464,15 +465,18 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
             //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Lumen",gettime (), (int) lumen, 0, "");
 
 
-            if (lumen > lumenMax) {
+            // if (lumen > lumenMax) {
+            if (lumen > 100) {
                 lumenMax = lumen;
-                System.out.println ("New Lumen Max: "+ lumenMax);
+                System.out.println ("Lumen: "+ lumenMax);
                 DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Lumen Max",gettime (), (int) lumenMax, 0, "");
             }
 
-            if (lumen < lumenMin) {
+            // if (lumen < lumenMin) {
+            if (lumen < 15) {
+
                 lumenMin = lumen;
-                System.out.println ("New Lumen Min: "+ lumenMin);
+                System.out.println ("Lumen: "+ lumenMin);
                 DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Lumen Min",gettime (), (int) lumenMin, 0,"");
             }
 
@@ -1281,47 +1285,55 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                 PackageManager myPM = getPackageManager ();
 
-                if (myPM != null)
-                {
+                if (myPM != null) {
                     List <ApplicationInfo> packages = myPM.getInstalledApplications (PackageManager.GET_META_DATA);
 
-                    for (ApplicationInfo applicationInfo : packages) {
+                    if (!packages.equals (packagesList)) {
+
+                        for (ApplicationInfo applicationInfo : packages) {
 
 
-                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Installed package : " + applicationInfo.packageName);
+                            System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Installed package : " + applicationInfo.packageName);
 
 
-                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Theme : " + applicationInfo.theme);
+                            System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Theme : " + applicationInfo.theme);
 
-                        // kein Erkenntnisgewinn und nicht überall hinterlegt
-                        // System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Class Name : " + applicationInfo.className);
+                            // kein Erkenntnisgewinn und nicht überall hinterlegt
+                            // System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Class Name : " + applicationInfo.className);
 
-                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Process Name : " + applicationInfo.processName);
+                            System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Process Name : " + applicationInfo.processName);
 
-                        if (applicationInfo.permission != null) {
-                            System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Permission : " + applicationInfo.permission);
-                        }
+                            if (applicationInfo.permission != null) {
+                                System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Permission : " + applicationInfo.permission);
+                            }
 
-                        // wirft harten Fehler ^^
+                            // wirft harten Fehler ^^
 //                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Category : " + applicationInfo.category);
 
-                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Enabled : " + applicationInfo.enabled);
+                            System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Enabled : " + applicationInfo.enabled);
 
-                        if (applicationInfo.packageName != null) {
-                            System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Launch Activity : " + myPM.getLaunchIntentForPackage (applicationInfo.packageName));
-                            // eigentlich interessiert der genaue Intent ja nicht...
-                            // System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Launch Activity : true" );
+                            if (applicationInfo.packageName != null) {
+                                System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Launch Activity : " + myPM.getLaunchIntentForPackage (applicationInfo.packageName));
+                                // eigentlich interessiert der genaue Intent ja nicht...
+                                // System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Launch Activity : true" );
+                            }
+
+                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installed Application", gettime (), 0, 0, applicationInfo.packageName);
+
                         }
 
-                    }
+                        // Liste scheint leer zu sein?
+                        List <PackageInfo> preferredPackages = myPM.getPreferredPackages (0);
+                        System.out.println ("########################################### Preferred package List : " + preferredPackages);
+                        // if (myPM.getPreferredPackages (PackageManager.) != 0) {
+                        for (PackageInfo packageInfo : preferredPackages) {
+                            System.out.println ("########################################### Preferred package : " + packageInfo.packageName);
+                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Preferred Application", gettime (), 0, 0, packageInfo.packageName);
+                        }
 
-                    // Liste scheint leer zu sein?
-                    List <PackageInfo> preferredPackages = myPM.getPreferredPackages (PackageManager.GET_META_DATA);
-                    System.out.println ("########################################### Preferred package List : " + preferredPackages);
-                    for (PackageInfo packageInfo : preferredPackages) {
-                        System.out.println ("########################################### Preferred package : " + packageInfo.packageName);
+                        //  }
                     }
-
+                    packagesList = packages;
                 }
 
 
