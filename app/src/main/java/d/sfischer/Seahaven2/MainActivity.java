@@ -1,4 +1,4 @@
-package d.sfischer.datacollector;
+package d.sfischer.Seahaven2;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
+
+import d.sfischer.Seahaven2.R;
 
 public class MainActivity extends AppCompatActivity {
 

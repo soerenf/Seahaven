@@ -1,4 +1,4 @@
-package d.sfischer.datacollector;
+package d.sfischer.Seahaven2;
 
 import java.io.IOException;
 import okhttp3.Credentials;

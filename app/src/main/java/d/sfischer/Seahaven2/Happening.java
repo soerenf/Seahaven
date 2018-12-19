@@ -1,4 +1,4 @@
-package d.sfischer.datacollector;
+package d.sfischer.Seahaven2;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

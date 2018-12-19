@@ -1,4 +1,4 @@
-package d.sfischer.datacollector;
+package d.sfischer.Seahaven2;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import d.sfischer.Seahaven2.R;
 
 public class DatabaseListDisplay extends Activity implements View.OnClickListener {
 

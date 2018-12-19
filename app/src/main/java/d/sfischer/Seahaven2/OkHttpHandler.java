@@ -1,4 +1,4 @@
-package d.sfischer.datacollector;
+package d.sfischer.Seahaven2;
 
 import android.os.AsyncTask;
 
@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static d.sfischer.datacollector.DataCollectionActivity.gettime;
+import static d.sfischer.Seahaven2.DataCollectionActivity.gettime;
 
 // von: https://www.journaldev.com/13629/okhttp-android-example-tutorial
 

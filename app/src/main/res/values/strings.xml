@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sensor Collector</string>
+    <string name="app_name">Seahaven</string>
     <string name="error_no_sensor">No sensor</string>
     <!-- if sensor not available -->
 </resources>

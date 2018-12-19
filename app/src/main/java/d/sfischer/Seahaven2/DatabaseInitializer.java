@@ -1,4 +1,4 @@
-package d.sfischer.datacollector;
+package d.sfischer.Seahaven2;
 
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.util.List;
 
-import static d.sfischer.datacollector.DataCollectionActivity.gettime;
+import static d.sfischer.Seahaven2.DataCollectionActivity.gettime;
 
 
 // https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9

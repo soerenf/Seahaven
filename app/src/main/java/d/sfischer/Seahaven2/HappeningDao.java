@@ -1,4 +1,4 @@
-package d.sfischer.datacollector;
+package d.sfischer.Seahaven2;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;

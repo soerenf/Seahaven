@@ -1,4 +1,4 @@
-package d.sfischer.collector;
+package d.sfischer.Seahaven2;
 
 import org.junit.Test;
 

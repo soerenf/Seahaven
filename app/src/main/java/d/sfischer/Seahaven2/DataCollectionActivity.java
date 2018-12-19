@@ -1,4 +1,4 @@
-package d.sfischer.datacollector;
+package d.sfischer.Seahaven2;
 
 
 import android.app.Activity;
@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -130,6 +129,14 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
     public List<String> ssidList = new ArrayList <> ();
     public List<ApplicationInfo> packagesList = new ArrayList <> ();
+    List <ApplicationInfo> packages_gotten = null;
+    List<String> packageArray = new ArrayList<>();
+
+    List <AppPackageNameMarshal> kidsList = new ArrayList <AppPackageNameMarshal> ();
+    List <AppPackageNameMarshal> bankingList = new ArrayList <> ();
+    List <AppPackageNameMarshal> datingList = new ArrayList <> ();
+
+
 
 
 
@@ -160,8 +167,22 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         DataCollectionActivity.context = getApplicationContext();
         setContentView (R.layout.activity_second);
 
+        check_after_time ("14:00:00");
+        check_after_time ("16:00:00");
+        check_round_time ();
 
-        initializeViews ();
+        initKidsList ();
+        initBankingList ();
+        initDatingList ();
+
+        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ kidsListSize : " + kidsList.size ());
+        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ datingListSize : " + datingList.size ());
+        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ bankingListSize : " + bankingList.size ());
+
+
+
+
+        //initializeViews ();
 
         //currentUnLocks.setText ("0");
         //currentScreenChecks.setText ("0");
@@ -317,17 +338,17 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
 
-        Button buttonSensorList = findViewById (R.id.button_sensor_list);
 
-        buttonSensorList.setOnClickListener (new View.OnClickListener () {
+
+        Button buttonStartData = findViewById (R.id.button_start_data);
+
+        buttonStartData.setOnClickListener (new View.OnClickListener () {
             @Override
             public void onClick ( View view ) {
+                registerBroadcastReceiver();
 
-                launchActivity (MainActivity.class);
             }
         });
-
-
         Button buttonDatabaseList = findViewById (R.id.button_database_list);
 
         buttonDatabaseList.setOnClickListener (new View.OnClickListener () {
@@ -338,22 +359,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
             }
         });
 
-    }
-
-
-    public void initializeViews ( ) {
-        currentX = findViewById (R.id.currentX);
-        currentY = findViewById (R.id.currentY);
-        currentZ = findViewById (R.id.currentZ);
-
-        maxX = findViewById (R.id.maxX);
-        maxY = findViewById (R.id.maxY);
-        maxZ = findViewById (R.id.maxZ);
-
-        currentUnLocks = findViewById (R.id.times_unlocked);
-        currentScreenChecks = findViewById (R.id.screen_check);
-        currentScreenTime = findViewById (R.id.time_screen_checked);
-        currentUnLockTime = findViewById (R.id.time_screen_unlocked);
     }
 
     //onResume() register the Sensor-Manager for listening the events
@@ -413,12 +418,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
         {
-            // clean current values
-            displayCleanValues ();
-            // display the current x,y,z accelerometer values
-            displayCurrentValues ();
-            // display the max x,y,z accelerometer values
-            displayMaxValues ();
+
 
             // get the change of the x,y,z values of the accelerometer
             deltaX = Math.abs (lastX - event.values[ 0 ]);
@@ -458,42 +458,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         //proximity aber sinnvoller...gehen aber hand in hand...
 
 
-        if (event.sensor.getType() == Sensor.TYPE_LIGHT)
-        {
-            lumen = event.values[0];
 
-            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Lumen",gettime (), (int) lumen, 0, "");
-
-
-            // if (lumen > lumenMax) {
-            if (lumen > 100) {
-                lumenMax = lumen;
-                System.out.println ("Lumen: "+ lumenMax);
-                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Lumen Max",gettime (), (int) lumenMax, 0, "");
-            }
-
-            // if (lumen < lumenMin) {
-            if (lumen < 15) {
-
-                lumenMin = lumen;
-                System.out.println ("Lumen: "+ lumenMin);
-                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Lumen Min",gettime (), (int) lumenMin, 0,"");
-            }
-
-            if ( lumen > significantLightThreshold ){
-                System.out.println ("Significant bright light: "+ lumen);
-                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significant bright light",gettime (), (int) lumen, 0,"");
-            }
-
-            // lumen = 2 schon bei Raum mit Energiesparlmape abends...
-            // erstmal raus
-            /*
-            if ( lumen < 3 ){
-                System.out.println ("Significantly dark "+ lumen);
-                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significantly dark",gettime (), (int) lumen, 0,"");
-            } */
-
-        }
 
         if (event.sensor.getType() == Sensor.TYPE_PROXIMITY)
         {
@@ -525,70 +490,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
         }
 
-        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
-        {
-            //magneticity = event.values[0];
-           magneticity = (float) Math.sqrt((event.values[0]*event.values[0])+(event.values[1]*event.values[1])+(event.values[2]*event.values[2]));
-
-            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Magneticity",gettime (), (int) magneticity, 0, "");
-
-            if (magneticity > magneticityMax) {
-                magneticityMax = magneticity;
-                System.out.println ("New magneticity Max: "+ magneticityMax);
-                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Magneticity Max",gettime (), (int) magneticityMax, 0, "");
-            }
-
-            if (magneticity < magneticityMin) {
-                magneticityMin = magneticity;
-                System.out.println ("New magneticity Min: "+ magneticityMin);
-                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Magneticity Min",gettime (), (int) magneticityMin, 0, "");
-            }
-
-            /* noch keine Ahnung von vernünftigen Grenzwerten
-
-            if ( magneticity > significantMagnetThreshold ){
-                System.out.println ("Significant positive magneticity change: "+ magneticity);
-                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significant positive magneticity change",gettime (), (int) magneticity, 0,"");
-            }
-            if ( magneticity < XX ){
-                System.out.println ("Significant negative magneticity change:"+ magneticity);
-                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significant negative magneticity  change",gettime (), (int) magneticity, 0,"");
-            }*/
-
-        }
-
-        if (event.sensor.getType() == Sensor.TYPE_PRESSURE)
-        {
-            pressure = event.values[0];
-
-            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Pressure",gettime (), (int) pressure, 0, "");
-
-            if (pressure > pressureMax) {
-                pressureMax = pressure;
-                System.out.println ("New pressure Max: "+ pressureMax);
-                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Pressure Max",gettime (), (int) pressureMax, 0, "");
-            }
-
-            if (pressure < pressureMin) {
-                pressureMin = pressure;
-                System.out.println ("New pressure Min: "+ pressureMin);
-                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Pressure Min",gettime (), (int) pressureMin, 0, "");
-            }
-
-            if ( pressure > significantPressureThreshold ){
-                System.out.println ("Significant pressure change: "+ pressure);
-                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significant pressure change",gettime (), (int) pressure, 0,"");
-            }
-            if ( pressure < 1000 ){
-                System.out.println ("Significant low pressure:"+ pressure);
-                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significant low pressure",gettime (), (int) pressure, 0,"");
-            }
-
-        }
 
 
-
-        //hier vielleicht zu viel
 
 
     }
@@ -842,31 +745,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                     }
                                 }
 
-                        /*
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "FQDN: "+ currentWifiConfiguration.FQDN);
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "preSharedKey: "+ currentWifiConfiguration.preSharedKey);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "providerFriendlyName: "+ currentWifiConfiguration.providerFriendlyName);
-                        }
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "allowedAuthAlgorithms: "+ currentWifiConfiguration.allowedAuthAlgorithms);
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "allowedGroupCiphers: "+ currentWifiConfiguration.allowedGroupCiphers);
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "allowedKeyManagement: "+ currentWifiConfiguration.allowedKeyManagement);
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "allowedPairwiseCiphers: "+ currentWifiConfiguration.allowedPairwiseCiphers);
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "allowedProtocols: "+ currentWifiConfiguration.allowedProtocols);
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "enterpriseConfig: "+ currentWifiConfiguration.enterpriseConfig);
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "isHomeProviderNetwork: "+ currentWifiConfiguration.isHomeProviderNetwork);
-                        }
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "roamingConsortiumIds: "+ Arrays.toString (currentWifiConfiguration.roamingConsortiumIds));
-                        }
-
-
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "wepKeys: "+ Arrays.toString (currentWifiConfiguration.wepKeys));
-                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"SSID: "+ currentWifiConfiguration.SSID,gettime (), 0, 0, "wepTxKeyIndex: "+ currentWifiConfiguration.wepTxKeyIndex);
-                        */
 
 
                         }
@@ -1033,12 +912,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                           //  System.out.println(dhcpINFO); //IM WIFI folgendes richtig hier gesetzt: ipaddr, gateway, netmask, dns1, (evtl. dns2) ,DHCP server, lease
 
                             DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP Info ",gettime (), 0, 0, String.valueOf (dhcpINFO));
-                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP internal IP: ",gettime (), 0, 0,  Integer.toString (dhcpINFO.ipAddress));
-                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP gateway: ",gettime (), 0, 0,  Integer.toString (dhcpINFO.gateway));
-                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP netmask: ",gettime (), 0, 0,  Integer.toString (dhcpINFO.netmask));
-                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP dns1: ",gettime (), 0, 0,  Integer.toString (dhcpINFO.dns1));
-                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP dns2: ",gettime (), 0, 0,  Integer.toString (dhcpINFO.dns2));
-                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP Server: ",gettime (), 0, 0,  Integer.toString (dhcpINFO.serverAddress));
+
 
                             //oldDhcpInfo = dhcpINFO;
                         //}
@@ -1102,12 +976,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         //  System.out.println(dhcpINFO); //IM WIFI folgendes richtig hier gesetzt: ipaddr, gateway, netmask, dns1, (evtl. dns2) ,DHCP server, lease
 
                         DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP Info ",gettime (), 0, 0, String.valueOf (dhcpINFO));
-                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP internal IP: ",gettime (), 0, 0,  Integer.toString (dhcpINFO.ipAddress));
-                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP gateway: ",gettime (), 0, 0,  Integer.toString (dhcpINFO.gateway));
-                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP netmask: ",gettime (), 0, 0,  Integer.toString (dhcpINFO.netmask));
-                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP dns1: ",gettime (), 0, 0,  Integer.toString (dhcpINFO.dns1));
-                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP dns2: ",gettime (), 0, 0,  Integer.toString (dhcpINFO.dns2));
-                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP Server: ",gettime (), 0, 0,  Integer.toString (dhcpINFO.serverAddress));
 
                         //oldDhcpInfo = dhcpINFO;
                         //}
@@ -1188,28 +1056,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
 
-                /**
-                 *CALL_Button, kein Gerät zum Testen
-                 */
 
-
-                if (strAction != null && strAction.equals (Intent.ACTION_CALL_BUTTON)) {
-                    //System.out.println ("Call Button pressed!");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Call Button",gettime (), 0, 0, "");
-                }
-
-
-
-
-                /**
-                 * CAMERA Button, kein Gerät zum Testen
-                 */
-
-
-                if (strAction != null && strAction.equals (Intent.ACTION_CAMERA_BUTTON)) {
-                    //System.out.println ("CAMERA_BUTTON pressed!");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Camera Button",gettime (), 0, 0, "");
-                }
 
 
                 /**
@@ -1285,55 +1132,110 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                 PackageManager myPM = getPackageManager ();
 
+
                 if (myPM != null) {
                     List <ApplicationInfo> packages = myPM.getInstalledApplications (PackageManager.GET_META_DATA);
 
-                    if (!packages.equals (packagesList)) {
+
+                    System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages : " + packages.size ());
+                    if (packages_gotten!= null)
+                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages_gotten : " + packages_gotten.size ());
+
+
+
+                    if (!equalLists (packages,packages_gotten)) {
+
+
+
+
 
                         for (ApplicationInfo applicationInfo : packages) {
 
 
-                            System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Installed package : " + applicationInfo.packageName);
+                            //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Installed package : " + applicationInfo.packageName);
+                            if (!(packageArray.contains (applicationInfo.packageName))){
+
+                                packageArray.add (applicationInfo.packageName);
+                                System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Installed package : " + applicationInfo.packageName);
 
 
-                            System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Theme : " + applicationInfo.theme);
+                                for (AppPackageNameMarshal appPackageNameMarshal : kidsList) {
+                                    if(appPackageNameMarshal.getPackageName () == applicationInfo.packageName){
+                                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Kiddy-App : " + appPackageNameMarshal.getAppname ()+ " installed!!!!");
+                                        //Hedwig.deliverNotification ("Sie haben die Kinder App: "+applicationInfo.packageName+"installiert.", );
+                                    }
+
+
+                                }
+                                for (AppPackageNameMarshal appPackageNameMarshal : datingList) {
+                                    if(appPackageNameMarshal.getPackageName ().equals (applicationInfo.packageName)){
+                                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Dating-App : " + appPackageNameMarshal.getAppname ()+ " installed!!!!");
+                                        //Hedwig.deliverNotification ("Sie haben die Dating App: "+applicationInfo.packageName+"installiert.", );
+                                    }
+
+                                }
+                                for (AppPackageNameMarshal appPackageNameMarshal : bankingList) {
+                                    if(appPackageNameMarshal.getPackageName ().equals (applicationInfo.packageName)){
+                                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Banking-App : " + appPackageNameMarshal.getAppname ()+ " installed!!!!");
+                                        //Hedwig.deliverNotification ("Sie haben die Banking App: "+applicationInfo.packageName+"installiert.", );
+                                    }
+
+                                }
+
+
+
+
+
+
+
+                                //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Process Name : " + applicationInfo.processName);
+                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installed Application", gettime (), 0, 0, applicationInfo.packageName);
+                            }
+                            else{
+                                System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Installed package : " + applicationInfo.packageName + "was installed before");
+                                //müsste mir noch überlegen ob ich deinstall/reinstall tracken will
+                            }
+
+
+                            //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Theme : " + applicationInfo.theme);
 
                             // kein Erkenntnisgewinn und nicht überall hinterlegt
                             // System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Class Name : " + applicationInfo.className);
 
-                            System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Process Name : " + applicationInfo.processName);
+                            //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Process Name : " + applicationInfo.processName);
 
-                            if (applicationInfo.permission != null) {
-                                System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Permission : " + applicationInfo.permission);
-                            }
+                        //    if (applicationInfo.permission != null) {
+                        //        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Permission : " + applicationInfo.permission);
+                        //    }
 
-                            // wirft harten Fehler ^^
-//                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Category : " + applicationInfo.category);
 
-                            System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Enabled : " + applicationInfo.enabled);
+                          //  System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Enabled : " + applicationInfo.enabled);
 
-                            if (applicationInfo.packageName != null) {
-                                System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Launch Activity : " + myPM.getLaunchIntentForPackage (applicationInfo.packageName));
+                        //    if (applicationInfo.packageName != null) {
+                        //        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Launch Activity : " + myPM.getLaunchIntentForPackage (applicationInfo.packageName));
                                 // eigentlich interessiert der genaue Intent ja nicht...
                                 // System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Launch Activity : true" );
-                            }
+                         //   }
 
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installed Application", gettime (), 0, 0, applicationInfo.packageName);
+                            /***
+                             *
+                             * Hier checken ob package name in den jeweiligen Liste ist und DB save falls ja mit notification
+                             *
+                             */
+                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installed Application", gettime (), 0, 0, applicationInfo.packageName);
 
                         }
 
-                        // Liste scheint leer zu sein?
-                        List <PackageInfo> preferredPackages = myPM.getPreferredPackages (0);
-                        System.out.println ("########################################### Preferred package List : " + preferredPackages);
-                        // if (myPM.getPreferredPackages (PackageManager.) != 0) {
-                        for (PackageInfo packageInfo : preferredPackages) {
-                            System.out.println ("########################################### Preferred package : " + packageInfo.packageName);
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Preferred Application", gettime (), 0, 0, packageInfo.packageName);
-                        }
+
 
                         //  }
+                        packages_gotten = packages;
+                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages : " + packages.size ());
+                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages_gotten : " + packages_gotten.size ());
+
+                        //packagesList = packages;
                     }
-                    packagesList = packages;
+                    //packagesList = packages;
                 }
 
 
@@ -1371,8 +1273,15 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                         {
                             //System.out.println ("#+#+#+#+#+#+#+#+#+#+#+Screen on");
+                            if (check_round_time () == true) {
+                                System.out.println ("#++++++++++++++++++++++++++++++++ Runde Zeit");
+                            }
+                            if (check_round_time () == (false)||check_round_time () == (null)){
+                                System.out.println ("#++++++++++++++++++++++++++++++++ keine Runde Zeit");
+                            }
+
                             screen_checked = screen_checked + 1;
-                            currentScreenChecks.setText (Float.toString (screen_checked));
+                            //currentScreenChecks.setText (Float.toString (screen_checked));
 
                             //long date = System.currentTimeMillis ();
 
@@ -1388,7 +1297,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                             }
 
-                            currentScreenTime.setText (oldScreenDateString);
+                            //currentScreenTime.setText (oldScreenDateString);
 
                             oldScreenDateString = screenDateString;
 
@@ -1408,14 +1317,14 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             String unlockDateString = gettime ();
 
 
-                            currentUnLockTime.setText (unlockDateString);
+                            //currentUnLockTime.setText (unlockDateString);
 
 
                             times_unlocked = times_unlocked + 1;
                             //locked_Time = Calendar.getInstance().getTime();
 
 
-                            currentUnLocks.setText (Float.toString (times_unlocked));
+                            //currentUnLocks.setText (Float.toString (times_unlocked));
                             //currentTime.setText ((CharSequence) locked_Time);
 
                             //damit unlock nicht zu screen check zählt
@@ -1425,7 +1334,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             screen_checked = 0 ;
 
 
-                            currentScreenChecks.setText (Float.toString (screen_checked));
+                            //currentScreenChecks.setText (Float.toString (screen_checked));
 
                             DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Screen unlocked",gettime (), (int) times_unlocked, 0, "times screen unlocked: "+ Float.toString (times_unlocked));
 
@@ -1445,37 +1354,9 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
     }
 
-    public void displayCleanValues ( ) {
-        currentX.setText ("0.0");
-        currentY.setText ("0.0");
-        currentZ.setText ("0.0");
 
 
-    }
 
-    // display the current x,y,z accelerometer values
-    public void displayCurrentValues ( ) {
-        currentX.setText (Float.toString (deltaX));
-        currentY.setText (Float.toString (deltaY));
-        currentZ.setText (Float.toString (deltaZ));
-
-    }
-
-    // display the max x,y,z accelerometer values
-    public void displayMaxValues ( ) {
-        if (deltaX > deltaXMax) {
-            deltaXMax = deltaX;
-            maxX.setText (Float.toString (deltaXMax));
-        }
-        if (deltaY > deltaYMax) {
-            deltaYMax = deltaY;
-            maxY.setText (Float.toString (deltaYMax));
-        }
-        if (deltaZ > deltaZMax) {
-            deltaZMax = deltaZ;
-            maxZ.setText (Float.toString (deltaZMax));
-        }
-    }
 
 
 
@@ -1558,197 +1439,310 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
         return time;
     }
+
+    public static Boolean check_after_time (String after){
+
+        long date = System.currentTimeMillis();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
+        String time_now = sdf.format(date);
+
+        //SimpleDateFormat border = new SimpleDateFormat("kk:mm:ss");
+        String time_border = after;
+
+
+
+        //Date date1 = Calendar.getInstance().getTime();
+
+        //System.out.println (date1);
+        if (time_now.compareTo(time_border) > 0) {
+            System.out.println("time_now occurs after time_border");
+            return true;
+        } // compareTo method returns the value greater than 0 if this Date is after the Date argument.
+        else if (time_now.compareTo(time_border) < 0) {
+            System.out.println("time_now occurs before time_border");
+            return false;
+        } // compareTo method returns the value less than 0 if this Date is before the Date argument;
+        else if (time_now.compareTo(time_border) == 0) {
+            System.out.println("Both are same dates");
+            return true;
+        } // compareTo method returns the value 0 if the argument Date is equal to the second Date;
+        else {
+            System.out.println("You seem to be a time traveller !!");
+        }
+
+    return null;}
+
+    public static Boolean check_round_time (){
+
+        long date = System.currentTimeMillis();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("ss");
+        String time_now = sdf.format(date);
+
+        //SimpleDateFormat border = new SimpleDateFormat("kk:mm:ss");
+        String round = "00";
+
+
+
+        //Date date1 = Calendar.getInstance().getTime();
+
+        //System.out.println (date1);
+        if (time_now.compareTo(round) > 0) {
+            System.out.println("time_now occurs after round");
+
+            return false;
+        } // compareTo method returns the value greater than 0 if this Date is after the Date argument.
+        else if (time_now.compareTo(round) < 0) {
+            System.out.println("time_now occurs before round");
+            return false;
+        } // compareTo method returns the value less than 0 if this Date is before the Date argument;
+        else if (time_now.compareTo(round) == 0) {
+            System.out.println("Both are round");
+            return true;
+        } // compareTo method returns the value 0 if the argument Date is equal to the second Date;
+        else {
+            System.out.println("You seem to be a time traveller !!");
+        }
+
+        return null;}
+
+    public  boolean equalLists(List<ApplicationInfo> one, List<ApplicationInfo> two){
+
+        if((one == null && two != null) || one != null && two == null || one.size() != two.size()){
+            return false;
+        }
+        return true;
+
+
+        //to avoid messing the order of the lists we will use a copy
+        //as noted in comments by A. R. S.
+        //one = new ArrayList<ApplicationInfo>(one);
+        //two = new ArrayList<ApplicationInfo>(two);
+
+
+        //Collections.sort(one);
+        //Collections.sort(two);
+        //return one.equals(two);
+    }
+
+    public void initKidsList () {
+        AppPackageNameMarshal Roblox = new AppPackageNameMarshal<> ("ROBLOX","com.roblox.client");
+        kidsList.add (Roblox);
+        AppPackageNameMarshal dentist = new AppPackageNameMarshal<> ("Children's doctor : dentist.", "com.YovoGames.dentist");
+        kidsList.add (dentist);
+        AppPackageNameMarshal LegoLife = new AppPackageNameMarshal<> ("LEGO® Life:Safe Social Media for Kids", "com.lego.common.legolife");
+        kidsList.add (LegoLife);
+        AppPackageNameMarshal ballpop = new AppPackageNameMarshal<> ("L.O.L. Surprise Ball Pop", "com.mgae.comlolsurprise.ballpop");
+        kidsList.add (ballpop);
+        AppPackageNameMarshal Duolingo = new AppPackageNameMarshal<> ("Duolingo: Learn Languages Free", "com.duolingo");
+        kidsList.add (Duolingo);
+        AppPackageNameMarshal TocaKitchen2 = new AppPackageNameMarshal<> ("Toca Kitchen 2", "com.tocaboca.tocakitchen2");
+        kidsList.add (TocaKitchen2);
+        AppPackageNameMarshal WildCraft = new AppPackageNameMarshal<> ("WildCraft: Animal Sim Online 3D", "com.turborocketgames.wildcraft");
+        kidsList.add (WildCraft);
+        AppPackageNameMarshal SuperToyClub = new AppPackageNameMarshal<> ("Super Toy Club", "com.superrtl.supertoyclub.toggo");
+        kidsList.add (SuperToyClub);
+        AppPackageNameMarshal BarbieDreamhouseAdventures = new AppPackageNameMarshal<> ("Barbie Dreamhouse Adventures", "com.budgestudios.googleplay.BarbieDreamhouse");
+        kidsList.add (BarbieDreamhouseAdventures);
+        AppPackageNameMarshal LEGOJuniorsCreateCruise = new AppPackageNameMarshal<> ("LEGO® Juniors Create & Cruise", "com.lego.bricksmore");
+        kidsList.add (LEGOJuniorsCreateCruise);
+        AppPackageNameMarshal FarmingSimulator14 = new AppPackageNameMarshal<> ("Farming Simulator 14", "com.giantssoftware.fs14");
+        kidsList.add (FarmingSimulator14);
+        AppPackageNameMarshal Masha = new AppPackageNameMarshal<> ("Masha and the Bear. Educational Games", "com.edujoy.masha.games");
+        kidsList.add (Masha);
+        AppPackageNameMarshal MinionRush = new AppPackageNameMarshal<> ("Minion Rush: Despicable Me Official Game", "com.gameloft.android.ANMP.GloftDMHM");
+        kidsList.add (MinionRush);
+        AppPackageNameMarshal PJMasks = new AppPackageNameMarshal<> ("PJ Masks: Moonlight Heroes", "com.pjmasks.moonlightheroes");
+        kidsList.add (PJMasks);
+        AppPackageNameMarshal HotWheels = new AppPackageNameMarshal<> ("Hot Wheels: Race Off", "com.hutchgames.hotwheels");
+        kidsList.add (HotWheels);
+        AppPackageNameMarshal daddylittlehelper = new AppPackageNameMarshal<> ("Daddy's Little Helper - Messy Home Fun Adventure", "com.tabtale.daddylittlehelper");
+        kidsList.add (daddylittlehelper);
+        AppPackageNameMarshal YouTubeKids = new AppPackageNameMarshal<> ("YouTube Kids", "com.google.android.apps.youtube.kids");
+        kidsList.add (YouTubeKids);
+        AppPackageNameMarshal Mahjong = new AppPackageNameMarshal<> ("Mahjong", "mahjong.games.mahjong.classic.free");
+        kidsList.add (Mahjong);
+        AppPackageNameMarshal Hangman = new AppPackageNameMarshal<> ("Hangman", "com.tellmewow.senior.hangman");
+        kidsList.add (Hangman);
+        AppPackageNameMarshal TOGGOSpiele = new AppPackageNameMarshal<> ("TOGGO Spiele", "de.eoa.srtl.toggospiele");
+        kidsList.add (TOGGOSpiele);
+        AppPackageNameMarshal Kahoot = new AppPackageNameMarshal<> ("Kahoot!", "no.mobitroll.kahoot.android");
+        kidsList.add (Kahoot);
+        AppPackageNameMarshal TOGGOVideos = new AppPackageNameMarshal<> ("TOGGO Videos", "de.toggo");
+        kidsList.add (TOGGOVideos);
+        AppPackageNameMarshal BrainTraining = new AppPackageNameMarshal<> ("Brain Training", "com.raghu.braingame");
+        kidsList.add (BrainTraining);
+        AppPackageNameMarshal PeppaPig= new AppPackageNameMarshal<> ("Peppa Pig: Paintbox", "air.com.peppapig.paintbox");
+        kidsList.add (PeppaPig);
+        AppPackageNameMarshal BabyPanda = new AppPackageNameMarshal<> ("Baby Panda's Child Safety", "com.sinyee.babybus.dailysafety");
+        kidsList.add (BabyPanda);
+        AppPackageNameMarshal KiKAPlayer = new AppPackageNameMarshal<> ("KiKA-Player", "de.kika.kikaplayer");
+        kidsList.add (KiKAPlayer);
+        AppPackageNameMarshal NickelodeonPlay = new AppPackageNameMarshal<> ("ickelodeon Play: Watch TV Shows, Episodes & Video", "com.nickappintl.android.nickelodeon");
+        kidsList.add (NickelodeonPlay);
+        AppPackageNameMarshal LEGONINJAGO = new AppPackageNameMarshal<> ("LEGO® NINJAGO®: Ride Ninja", "com.lego.ninjago.rideninja");
+        kidsList.add (LEGONINJAGO);
+        AppPackageNameMarshal Babycare = new AppPackageNameMarshal<> ("Baby care", "com.YovoGames.babycare");
+        kidsList.add (Babycare);
+        AppPackageNameMarshal LEGO3DKatalog = new AppPackageNameMarshal<> ("LEGO® 3D Katalog", "com.lego.catalogue.german");
+        kidsList.add (LEGO3DKatalog);
+
+
+    }
+
+    public void initDatingList () {
+        AppPackageNameMarshal kicker = new AppPackageNameMarshal <> ("kicker", "com.netbiscuits.kicker");
+        datingList.add (kicker);
+
+        AppPackageNameMarshal Parship = new AppPackageNameMarshal <> ("Parship – Partnersuche", "com.parship.android");
+        datingList.add (Parship);
+
+        AppPackageNameMarshal iDates = new AppPackageNameMarshal <> ("iDates - Chats, Flirts, Dating, Love & Relations", "com.boranuonline.idates");
+        datingList.add (iDates);
+
+
+        AppPackageNameMarshal Knuddels = new AppPackageNameMarshal <> ("Knuddels - Chat. Play. Flirt.", "com.knuddels.android");
+        datingList.add (Knuddels);
+
+
+
+        AppPackageNameMarshal CasualDatingAdultSinglesJoyride = new AppPackageNameMarshal <> ("Casual Dating & Adult Singles - Joyride", "com.jaumo.casual");
+        datingList.add (CasualDatingAdultSinglesJoyride);
+
+
+        AppPackageNameMarshal FindRealLoveYouLovePremiumDating = new AppPackageNameMarshal <> ("Find Real Love — YouLove Premium Dating", "com.jaumo.prime");
+        datingList.add (FindRealLoveYouLovePremiumDating);
+
+
+        AppPackageNameMarshal FreeDatingFlirtChatChoiceofLove = new AppPackageNameMarshal <> ("Free Dating & Flirt Chat - Choice of Love", "com.choiceoflove.dating");
+        datingList.add (FreeDatingFlirtChatChoiceofLove);
+
+
+        AppPackageNameMarshal CamGirlsLiveChat	 = new AppPackageNameMarshal <> ("Cam Girls Live Chat", "com.live.camgirls.chat");
+        datingList.add (CamGirlsLiveChat);
+
+
+        AppPackageNameMarshal Bildkontakte= new AppPackageNameMarshal <> ("Bildkontakte - Flirt & Dating", "de.entrex.bildkontakte");
+        datingList.add (Bildkontakte);
+
+
+        AppPackageNameMarshal Koko = new AppPackageNameMarshal <> ("Parship – Partnersuche", "com.koko.dating.chat");
+        datingList.add (Koko);
+
+
+        AppPackageNameMarshal whispar = new AppPackageNameMarshal <> ("whispar", "com.talk4date.whispar.android");
+        datingList.add (whispar);
+
+
+        AppPackageNameMarshal CamGirlsVideoChat = new AppPackageNameMarshal <> ("Cam Girls Video & Chat", "com.camgirl.video.chat");
+        datingList.add (CamGirlsVideoChat);
+
+
+        AppPackageNameMarshal yoomee = new AppPackageNameMarshal <> ("yoomee - Flirt Dating Chat App", "de.mobiletrend.lovidoo");
+        datingList.add (yoomee);
+
+
+        AppPackageNameMarshal OkCupid = new AppPackageNameMarshal <> ("OkCupid - The #1 Online Dating App for Great Dates", "com.okcupid.okcupid");
+        datingList.add (OkCupid);
+
+
+        AppPackageNameMarshal LoveScout24 = new AppPackageNameMarshal <> ("LoveScout24 - Flirt App", "de.friendscout24.android.messaging");
+        datingList.add (LoveScout24);
+
+
+        AppPackageNameMarshal Once = new AppPackageNameMarshal <> ("Once - Quality Matches Every day", "com.once.android");
+        datingList.add (Once);
+
+
+        AppPackageNameMarshal Muslima = new AppPackageNameMarshal <> ("Muslima - Muslim Matrimonials App", "com.cupidmedia.wrapper.muslima");
+        datingList.add (Muslima);
+
+
+        AppPackageNameMarshal MyDates = new AppPackageNameMarshal <> ("MyDates - The best way to find long lasting love", "com.boranuonline.mydates2");
+        datingList.add (MyDates);
+
+
+        AppPackageNameMarshal ROMEO = new AppPackageNameMarshal <> ("ROMEO - Gay Chat & Dating", "com.planetromeo.android.app");
+        datingList.add (ROMEO);
+
+
+        AppPackageNameMarshal HotorNot = new AppPackageNameMarshal <> ("Hot or Not - Find someone right now", "com.hotornot.app");
+        datingList.add (HotorNot);
+
+
+        AppPackageNameMarshal YoCutie = new AppPackageNameMarshal <> ("Free Dating App - YoCutie - Flirt, Chat & Meet", "de.appfiction.yocutiegoogle");
+        datingList.add (YoCutie);
+
+
+        AppPackageNameMarshal Chatro = new AppPackageNameMarshal <> ("Parship – Partnersuche", "jking.chat");
+        datingList.add (Chatro);
+
+
+        AppPackageNameMarshal ElitePartner = new AppPackageNameMarshal <> ("ElitePartner - dating site", "de.elitepartner.android");
+        datingList.add (ElitePartner);
+
+
+        AppPackageNameMarshal FINALLY = new AppPackageNameMarshal <> ("Dating for 50 plus Mature Singles – FINALLY", "com.jaumo.mature");
+        datingList.add (FINALLY);
+
+
+        AppPackageNameMarshal RusDate = new AppPackageNameMarshal <> ("Russian Dating & Chat for Russian speaking RusDate", "com.rusdate.net");
+        datingList.add (RusDate);
+
+
+        AppPackageNameMarshal WomenRadar = new AppPackageNameMarshal <> ("Women Radar - Free dating single women and girls", "com.rubisoft.womenradar");
+        datingList.add (WomenRadar);
+
+
+        AppPackageNameMarshal ChatVideo = new AppPackageNameMarshal <> ("ChatVideo - Meet New People", "air.com.flaxbin.chat");
+        datingList.add (ChatVideo);
+
+
+        AppPackageNameMarshal Stranger = new AppPackageNameMarshal <> ("Stranger Chat & Date", "dynnsoft.strangersmeet");
+        datingList.add (Stranger);
+
+
+        AppPackageNameMarshal Zoosk = new AppPackageNameMarshal <> ("Find your Love. Match & Meet your Date on Zoosk.", "com.zoosk.zoosk");
+        datingList.add (Zoosk);
+
+
+        AppPackageNameMarshal buzzArab = new AppPackageNameMarshal <> ("buzzArab - Single Arabs and Muslims", "com.buzzarab.buzzarab");
+        datingList.add (buzzArab);
+
+
+        AppPackageNameMarshal DeutscheChatDatingKostenlos = new AppPackageNameMarshal <> ("Deutsche Chat & Dating Kostenlos", "com.oneschat.germany");
+        datingList.add (DeutscheChatDatingKostenlos);
+
+        //da fehlen welche die nicht unter dating laufen.....lifestyle, social
+        // gute auflistung unter https://www.smartmobil.de/magazin/dating-apps-im-test stand 19.12.2018
+        // Grindr - Gay chat    com.grindrapp.android
+        // Tinder               com.tinder
+        // LOVOO®               net.lovoo.android
+        // Badoo - Free Chat & Dating App   com.badoo.mobile
+        // ??? Premium Dating com.badoo.mobile.premium weil kostenpflichtige app fraglich
+        // Candidate – Dating App       at.schneider_holding.candidate
+        // Bumble — Date. Meet Friends. Network.    com.bumble.app
+        // happn – Local dating app     com.ftw_and_co.happn
+        //
+        //
+        //
+        //
+        //
+
+    }
+
+
+
+    public void initBankingList () {
+
+
+        // http://www.die-bank.de/fileadmin/images/top100/diebank_07-2018_Top-100.pdf als Quell ok?
+        AppPackageNameMarshal YouTube = new AppPackageNameMarshal <> ("YouTube", "com.google.android.youtube");
+        bankingList.add (YouTube);
+    }
 }
 
-
-
-
-/*
- *
- * BluetoothManager...
- *
- */
-
-
-
-/*
- *
- * PreferenceManager
- *
- */
-
-/*
- *
- * AccountManager interessant!
- *
- */
-
-/*
- *
- * FragmentManager
- *
- */
-
-
-/*
- *
- * Package Manager interessant!
- * z.B. getInstalledPackages
- *
- */
-
-/*
- *
- * UsageStatsManager
- *
- * für Auswertung evtl interessant...
- *
- */
-
-
-/*
- *
- * AssetManager, scheint uninteressant
- *
- */
-
-
-/*
- *
- * ShortcutManager
- *
- */
-
-
-/*
- *
- * SmsManager auch Sachen ohne Permissions?
- *
- */
-
-/*
- *
- * WallpaperManager, trolling? Rick roll wallpaper?
- *
- */
-
-/*
- *
- * ConsumerIrManager
- * inkl. hasIrEmitter () und transmit()
- *
- */
-
-
-/*
- *
- * SearchManager, was wie wo suchen?
- *
- */
-
-
-/*
- *
- * WifiP2pManager ??
- *
- */
-
-
-/*
- *
- * SubscriptionManager
- *
- */
-
-
-/*
- *
- * NsdManager
- * Network service discovery
- * z.B. printer detection in Network!!!!!!!
- *
- */
-
-/*
- *
- * FingerprintManager -> BiometricPrompt
- *
- */
-
-/*
- *
- * TelecomManager
- * nicht alles mit permission
- * z.B. getPhoneAccount
- *
- */
-
-/*
- *
- * NfcAdapter einiges mit möglich...
- *
- */
-
-/*
- *
- * UsbManager, für connected devices
- *
- */
-
-
-/*
- *
- * InputManager RubberDucky oder allgemein Tastatur erkennen?
- *
- */
-
-/*
- *
- * AccessibilityManager
- *
- */
-
-/*
- *
- * RingtoneManager
- * Standard ringtone holen und dann abspielen?
- *
- */
-
-
-/*
- *
- * KeyguardManager
- * z.T. schon genutzt aber weitere Möglichkeiten wie. z.B. isDeviceSecure ()
- *
- */
-
-
-/*
- *
- * MediaSessionManager
- *
- */
-
-
-/*
- *
- * SipManager Sip calls?????
- *
- */
-
-/*
- *
- * ClipboardManager
- * z.B. setPrimaryClip
- *
- */
-
-/*
- *
- * PrintManager, no Permissions.....
- *
- */
 
 
 
