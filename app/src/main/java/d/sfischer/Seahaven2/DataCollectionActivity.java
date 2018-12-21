@@ -1714,21 +1714,42 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         AppPackageNameMarshal DeutscheChatDatingKostenlos = new AppPackageNameMarshal <> ("Deutsche Chat & Dating Kostenlos", "com.oneschat.germany");
         datingList.add (DeutscheChatDatingKostenlos);
 
-        //da fehlen welche die nicht unter dating laufen.....lifestyle, social
+        //da fehlen welche die nicht unter der dating-kategorie laufen.....lifestyle, social
         // gute auflistung unter https://www.smartmobil.de/magazin/dating-apps-im-test stand 19.12.2018
+
+        AppPackageNameMarshal Grindr = new AppPackageNameMarshal <> ("Grindr - Gay chat", "com.grindrapp.android");
+        datingList.add (Grindr);
         // Grindr - Gay chat    com.grindrapp.android
+
+        AppPackageNameMarshal Tinder = new AppPackageNameMarshal <> ("Tinder", "com.tinder");
+        datingList.add (Tinder);
         // Tinder               com.tinder
+
+        AppPackageNameMarshal LOVOO = new AppPackageNameMarshal <> ("LOVOO®", "net.lovoo.android");
+        datingList.add (LOVOO);
         // LOVOO®               net.lovoo.android
+
+        AppPackageNameMarshal Badoo = new AppPackageNameMarshal <> ("Badoo - Free Chat & Dating App", "com.badoo.mobile");
+        datingList.add (Badoo);
         // Badoo - Free Chat & Dating App   com.badoo.mobile
+
+        AppPackageNameMarshal BadooPremium = new AppPackageNameMarshal <> ("Badoo Premium Dating", "com.badoo.mobile.premium");
+        datingList.add (BadooPremium);
         // ??? Premium Dating com.badoo.mobile.premium weil kostenpflichtige app fraglich
+
+        AppPackageNameMarshal Candidate = new AppPackageNameMarshal <> ("Candidate – Dating App", "at.schneider_holding.candidate");
+        datingList.add (Candidate);
         // Candidate – Dating App       at.schneider_holding.candidate
+
+        AppPackageNameMarshal Bumble = new AppPackageNameMarshal <> ("Bumble — Date. Meet Friends. Network.", "com.bumble.app");
+        datingList.add (Bumble);
         // Bumble — Date. Meet Friends. Network.    com.bumble.app
+
+        AppPackageNameMarshal happn = new AppPackageNameMarshal <> ("happn – Local dating app", "com.ftw_and_co.happn");
+        datingList.add (happn);
         // happn – Local dating app     com.ftw_and_co.happn
-        //
-        //
-        //
-        //
-        //
+
+
 
     }
 
@@ -1736,10 +1757,211 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
     public void initBankingList () {
 
+        // weil paypal DOH!
+        AppPackageNameMarshal PayPal = new AppPackageNameMarshal <> ("PayPal Mobile Cash: Send and Request Money Fast", "com.paypal.android.p2pmobile");
+        bankingList.add (PayPal);
+
+        // nach Banking gesucht
+
+        AppPackageNameMarshal VRBanking = new AppPackageNameMarshal <> ("VR-Banking", "de.fiducia.smartphone.android.banking.vr");
+        bankingList.add (VRBanking);
+
+        AppPackageNameMarshal N26 = new AppPackageNameMarshal <> ("26 – The Mobile Bank", "de.number26.android");
+        bankingList.add (N26);
+
+        AppPackageNameMarshal СбербанкОнлайн = new AppPackageNameMarshal <> ("Сбербанк Онлайн\t", "ru.sberbankmobile");
+        bankingList.add (СбербанкОнлайн);
+
+        AppPackageNameMarshal BankNorwegian = new AppPackageNameMarshal <> ("Bank Norwegian", "com.banknorwegian");
+        bankingList.add (BankNorwegian);
+
+        AppPackageNameMarshal SpardaApp = new AppPackageNameMarshal <> (" SpardaApp", "de.sdvrz.ihb.mobile.app");
+        bankingList.add (SpardaApp);
+
+        AppPackageNameMarshal TARGOBANK = new AppPackageNameMarshal <> ("TARGOBANK Mobile Banking", "com.targo_prod.bad");
+        bankingList.add (TARGOBANK);
+
+        AppPackageNameMarshal Hanseatic = new AppPackageNameMarshal <> ("Hanseatic Bank Mobile", "com.hanseaticbank.banking");
+        bankingList.add (Hanseatic);
+
+        AppPackageNameMarshal ING = new AppPackageNameMarshal <> ("ING Smart Banking", "MyING.be");
+        bankingList.add (ING);
+
+        AppPackageNameMarshal Consorsbank = new AppPackageNameMarshal <> ("Consorsbank", "de.consorsbank");
+        bankingList.add (Consorsbank);
+
+        AppPackageNameMarshal Fidor = new AppPackageNameMarshal <> ("Fidor Smart Banking", "com.fidor.fsw");
+        bankingList.add (Fidor);
+
+        AppPackageNameMarshal EB = new AppPackageNameMarshal <> ("EB-Banking", "de.eb.banking.privat");
+        bankingList.add (EB);
+
+        AppPackageNameMarshal PSD = new AppPackageNameMarshal <> ("PSD Banking", "de.psd.banking.privat");
+        bankingList.add (PSD);
+
+        AppPackageNameMarshal BBBank = new AppPackageNameMarshal <> ("BBBank-Banking", "de.bbbank.banking.privat");
+        bankingList.add (BBBank);
+
+        AppPackageNameMarshal AlfaBank = new AppPackageNameMarshal <> ("Альфа-Банк (Alfa-Bank)", "ru.alfabank.mobile.android");
+        bankingList.add (AlfaBank);
+
+        AppPackageNameMarshal Monzo = new AppPackageNameMarshal <> ("Monzo Bank", "co.uk.getmondo");
+        bankingList.add (Monzo);
+
+        AppPackageNameMarshal Ecobank = new AppPackageNameMarshal <> ("Ecobank Mobile Banking", "com.app.ecobank");
+        bankingList.add (Ecobank);
+
+        AppPackageNameMarshal Capitec = new AppPackageNameMarshal <> ("Capitec Remote Banking", "capitecbank.remote.prd");
+        bankingList.add (Capitec);
+
+        AppPackageNameMarshal NBG = new AppPackageNameMarshal <> ("NBG Mobile Banking", "mbanking.NBG");
+        bankingList.add (NBG);
+
+        AppPackageNameMarshal BankofScotland = new AppPackageNameMarshal <> ("Bank of Scotland Mobile Banking: secure on the go", "com.grppl.android.shell.BOS");
+        bankingList.add (BankofScotland);
+
+        AppPackageNameMarshal SpardaSecureApp = new AppPackageNameMarshal <> ("SpardaSecureApp", "de.sdvrz.ihb.mobile.secureapp.sparda.produktion");
+        bankingList.add (SpardaSecureApp);
+
+        AppPackageNameMarshal HSBC = new AppPackageNameMarshal <> ("HSBC Mobile Banking", "com.htsu.hsbcpersonalbanking");
+        bankingList.add (HSBC);
+
+        AppPackageNameMarshal AlphaBank = new AppPackageNameMarshal <> ("Alpha Bank", "com.mobileloft.alpha.droid");
+        bankingList.add (AlphaBank);
+
+        AppPackageNameMarshal Degussa = new AppPackageNameMarshal <> ("Degussa Bank Banking+Brokerage", "de.degussa_bank.degussabank");
+        bankingList.add (Degussa);
+
+        AppPackageNameMarshal dzbank = new AppPackageNameMarshal <> ("DepotPLUS – Finanzassistent", "de.dzbank.depotplus");
+        bankingList.add (dzbank);
+
+        AppPackageNameMarshal GLSmBank = new AppPackageNameMarshal <> ("GLS mBank", "de.gls.mbank");
+        bankingList.add (GLSmBank);
+
+        AppPackageNameMarshal pbb = new AppPackageNameMarshal <> ("pbb direkt push TAN", "de.fintech.pbbdirekt.ptan");
+        bankingList.add (pbb);
+
 
         // http://www.die-bank.de/fileadmin/images/top100/diebank_07-2018_Top-100.pdf als Quell ok?
-        AppPackageNameMarshal YouTube = new AppPackageNameMarshal <> ("YouTube", "com.google.android.youtube");
-        bankingList.add (YouTube);
+
+        //  1 Deutsche Bank AG
+        AppPackageNameMarshal DeutscheBankMobile = new AppPackageNameMarshal <> ("Deutsche Bank Mobile", "com.db.pwcc.dbmobile");
+        bankingList.add (DeutscheBankMobile);
+
+        AppPackageNameMarshal DeutscheBankphotoTAN = new AppPackageNameMarshal <> ("Deutsche Bank photoTAN", "com.db.pbc.phototan.db");
+        bankingList.add (DeutscheBankphotoTAN);
+
+        //  2 DZ Bank AG
+        AppPackageNameMarshal dzbankderivate = new AppPackageNameMarshal <> (" dzbank-derivate.de - Zertifikate und Hebelprodukte", "de.eniteo.mobile");
+        bankingList.add (dzbankderivate);
+
+        //  3 KfW
+        // keine gefunden
+
+
+        //  4 Commerzbank AG
+        AppPackageNameMarshal CommerzbankphotoTAN = new AppPackageNameMarshal <> ("Commerzbank photoTAN", "com.commerzbank.photoTAN");
+        bankingList.add (CommerzbankphotoTAN);
+
+        AppPackageNameMarshal Commerzbank = new AppPackageNameMarshal <> ("Commerzbank Banking App", "de.commerzbanking.mobil");
+        bankingList.add (Commerzbank);
+
+
+        //  5 Unicredit Bank AG
+        AppPackageNameMarshal HVB = new AppPackageNameMarshal <> ("HVB Mobile B@nking", "eu.unicreditgroup.hvbapptan");
+        bankingList.add (HVB);
+
+        //  6 Landesbank Baden-Württemberg
+        AppPackageNameMarshal BWpushTAN = new AppPackageNameMarshal <> ("BW-pushTAN für mobiles Banking", "com.starfinanz.mobile.android.bwpushtan");
+        bankingList.add (BWpushTAN);
+
+        AppPackageNameMarshal BW = new AppPackageNameMarshal <> ("BW Mobilbanking für Smartphone und Tablet", "com.starfinanz.smob.android.bwmobilbanking");
+        bankingList.add (BW);
+
+        //  7 Bayerische Landesbank
+        // nur apple https://itunes.apple.com/de/app/e-client/id968664471?mt=8
+
+        //  8 Norddeutsche Landesbank Girozentrale
+        // nichts dazu explizit
+
+        //  9 ING-DiBa AG
+        AppPackageNameMarshal INGBankingtogo = new AppPackageNameMarshal <> ("ING Banking to go", "de.ingdiba.bankingapp");
+        bankingList.add (INGBankingtogo);
+
+        // 10 Landesbank Hessen-Thüringen Girozentrale
+        AppPackageNameMarshal Helaba = new AppPackageNameMarshal <> ("Helaba Kunde", "de.helaba.HelabaApp");
+        bankingList.add (Helaba);
+
+        // 11 NRW.Bank
+        AppPackageNameMarshal NRWBANK = new AppPackageNameMarshal <> ("NRW.BANK", "net.plazz.mea.nrwbank");
+        bankingList.add (NRWBANK);
+
+        // 12 Deutsche Postbank AG
+        AppPackageNameMarshal Postbank = new AppPackageNameMarshal <> ("Postbank Finanzassistent", "de.postbank.finanzassistent");
+        bankingList.add (Postbank);
+
+        // 13 Deka Bank Deutsche Girozentrale
+        AppPackageNameMarshal DekaImmobilienfonds = new AppPackageNameMarshal <> ("Deka Immobilienfonds", "de.fiveandfriends.InterSelect.Android");
+        bankingList.add (DekaImmobilienfonds);
+
+
+        // 14 Landwirtschaftliche Rentenbank
+        // nichts gefunden
+
+        // 15 Volkswagen Bank GmbH
+        AppPackageNameMarshal BankingVW = new AppPackageNameMarshal <> ("Banking (Volkswagen Financial Services AG)", "com.vwfs.Banking");
+        bankingList.add (BankingVW);
+
+
+        // 16 DKB Deutsche Kreditbank AG
+        AppPackageNameMarshal DKB = new AppPackageNameMarshal <> ("DKB-Banking", "de.dkb.portalapp");
+        bankingList.add (DKB);
+
+        // 17 Landeskreditbank Baden-Württemberg - Förderbank (L-Bank)
+
+
+        // 18 HSH Nordbank AG // App aber nicht für normale Kunden
+        AppPackageNameMarshal HSH = new AppPackageNameMarshal <> ("HSH Banking", "com.hshnordbank.hshbanking");
+        bankingList.add (HSH);
+
+        // 19 Bausparkasse Schwäbisch Hall AG
+        AppPackageNameMarshal BausparkasseSchwäbischHall = new AppPackageNameMarshal <> (" Bausparkasse Schwäbisch Hall - MEIN KONTO", "de.bsh.meinkonto");
+        bankingList.add (BausparkasseSchwäbischHall);
+
+        // 20 Deutsche Pfandbriefbank AG
+        // auf Seite nix und Deutsche Bank als Vorschlag
+
+        // 21 Landesbank Berlin AG
+        // auf Seite nix und finanzblick Online-Banking als Vorschlag
+
+        // 22 Hamburger Sparkasse AG           // 29 BHW Bausparkasse AG
+        AppPackageNameMarshal Sparkasse = new AppPackageNameMarshal <> ("Sparkasse Ihre mobile Filiale", "com.starfinanz.smob.android.sfinanzstatus");
+        bankingList.add (Sparkasse);
+
+        // 23 Santander Consumer Bank AG
+        AppPackageNameMarshal Santander = new AppPackageNameMarshal <> ("Santander Mobile Banking", "mobile.santander.de");
+        bankingList.add (Santander);
+
+        // 24 Aareal Bank AG
+        // nur für apple https://itunes.apple.com/de/app/aareal-sign/id1058778609?mt=8
+
+        // 25 Deutsche Apotheker- und Ärztebank e. G.
+        AppPackageNameMarshal apoBanking = new AppPackageNameMarshal <> ("apoBanking", "de.apobank.banking");
+        bankingList.add (apoBanking);
+
+        // 26 Münchener Hypothekenbank e.G.
+        // nichts gefunden
+
+        // 27 WL Bank AG Westfälische Landschaft Bodenkreditbank
+        // auf Seite nix und SpardaApp als Vorschlag
+
+
+        // 28 DG Hyp Deutsche Genossenschafts-Hypothekenbank AG
+        // nichts gefunden
+
+        // 30 Mercedes-Benz Bank AG
+        // nichts gefunden
+
     }
 }
 

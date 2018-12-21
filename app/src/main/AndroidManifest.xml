@@ -93,7 +93,7 @@
 
             </intent-filter>
         </receiver>
-
+        <activity android:name="d.sfischer.Seahaven2.DatabaseEditor"></activity>
     </application>
 
 </manifest>

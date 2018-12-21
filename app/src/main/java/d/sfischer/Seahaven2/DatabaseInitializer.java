@@ -50,16 +50,19 @@ public class DatabaseInitializer {
         task.execute();
     }
 
-    private static void getFromDb (AppDatabase db,String happeningName){
+    //private static void getFromDb (AppDatabase db,String happeningName){
+    private static Happening getFromDb (AppDatabase db,String happeningName){
         Happening happening = db.happeningDao().findByName (happeningName);
         if(happening != null)
         {
             System.out.println ("############################# Happening Name :  "+ happening.getHappeningName ());
+            return happening;
         }
         else
             {
                 System.out.println ("############################# No such happening found!");
                 //Hedwig.deliverNotification ("No such happening found!",465, DataCollectionActivity.getAppContext (),"getfromDB");
+                return null;
             }
 
      }

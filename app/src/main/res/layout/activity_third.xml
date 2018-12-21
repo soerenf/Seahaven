@@ -27,13 +27,13 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"/>
 
-    <TextView
+    <ListView
         android:id="@+id/text_database_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="(placeholder)"
-        android:textSize="10dp" />
+        android:textSize="20dp" />
 
 </LinearLayout>
 </ScrollView>

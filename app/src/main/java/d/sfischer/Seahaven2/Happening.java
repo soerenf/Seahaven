@@ -3,6 +3,7 @@ package d.sfischer.Seahaven2;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.database.Cursor;
 
 
 // https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9
@@ -92,6 +93,7 @@ public class Happening {
     public void setInfo(String info) {
         this.info = info;
     }
+
 
 
 }
