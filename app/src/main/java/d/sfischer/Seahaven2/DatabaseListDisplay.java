@@ -84,6 +84,8 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
         //ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, databaseTextList);
         databaseListView.setAdapter (adapter);
 
+
+
         //adapter.notifyDataSetChanged();
         //databaseListView.setText(databaseText);
 
@@ -128,6 +130,9 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
             }
         });
         databaseTextList = initDatabaseView ();
+        //( (ArrayAdapter) adapter ).clear ();
+        //( (ArrayAdapter) adapter ).addAll (databaseTextList);
+        //( (ArrayAdapter) adapter ).notifyDataSetChanged ();
 
     }
 
@@ -223,6 +228,9 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
                 //System.out.println (databaseText);
 
                 databaseTextList = initDatabaseView ();
+                //( (ArrayAdapter) adapter ).clear ();
+                ( (ArrayAdapter) adapter ).addAll (databaseTextList);
+                ( (ArrayAdapter) adapter ).notifyDataSetChanged ();
                 break;
 
 
