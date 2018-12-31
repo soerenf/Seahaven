@@ -37,6 +37,7 @@ public class OkHttpHandler extends AsyncTask <String, Void, String>{
         //txtString.setText(s);
         //System.out.println(s);
         DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"OkHttpHandler",gettime (), 0, 0, s);
+        // hier operationen auf s um das zu splitten? vllt abhängig von call?
     }
 
 

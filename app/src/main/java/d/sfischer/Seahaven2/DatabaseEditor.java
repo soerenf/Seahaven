@@ -3,14 +3,18 @@ package d.sfischer.Seahaven2;
 // aus https://github.com/mitchtabian/SaveReadWriteDeleteSQLite
 
 
+import android.arch.persistence.room.Database;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import static d.sfischer.Seahaven2.DataCollectionActivity.gettime;
 
 public class DatabaseEditor extends AppCompatActivity {
 
@@ -22,6 +26,7 @@ public class DatabaseEditor extends AppCompatActivity {
     Happening mDatabaseHelper;
 
     private String selectedName;
+    private String selectedText;
     private int selectedID;
 
     @Override
@@ -42,6 +47,8 @@ public class DatabaseEditor extends AppCompatActivity {
         //now get the name we passed as an extra
         selectedName = receivedIntent.getStringExtra("name");
 
+        selectedText =  receivedIntent.getStringExtra("text");
+
         //set the text to show the current selected name
         editable_item.setText(selectedName);
 
@@ -51,6 +58,9 @@ public class DatabaseEditor extends AppCompatActivity {
                 String item = editable_item.getText().toString();
                 if(!item.equals("")){
                    // mDatabaseHelper.updateName(item,selectedID,selectedName);
+                    Intent DatabaseListDisplayIntent = new Intent(DatabaseEditor.this, DatabaseListDisplay.class);
+                    startActivity(DatabaseListDisplayIntent);
+
                 }else{
                     toastMessage("You must enter a name");
                 }
@@ -60,9 +70,22 @@ public class DatabaseEditor extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mDatabaseHelper.deleteName(selectedID,selectedName);
+
                 editable_item.setText("");
+
+                System.out.println ("++++++++++++++ Deleting entry with UID: "+ selectedID+" and name " +selectedName);
+                DatabaseInitializer.removeFromAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()), selectedID);
                 toastMessage("removed from database");
+
+
+                //DatabaseListDisplay.databaseTextList = DatabaseListDisplay.initDatabaseView ();
+                // muss ich via singleton machen oder wie????
+                DatabaseListDisplay.listViewChanged(DataCollectionActivity.getAppContext (),selectedText);
+
+
+                Intent DatabaseListDisplayIntent = new Intent(DatabaseEditor.this, DatabaseListDisplay.class);
+                startActivity(DatabaseListDisplayIntent);
+
             }
         });
 

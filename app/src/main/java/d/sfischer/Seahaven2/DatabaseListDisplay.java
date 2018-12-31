@@ -1,6 +1,7 @@
 package d.sfischer.Seahaven2;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import static android.content.ContentValues.TAG;
 public class DatabaseListDisplay extends Activity implements View.OnClickListener {
 
 
+    private static final String TAG = "DatabaseListDisplay";
     private Button ButtonSensorData, ButtonRefreshData;
     static List<Happening> databaseList;
     public ListView databaseListView;
@@ -28,6 +30,7 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
     //static StringBuilder databaseText = new StringBuilder();
     String[] databaseText;
     static List<String> databaseTextList = new ArrayList <> ();
+
 
     DatabaseInitializer mDatabaseHelper;
 
@@ -79,10 +82,14 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
         }
 
         */
+
+        databaseTextList = initDatabaseView ();
         ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, databaseTextList);
 
         //ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, databaseTextList);
         databaseListView.setAdapter (adapter);
+
+        ( (ArrayAdapter) adapter ).notifyDataSetChanged ();
 
 
 
@@ -106,10 +113,20 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
                 Log.d(TAG, "onItemClick: You Clicked on " + name);
                 System.out.println ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + name);
 
+
+                String[] tokens = name.split  (" ");
+                System.out.println ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + tokens[0]);
+                //DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (this),tokens[1]);
+                //DatabaseInitializer.getAllfromAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()));
+
+
+
                 //Cursor data = mDatabaseHelper.getItemID(name); //get the id associated with that name
                 //Cursor data = mDatabaseHelper. (name); //get the id associated with that name
                 //DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (this),name);
-                int itemID = -1;
+
+
+                //int itemID = -1;
 
 
                 /*
@@ -117,11 +134,14 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
                     itemID = data.getInt(0);
                 }
                 */
-                if(itemID > -1){
-                    Log.d(TAG, "onItemClick: The ID is: " + itemID);
+                if(Integer.parseInt(tokens[0]) > -1){
+                    Log.d(TAG, "onItemClick: The ID is: " + tokens[0]);
                     Intent DatabaseEditIntent = new Intent(DatabaseListDisplay.this, DatabaseEditor.class);
-                    DatabaseEditIntent.putExtra("id",itemID);
-                    DatabaseEditIntent.putExtra("name",name);
+                    DatabaseEditIntent.putExtra("id",Integer.parseInt(tokens[0]));
+
+                    DatabaseEditIntent.putExtra("name",tokens[2]);
+                    DatabaseEditIntent.putExtra("text",name);
+
                     startActivity(DatabaseEditIntent);
                 }
                 else{
@@ -157,19 +177,24 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
 
                 if (!testList.contains (currentHappening.getUid ()))
                 {
-                    //int i=0;
+
                     testList.add (currentHappening.getUid ());
                     System.out.println ("Adding Stuff!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+ databaseList.size ());
 
                     //databaseText.append(currentHappening.getHappeningName ()).append(" || ").append(currentHappening.getStartDate ()).append(" || ").append (currentHappening.getInfo ()).append(" || ").append (currentHappening.getValue ()).append(
                     //        System.getProperty("line.separator"));
                     //databaseText[i]=(currentHappening.getHappeningName ()+(" || ")+(currentHappening.getStartDate ()+(" || ")+ (currentHappening.getInfo ())+(" || ")+ (currentHappening.getValue ())));
-                    databaseTextList.add(currentHappening.getHappeningName ()+(" || ")+(currentHappening.getStartDate ()+(" || ")+ (currentHappening.getInfo ())+(" || ")+ (currentHappening.getValue ())));
-                    //i=i+1;
+                    databaseTextList.add(currentHappening.getUid ()+(" || ")+currentHappening.getHappeningName ()+(" || ")+ (currentHappening.getInfo ()));
+
+                    // anpassen nur für relevante sachen, aber bachten das das split dadurch geänert sein könnte
+                    // databaseTextList.add(currentHappening.getUid ()+(" || ")+currentHappening.getHappeningName ()+(" || ")+(currentHappening.getStartDate ()+(" || ")+ (currentHappening.getInfo ())+(" || ")+ (currentHappening.getValue ())));
+
                     System.out.println ("Adding Stuff!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+ databaseTextList.size ());
 
 
                 }
+
+                //
             }
 
         }
@@ -219,17 +244,9 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
                 }
                 */
 
-                //notifyDataSetChanged();
+
                 databaseListView.setAdapter (adapter);
-
-                //mAdapter.notifyDataSetChanged();
-                //databaseListView.setText(databaseText);
-
-                //System.out.println (databaseText);
-
                 databaseTextList = initDatabaseView ();
-                //( (ArrayAdapter) adapter ).clear ();
-                ( (ArrayAdapter) adapter ).addAll (databaseTextList);
                 ( (ArrayAdapter) adapter ).notifyDataSetChanged ();
                 break;
 
@@ -241,7 +258,7 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
     }
 
 
-    //set an onItemClickListener to the ListView
+
 
     /**
      * customizable toast
@@ -249,6 +266,26 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
      */
     private void toastMessage(String message){
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //databaseTextList = null;
+        databaseTextList = initDatabaseView ();
+        ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, databaseTextList);
+
+
+        ( (ArrayAdapter) adapter ).notifyDataSetChanged ();
+    }
+
+    // Function to call update on adapter and remove one item
+    public static void listViewChanged ( Context context, String name ) {
+        ListAdapter adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, databaseTextList);
+
+        ( (ArrayAdapter) adapter ).remove (name);
+
+        ( (ArrayAdapter) adapter ).notifyDataSetChanged ();
     }
 }
 

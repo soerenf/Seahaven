@@ -8,7 +8,7 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 
-// https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9
+// >https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9
 // bzw: https://github.com/ajaysaini-sgvu/room-persistence-sample/blob/master/app/src/main/java/com/nagarro/persistence/
 
 @Dao
@@ -19,6 +19,9 @@ public interface HappeningDao {
 
     @Query("SELECT * FROM Happening where happening_name LIKE  :happeningName")
     Happening findByName( String happeningName);
+
+    @Query("SELECT * FROM Happening where uid LIKE  :uid")
+    Happening findByUID( int uid);
 
     @Query("SELECT COUNT(*) from Happening")
     int countHappenings();

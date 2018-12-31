@@ -94,6 +94,7 @@ public class Happening {
         this.info = info;
     }
 
-
+    //howto delete
+    public void delete (Happening happening){this.uid = -1;}
 
 }

@@ -30,6 +30,10 @@ public class DatabaseInitializer {
         return happening;
     }
 
+    private static Happening deleteHappening( final AppDatabase db, Happening happening ) {
+        db.happeningDao().delete(happening);
+        return null;
+    }
     private static void populateWithTestData(AppDatabase db) {
         Happening happening = new Happening ();
         happening.setHappeningName ("TestData");
@@ -67,6 +71,23 @@ public class DatabaseInitializer {
 
      }
 
+    private static Happening getUIDFromDb (AppDatabase db,int uid){
+        Happening happening = db.happeningDao().findByUID (uid);
+        if(happening != null)
+        {
+            System.out.println ("############################# Happening UID :  "+ happening.getUid ());
+
+            return happening;
+        }
+        else
+        {
+            System.out.println ("############################# No such happening found!");
+            //Hedwig.deliverNotification ("No such happening found!",465, DataCollectionActivity.getAppContext (),"getfromDB");
+            return null;
+        }
+
+    }
+
     public static void getAllfromAsync(@NonNull final AppDatabase db) {
         GetAllFromDbAsync task = new GetAllFromDbAsync (db);
         task.execute();
@@ -98,6 +119,8 @@ public class DatabaseInitializer {
         task.execute();
     }
 
+
+
     private static void addToDb (AppDatabase db, String happeningName, String startDate, int value, int userApproved, String info){
         Happening happening = new Happening ();
         //happening.setFirstName (firstName);
@@ -114,7 +137,17 @@ public class DatabaseInitializer {
     }
 
 
+    public static void removeFromAsync(@NonNull final AppDatabase db, int uid) {
 
+        RemoveFromDbAsync task = new  RemoveFromDbAsync (db, uid);
+        task.execute();
+    }
+
+    private static void removeFromDb (AppDatabase db, int uid){
+        Happening happening = getUIDFromDb (db, uid);
+        deleteHappening (db, happening);
+
+    }
 
 
      private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
@@ -161,6 +194,31 @@ public class DatabaseInitializer {
 
     }
 
+
+    private static class GetUIDFromDbAsync extends AsyncTask<Void, Void,Void>{
+
+        private final AppDatabase mDb;
+        //private final String mFirstName;
+        //private final String mLastName;
+        private final int mUID;
+
+
+
+        GetUIDFromDbAsync(AppDatabase db, int uid) {
+            mDb = db;
+            //mFirstName = firstName;
+            //mLastName = lastName;
+            mUID = uid;
+
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            getUIDFromDb (mDb, mUID);
+            return null;
+        }
+
+    }
 
     private static class GetAllFromDbAsync extends AsyncTask<Void, Void,Void>{
 
@@ -216,4 +274,27 @@ public class DatabaseInitializer {
 
     }
 
+    private static class RemoveFromDbAsync extends AsyncTask<String, Void,Void>{
+
+        private final AppDatabase mDb;
+
+        //private final String mHappening;
+
+        private final int mUID;
+
+
+    RemoveFromDbAsync ( AppDatabase db, int uid ) {
+            mDb = db;
+            //mHappening = happeningName;
+            mUID = uid;
+
+        }
+
+        @Override
+        protected Void doInBackground(final String... params) {
+            removeFromDb (mDb, mUID);
+            return null;
+        }
+
+    }
 }
