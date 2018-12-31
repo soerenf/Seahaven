@@ -114,7 +114,7 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
                 System.out.println ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + name);
 
 
-                String[] tokens = name.split  (" ");
+                String[] tokens = name.split  ("#");
                 System.out.println ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + tokens[0]);
                 //DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (this),tokens[1]);
                 //DatabaseInitializer.getAllfromAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()));
@@ -138,6 +138,7 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
                     Log.d(TAG, "onItemClick: The ID is: " + tokens[0]);
                     Intent DatabaseEditIntent = new Intent(DatabaseListDisplay.this, DatabaseEditor.class);
                     DatabaseEditIntent.putExtra("id",Integer.parseInt(tokens[0]));
+
 
                     DatabaseEditIntent.putExtra("name",tokens[2]);
                     DatabaseEditIntent.putExtra("text",name);
@@ -184,7 +185,7 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
                     //databaseText.append(currentHappening.getHappeningName ()).append(" || ").append(currentHappening.getStartDate ()).append(" || ").append (currentHappening.getInfo ()).append(" || ").append (currentHappening.getValue ()).append(
                     //        System.getProperty("line.separator"));
                     //databaseText[i]=(currentHappening.getHappeningName ()+(" || ")+(currentHappening.getStartDate ()+(" || ")+ (currentHappening.getInfo ())+(" || ")+ (currentHappening.getValue ())));
-                    databaseTextList.add(currentHappening.getUid ()+(" || ")+currentHappening.getHappeningName ()+(" || ")+ (currentHappening.getInfo ()));
+                    databaseTextList.add(currentHappening.getUid ()+("#")+currentHappening.getHappeningName ()+("#")+ (currentHappening.getInfo ()));
 
                     // anpassen nur für relevante sachen, aber bachten das das split dadurch geänert sein könnte
                     // databaseTextList.add(currentHappening.getUid ()+(" || ")+currentHappening.getHappeningName ()+(" || ")+(currentHappening.getStartDate ()+(" || ")+ (currentHappening.getInfo ())+(" || ")+ (currentHappening.getValue ())));
