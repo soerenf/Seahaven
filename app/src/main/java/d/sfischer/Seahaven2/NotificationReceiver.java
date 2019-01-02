@@ -166,6 +166,36 @@ public class NotificationReceiver extends BroadcastReceiver {
                         manager.cancel (97);
                     }
                 }
+                if (extras.containsKey ("Kinder"))
+                {
+                    System.out.println ("Kinder ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Kinder-App installiert ", gettime (), 0, 1, " ");
+                    if (manager != null) {
+                        manager.cancel (101);
+                    }
+                }
+                if (extras.containsKey ("Dating"))
+                {
+                    System.out.println ("Dating ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Dating-App installiert ", gettime (), 0, 1, " ");
+                    if (manager != null) {
+                        manager.cancel (69);
+                    }
+                }
+                if (extras.containsKey ("Banking"))
+                {
+                    System.out.println ("Banking ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Banking-App installiert ", gettime (), 0, 1, " ");
+                    if (manager != null) {
+                        manager.cancel (100);
+                    }
+                }
             }
         }
         if (action != null && action.equals (Hedwig.NO_ACTION)) {
@@ -291,6 +321,36 @@ public class NotificationReceiver extends BroadcastReceiver {
                         manager.cancel (97);
                     }
                 }
+                if (extras.containsKey ("Kinder"))
+                {
+                    System.out.println ("Kinder ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Kinder-App installiert ", gettime (), 0, 0, " ");
+                    if (manager != null) {
+                        manager.cancel (101);
+                    }
+                }
+                if (extras.containsKey ("Dating"))
+                {
+                    System.out.println ("Dating ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Dating-App installiert ", gettime (), 0, 0, " ");
+                    if (manager != null) {
+                        manager.cancel (69);
+                    }
+                }
+                if (extras.containsKey ("Banking"))
+                {
+                    System.out.println ("Banking ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Banking-App installiert ", gettime (), 0, 0, " ");
+                    if (manager != null) {
+                        manager.cancel (100);
+                    }
+                }
             }
         }
         if (action != null && action.equals (Hedwig.MAYBE_ACTION)) {
@@ -413,6 +473,36 @@ public class NotificationReceiver extends BroadcastReceiver {
                     DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv ",gettime (), 0, 2, "von: "+ voipTiming + "bis: "+ normalAudioTiming);
                     if (manager != null) {
                         manager.cancel (97);
+                    }
+                }
+                if (extras.containsKey ("Kinder"))
+                {
+                    System.out.println ("Kinder ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Kinder-App installiert ", gettime (), 0, 2, " ");
+                    if (manager != null) {
+                        manager.cancel (101);
+                    }
+                }
+                if (extras.containsKey ("Dating"))
+                {
+                    System.out.println ("Dating ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Dating-App installiert ", gettime (), 0, 2, " ");
+                    if (manager != null) {
+                        manager.cancel (69);
+                    }
+                }
+                if (extras.containsKey ("Banking"))
+                {
+                    System.out.println ("Banking ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Banking-App installiert ", gettime (), 0, 2, " ");
+                    if (manager != null) {
+                        manager.cancel (100);
                     }
                 }
             }

@@ -100,6 +100,14 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     public static int tiltingCount = 0;
     public static int stillCount = 0;
 
+    public static String vehicleTime = "no time set";
+    public static String bicycleTime = "no time set";
+    public static String walkingTime = "no time set";
+    public static String onFootTime = "no time set";
+    public static String runningTime = "no time set";
+    public static String tiltingTime = "no time set";
+    public static String stillTime = "no time set";
+
     public static int callCount = 0;
     public static int voipCallCount = 0;
     public static int normalAudioCount = 0;
@@ -167,8 +175,10 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         DataCollectionActivity.context = getApplicationContext();
         setContentView (R.layout.activity_second);
 
-        check_after_time ("14:00:00");
-        check_after_time ("20:00:00");
+        //check_after_time ("14:00:00");
+        //check_after_time ("24:00:00");
+        //check_after_time ("01:00:00");
+
         //check_round_time ();
 
         initKidsList ();
@@ -413,22 +423,22 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
             if (closeness > closenessMax) {
                 closenessMax = closeness;
-                System.out.println ("New closeness Max: "+ closenessMax);
+                //System.out.println ("New closeness Max: "+ closenessMax);
                 //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Closeness Max",gettime (), (int) closenessMax, 0," ");
             }
 
             if (closeness < closenessMin) {
                 closenessMin = closeness;
-                System.out.println ("New closeness Min: "+ closenessMin);
+                //System.out.println ("New closeness Min: "+ closenessMin);
                 //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Closeness Min",gettime (), (int) closenessMin, 0," ");
             }
 
             if ( closeness >= significantDistanceThreshold ){
-                System.out.println ("Significant far distance: "+ closeness);
+                //System.out.println ("Significant far distance: "+ closeness);
                 //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significant far distance",gettime (), (int) closeness, 0," ");
             }
             if ( closeness < 5 ){
-                System.out.println ("Significantly close "+ closeness);
+                //System.out.println ("Significantly close "+ closeness);
                 //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significantly close",gettime (), (int) closeness, 0," ");
             }
 
@@ -591,7 +601,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     if (voipCallCount != 0)
                     {
 
-                        Hedwig.deliverNotification("VOIP-Telefonat von: "+ callTiming + " bis: "+ normalAudioTiming, 97, context,"VOIP-Telefonat");
+                        Hedwig.deliverNotification("VOIP-Telefonat von: "+ callTiming + " bis: "+ voipTiming, 97, context,"VOIP-Telefonat");
                     }
 
 
@@ -637,9 +647,9 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             if(!ssidList.contains ("SSID: "+currentWifiConfiguration.SSID+"status: "+currentWifiConfiguration.status)){
 
 
-                                System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ssidList size: " + ssidList.size ());
+                                //System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ssidList size: " + ssidList.size ());
                                 ssidList.add ("SSID: "+currentWifiConfiguration.SSID+"status: "+currentWifiConfiguration.status);
-                                System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ssidList size: " + ssidList.size ());
+                                //System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ssidList size: " + ssidList.size ());
 
                                 /***
                                  *
@@ -681,7 +691,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
                         }
-                            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ssidList size: " + ssidList.size ());
+                            //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ssidList size: " + ssidList.size ());
                         }
 
                 }
@@ -714,7 +724,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                 // nur wenn WIFI enabled weil sonst rest keinen Sinn macht
                 if(myWM.isWifiEnabled ()){
-                    System.out.println ("WIFI ist enabled");
+                    //System.out.println ("WIFI ist enabled");
 
                     //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wifi enabled",gettime (), 0, 0, " ");
 
@@ -1111,9 +1121,9 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     List <ApplicationInfo> packages = myPM.getInstalledApplications (PackageManager.GET_META_DATA);
 
 
-                    System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages : " + packages.size ());
+                    //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages : " + packages.size ());
                     if (packages_gotten!= null)
-                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages_gotten : " + packages_gotten.size ());
+                        //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages_gotten : " + packages_gotten.size ());
 
 
 
@@ -1130,14 +1140,15 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             if (!(packageArray.contains (applicationInfo.packageName))){
 
                                 packageArray.add (applicationInfo.packageName);
-                                System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Installed package : " + applicationInfo.packageName);
+                                //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Installed package : " + applicationInfo.packageName);
 
 
                                 for (AppPackageNameMarshal appPackageNameMarshal : kidsList) {
                                     if(appPackageNameMarshal.getPackageName ().equals ( applicationInfo.packageName)){
                                         System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Kiddy-App : " + appPackageNameMarshal.getAppname ()+ " installed!!!!");
                                         //Hedwig.deliverNotification ("Sie haben die Kinder App: "+applicationInfo.packageName+"installiert.", );
-                                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte Kinder-App: ", gettime (), 0, 0, applicationInfo.packageName);
+                                        Hedwig.deliverNotification("Kinder-App "+ appPackageNameMarshal.getAppname () +"ist installiert.", 101, context,"Kinder");
+                                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte Kinder-App: ", gettime (), 0, 0, applicationInfo.packageName);
 
                                     }
 
@@ -1147,7 +1158,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                     if(appPackageNameMarshal.getPackageName ().equals (applicationInfo.packageName)){
                                         System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Dating-App : " + appPackageNameMarshal.getAppname ()+ " installed!!!!");
                                         //Hedwig.deliverNotification ("Sie haben die Dating App: "+applicationInfo.packageName+"installiert.", );
-                                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte Dating-App: ", gettime (), 0, 0, applicationInfo.packageName);
+                                        Hedwig.deliverNotification("Dating-App "+ appPackageNameMarshal.getAppname () +"ist installiert.", 69, context,"Dating");
+                                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte Dating-App: ", gettime (), 0, 0, applicationInfo.packageName);
                                     }
 
                                 }
@@ -1155,7 +1167,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                     if(appPackageNameMarshal.getPackageName ().equals (applicationInfo.packageName)){
                                         System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Banking-App : " + appPackageNameMarshal.getAppname ()+ " installed!!!!");
                                         //Hedwig.deliverNotification ("Sie haben die Banking App: "+applicationInfo.packageName+"installiert.", );
-                                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte Banking-App: ", gettime (), 0, 0, applicationInfo.packageName);
+                                        Hedwig.deliverNotification("Banking-App "+ appPackageNameMarshal.getAppname () +"ist installiert.", 100, context,"Banking");
+                                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte Banking-App: ", gettime (), 0, 0, applicationInfo.packageName);
                                     }
 
                                 }
@@ -1189,8 +1202,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
                         packages_gotten = packages;
-                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages : " + packages.size ());
-                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages_gotten : " + packages_gotten.size ());
+                        //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages : " + packages.size ());
+                        //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages_gotten : " + packages_gotten.size ());
 
 
                     }
@@ -1220,10 +1233,10 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                            if( strAction.equals (Intent.ACTION_USER_PRESENT) || strAction.equals (Intent.ACTION_SCREEN_OFF))
                             {
-                               //System.out.println ("#+#+#+#+#+#+#+#+#+#+#+Screen off " + "LOCKED");
-                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Screen locked",gettime (), 0, 0, " ");
+                               System.out.println ("#+#+#+#+#+#+#+#+#+#+#+Screen off " + "LOCKED");
+                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Screen locked",gettime (), 0, 0, " ");
                                 /***
-                                 * wenn lange kein unlock+ still(api) dann schlafender user???
+                                 * Hier wenn lange kein unlock + still(api) dann schlafender user???
                                  */
 
 
@@ -1240,9 +1253,9 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             if (check_round_time () == true) {
                                 System.out.println ("#++++++++++++++++++++++++++++++++ Runde Zeit");
 
-                                if(check_after_time ("18:00:00"))       //nach 02 Uhr sollten alle ins Bett oder keinen Wecker mehr
+                                if(check_after_time ("02:00:00"))       //nach 02 Uhr sollten alle ins Bett oder keinen Wecker mehr
                                 {
-                                    if(!(check_after_time ("10:00:00")))  // bis 10 Uhr meisten Menschen wach
+                                    if((!check_after_time ("10:00:00")))  // bis 10 Uhr meisten Menschen wach
                                     {
                                         Hedwig.deliverNotification("Wecker war gestellt auf "+ gettime (), 99, context,"Wecker");
                                     }
