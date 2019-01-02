@@ -5,9 +5,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
+import static d.sfischer.Seahaven2.DataCollectionActivity.callTiming;
+import static d.sfischer.Seahaven2.DataCollectionActivity.gettime;
+import static d.sfischer.Seahaven2.DataCollectionActivity.normalAudioTiming;
+import static d.sfischer.Seahaven2.DataCollectionActivity.voipTiming;
 //import android.widget.Toast;
 
 public class NotificationReceiver extends BroadcastReceiver {
+
+
 
 
     // wie bekomme ich raus von welcher notfication ich komme über die ID von .notify?
@@ -126,6 +133,39 @@ public class NotificationReceiver extends BroadcastReceiver {
                     }
 
                 }
+
+                if (extras.containsKey ("Wecker"))
+                {
+                    System.out.println ("Wecker ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",time, 0, 1, time);
+                    if (manager != null) {
+                        manager.cancel (99);
+                    }
+                }
+
+                if (extras.containsKey ("Telefonat"))
+                {
+                    System.out.println ("Telefonat ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv ",gettime (), 0, 1,"von: "+ callTiming + "bis: "+ normalAudioTiming);
+                    if (manager != null) {
+                        manager.cancel (98);
+                    }
+                }
+
+                if (extras.containsKey ("VOIP-Telefonat"))
+                {
+                    System.out.println ("VOIP-Telefonat ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv ",gettime (), 0, 1, "von: "+ voipTiming + "bis: "+ normalAudioTiming);
+                    if (manager != null) {
+                        manager.cancel (97);
+                    }
+                }
             }
         }
         if (action != null && action.equals (Hedwig.NO_ACTION)) {
@@ -218,6 +258,39 @@ public class NotificationReceiver extends BroadcastReceiver {
                         manager.cancel (14);
                     }
                 }
+
+                if (extras.containsKey ("Wecker"))
+                {
+                    System.out.println ("Wecker ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",time, 0, 0, time);
+                    if (manager != null) {
+                        manager.cancel (99);
+                    }
+                }
+
+                if (extras.containsKey ("Telefonat"))
+                {
+                    System.out.println ("Telefonat ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv ",gettime (), 0, 0,"von: "+ callTiming + "bis: "+ normalAudioTiming);
+                    if (manager != null) {
+                        manager.cancel (98);
+                    }
+                }
+
+                if (extras.containsKey ("VOIP-Telefonat"))
+                {
+                    System.out.println ("VOIP-Telefonat ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv ",gettime (), 0, 0, "von: "+ voipTiming + "bis: "+ normalAudioTiming);
+                    if (manager != null) {
+                        manager.cancel (97);
+                    }
+                }
             }
         }
         if (action != null && action.equals (Hedwig.MAYBE_ACTION)) {
@@ -307,6 +380,39 @@ public class NotificationReceiver extends BroadcastReceiver {
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     if (manager != null) {
                         manager.cancel (14);
+                    }
+                }
+
+                if (extras.containsKey ("Wecker"))
+                {
+                    System.out.println ("Wecker ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",time, 0, 2, time);
+                    if (manager != null) {
+                        manager.cancel (99);
+                    }
+                }
+
+                if (extras.containsKey ("Telefonat"))
+                {
+                    System.out.println ("Telefonat ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv ",gettime (), 0, 2,"von: "+ callTiming + "bis: "+ normalAudioTiming);
+                    if (manager != null) {
+                        manager.cancel (98);
+                    }
+                }
+
+                if (extras.containsKey ("VOIP-Telefonat"))
+                {
+                    System.out.println ("VOIP-Telefonat ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv ",gettime (), 0, 2, "von: "+ voipTiming + "bis: "+ normalAudioTiming);
+                    if (manager != null) {
+                        manager.cancel (97);
                     }
                 }
             }

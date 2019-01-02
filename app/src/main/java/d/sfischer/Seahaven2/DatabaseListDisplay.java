@@ -185,7 +185,7 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
                     //databaseText.append(currentHappening.getHappeningName ()).append(" || ").append(currentHappening.getStartDate ()).append(" || ").append (currentHappening.getInfo ()).append(" || ").append (currentHappening.getValue ()).append(
                     //        System.getProperty("line.separator"));
                     //databaseText[i]=(currentHappening.getHappeningName ()+(" || ")+(currentHappening.getStartDate ()+(" || ")+ (currentHappening.getInfo ())+(" || ")+ (currentHappening.getValue ())));
-                    databaseTextList.add(currentHappening.getUid ()+("#")+currentHappening.getHappeningName ()+("#")+ (currentHappening.getInfo ()));
+                    databaseTextList.add(currentHappening.getUid ()+("#")+currentHappening.getHappeningName ()+("#")+ (currentHappening.getInfo ())+("#")+("Nutzer-Feedback: ")+ currentHappening.getUserApproved () );
 
                     // anpassen nur für relevante sachen, aber bachten das das split dadurch geänert sein könnte
                     // databaseTextList.add(currentHappening.getUid ()+(" || ")+currentHappening.getHappeningName ()+(" || ")+(currentHappening.getStartDate ()+(" || ")+ (currentHappening.getInfo ())+(" || ")+ (currentHappening.getValue ())));

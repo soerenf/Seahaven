@@ -32,7 +32,7 @@ public class Hedwig {
         Intent yesReceive = new Intent();
         yesReceive.setAction(YES_ACTION);
         yesReceive.putExtra (caller, id);
-        yesReceive.putExtra ("timing", System.currentTimeMillis ());
+        yesReceive.putExtra ("timing", DataCollectionActivity.getJustTime ());
         yesReceive.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntentYes = PendingIntent.getBroadcast(context, id, yesReceive, PendingIntent.FLAG_UPDATE_CURRENT);
         //PendingIntent pendingIntentYes = PendingIntent.getBroadcast(context, 1, yesReceive, 0);
@@ -41,7 +41,7 @@ public class Hedwig {
         Intent maybeReceive = new Intent();
         maybeReceive.setAction(MAYBE_ACTION);
         maybeReceive.putExtra (caller, id);
-        maybeReceive.putExtra ("timing", System.currentTimeMillis ());
+        maybeReceive.putExtra ("timing", DataCollectionActivity.getJustTime ());
         maybeReceive.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntentMaybe = PendingIntent.getBroadcast(context, id, maybeReceive, PendingIntent.FLAG_UPDATE_CURRENT);
         //PendingIntent pendingIntentMaybe = PendingIntent.getBroadcast(context, 2, maybeReceive, 0);
@@ -50,7 +50,7 @@ public class Hedwig {
         Intent noReceive = new Intent();
         noReceive.setAction(NO_ACTION);
         noReceive.putExtra (caller, id);
-        noReceive.putExtra ("timing", System.currentTimeMillis ());
+        noReceive.putExtra ("timing", DataCollectionActivity.getJustTime ());
         //noReceive.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         noReceive.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntentNo = PendingIntent.getBroadcast(context, id, noReceive, PendingIntent.FLAG_UPDATE_CURRENT);

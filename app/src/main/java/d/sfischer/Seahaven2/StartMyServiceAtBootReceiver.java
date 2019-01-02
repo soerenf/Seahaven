@@ -11,7 +11,7 @@ public class StartMyServiceAtBootReceiver extends BroadcastReceiver {
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             Intent serviceIntent = new Intent(context, DataCollectionActivity.class);
             context.startActivity (serviceIntent);
-            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Smartphone neu gestartet um: ", DataCollectionActivity.gettime (), 0, 0, DataCollectionActivity.gettime ());
+            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Smartphone wurde neu gestartet um: ", DataCollectionActivity.gettime (), 0, 0, DataCollectionActivity.gettime ());
         }
     }
 }

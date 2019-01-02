@@ -92,12 +92,35 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     private int telefonprovider = 0;
     public static int querytoggle = 0;
 
+    public static int vehicleCount = 0;
+    public static int bicycleCount = 0;
+    public static int walkingCount = 0;
+    public static int onFootCount = 0;
+    public static int runningCount = 0;
+    public static int tiltingCount = 0;
+    public static int stillCount = 0;
+
+    public static int callCount = 0;
+    public static int voipCallCount = 0;
+    public static int normalAudioCount = 0;
+
+    public static int screenOffCount = 0;
+    public static int screenOnCount = 0;
+
+    public static int wlanDayCount = 0;
+
+
+
+
     private int toggle = 0;
 
     public String oldScreenDateString;
     public String oldssid = "dummy SSID";
     public String connectedToSSID;
     public static String stillConnectedToSSID = "dummy SSID";
+    public static String callTiming = "no time set";
+    public static String voipTiming = "no time set";
+    public static String normalAudioTiming = "no time set";
 
     public boolean isConnected;
 
@@ -144,8 +167,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         DataCollectionActivity.context = getApplicationContext();
         setContentView (R.layout.activity_second);
 
-        //check_after_time ("14:00:00");
-        //check_after_time ("16:00:00");
+        check_after_time ("14:00:00");
+        check_after_time ("20:00:00");
         //check_round_time ();
 
         initKidsList ();
@@ -513,8 +536,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 if (myAM != null && myAM.getMode () == AudioManager.MODE_RINGTONE) {
 
 
-                    String timing = gettime ();
-                    System.out.println ("Ringing. " + timing);
+                    String RingTiming = getJustTime ();
+                    System.out.println ("Ringing. " + RingTiming);
                     DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Ringing",gettime (), 0, 0, " ");
 
 
@@ -524,11 +547,14 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                 if (myAM != null && myAM.getMode () == AudioManager.MODE_IN_CALL) {
 
+                    if (callCount == 0)
+                    {
+                        callTiming = getJustTime ();
+                        System.out.println ("Telefonat begann: " + callTiming);
+                    }
 
-                    String timing = gettime ();
-
-                    System.out.println ("Active call: " + timing);
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv",gettime (), 0, 0,gettime ());
+                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv",gettime (), 0, 0,gettime ());
+                    callCount = callCount + 1;
                     //hier toggle setzen wenn ungesetzt daten des calls merken und dann bei audio mode checken ob toggle ist und falls toggle dann telefonat beendetmit neuer zeit?
                     // dann müsste nur  DatabaseInitializer.add bei normal mode wenn toggle war 2 veschiedene toggel einfach für modi?
 
@@ -537,10 +563,14 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                 if (myAM != null && myAM.getMode () == AudioManager.MODE_IN_COMMUNICATION) {
 
+                    if (voipCallCount == 0)
+                    {
+                        voipTiming = getJustTime ();
+                        System.out.println ("VOIP-Telefonat begann: " + voipTiming);
+                    }
 
-                    String timing = gettime ();
-                    System.out.println ("Active VOIP-call: " + timing);
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv",gettime (), 0, 0, gettime ());
+                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv",gettime (), 0, 0, gettime ());
+                    voipCallCount = voipCallCount + 1;
                     //hier toggle setzen und bei audio mode checken und falls toggle dann telefonat beendet?
 
                     // getestet mit WhatsApp und funktioniert dort
@@ -549,8 +579,25 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 if (myAM != null && myAM.getMode () == AudioManager.MODE_NORMAL) {
 
 
-                    String timing = gettime ();
-                    System.out.println ("Back to normal. " + timing);
+                    normalAudioTiming = getJustTime ();
+                    System.out.println ("Back to normal. " + normalAudioTiming);
+                    if (callCount != 0)
+                    {
+
+                        Hedwig.deliverNotification("Telefonat von: "+ callTiming + " bis: "+ normalAudioTiming, 98, context,"Telefonat");
+
+                    }
+
+                    if (voipCallCount != 0)
+                    {
+
+                        Hedwig.deliverNotification("VOIP-Telefonat von: "+ callTiming + " bis: "+ normalAudioTiming, 97, context,"VOIP-Telefonat");
+                    }
+
+
+                    voipCallCount = 0;
+                    callCount = 0;
+
                     //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Normal Audio",gettime (), 0, 0, " ");
 
                     // wird oft gebroadcasted (in indle anscheinend alle 30 sek) vllt nicht nötig...jedoch interessant für dauer von gesprächen
@@ -593,7 +640,15 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                 System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ssidList size: " + ssidList.size ());
                                 ssidList.add ("SSID: "+currentWifiConfiguration.SSID+"status: "+currentWifiConfiguration.status);
                                 System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ssidList size: " + ssidList.size ());
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Gespeichertes WLAN: ", gettime (), 0, 0, currentWifiConfiguration.SSID);
+
+                                /***
+                                 *
+                                 *
+                                 * Hier gespeicherte WLANS!!!!
+                                 *
+                                 */
+                                //
+                                // DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Gespeichertes WLAN: ", gettime (), 0, 0, currentWifiConfiguration.SSID);
 
 
                                 //natürlich auch für jede SSID möglich...
@@ -671,9 +726,13 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     // System.out.println("SSID: " +ssid+ " BSSID: "+bssid);
                     if(!ssid.equals ("<unknown ssid>") && !bssid.equals ("02:00:00:00:00:00"))
                     {
-                        if(!ssid.equals (stillConnectedToSSID)) {
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Verbunden mit WLAN: ", gettime (), 0, 0, ssid);
-                            stillConnectedToSSID = ssid;
+                        if(!ssid.equals (stillConnectedToSSID))
+                        {
+
+                            if (! ssid.equals ("0x"))
+                            {
+                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Verbunden mit WLAN: ", gettime (), 0, 0, ssid);
+                                stillConnectedToSSID = ssid;
 
 
                                 querytoggle = 1;
@@ -684,25 +743,35 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                 okHttpHandlerIpstack.execute (urlIpstack);
 
 
-
-
-
                                 // limit beachten...könnte auch mir einfach merken welche ssid bzw bssid wo ist...und nur anfragen bei neuen...bei höhere API nicht mehr möglich
-                                if(!ssid.equals ("<unknown ssid>") && !bssid.equals ("02:00:00:00:00:00"))
+                                if (! ssid.equals ("<unknown ssid>") && ! bssid.equals ("02:00:00:00:00:00"))
                                 {
-                                    System.out.println("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Query location via BSSID: "+bssid);
-
+                                    System.out.println ("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Query location via BSSID: " + bssid);
 
 
                                     // DatabaseInitializer.add im executes
-                                    new Authenticate ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&netid="+bssid, "AID9eec974665aa0c903b7e8b1a882e222b", "710edd26134760027e3d09739f0ecc4f") ;
+                                    new Authenticate ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&netid=" + bssid, "AID9eec974665aa0c903b7e8b1a882e222b", "710edd26134760027e3d09739f0ecc4f");
 
                                 }
+                            }
+
+                            else
+                            {
+                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Nicht verbunden mit einem WLAN ",gettime (), 0, 0, " ");
+                            }
 
                         }
                         else{
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Weiterhin verbunden mit WLAN: ",gettime (), 0, 0, ssid);
-                            querytoggle = 1;
+                            if(!ssid.equals ("0x"))
+                            {
+                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Weiterhin verbunden mit WLAN: ",gettime (), 0, 0, ssid);
+                                querytoggle = 1;
+                            }
+                            else
+                                {
+                                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Nicht verbunden mit einem WLAN ",gettime (), 0, 0, " ");
+                                }
+
 
                         }
 
@@ -744,6 +813,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                                 }
                                 else {
+
                                     DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Weiterhin verbunden mit WLAN (via status): ",gettime (), 0, 0, connectedToSSID);
                                     querytoggle = 1;
                                 }
@@ -994,9 +1064,17 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                     int plugIn = intent.getIntExtra (BatteryManager.EXTRA_PLUGGED, 0);
                     switch (plugIn) {
+
+
+                        /***
+                         *
+                         * Hier verschiedenen Ladearten
+                         *
+                         */
+
                         case 0:
                             //System.out.println ("No Connection");
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"wird nicht geladen",gettime (), 0, 0, gettime ());
+                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"wird nicht geladen",gettime (), 0, 0, gettime ());
 
                             // noch nicht sicher was mir die Info bringen soll 0 ist eigentlich battery....
                             // kommt aber auch immer wieder zwischendurch...z.B. beim screen on / off
@@ -1005,7 +1083,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         case BatteryManager.BATTERY_PLUGGED_AC:
                             //System.out.println ("Adapter Connected");
                             //Hedwig.deliverNotification("Loading over AC", 13, DataCollectionActivity.this, "Plugged AC");
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"geladen via: ",gettime (), 0, 0, "Steckdose");
+                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"geladen via: ",gettime (), 0, 0, "Steckdose");
                             break;
 
 
@@ -1013,7 +1091,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         case BatteryManager.BATTERY_PLUGGED_USB:
                             //System.out.println ("USB Connected");
                             //Hedwig.deliverNotification("Loading over USB", 14, DataCollectionActivity.this,"Plugged USB");
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"geladen via: ",gettime (), 0, 0, "USB");
+                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"geladen via: ",gettime (), 0, 0, "USB");
                             break;
                     }
 
@@ -1089,7 +1167,15 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
                                 //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Process Name : " + applicationInfo.processName);
-                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte App: ", gettime (), 0, 0, applicationInfo.packageName);
+
+                                /**
+                                 *
+                                 *
+                                 * Hier ist Listze mit installierten Apps
+                                 *
+                                 */
+
+                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte App: ", gettime (), 0, 0, applicationInfo.packageName);
                             }
                             else{
                                 System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Installed package : " + applicationInfo.packageName + "was installed before");
@@ -1153,7 +1239,17 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             //System.out.println ("#+#+#+#+#+#+#+#+#+#+#+Screen on");
                             if (check_round_time () == true) {
                                 System.out.println ("#++++++++++++++++++++++++++++++++ Runde Zeit");
-                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",gettime (), 0, 0, gettime ());
+
+                                if(check_after_time ("18:00:00"))       //nach 02 Uhr sollten alle ins Bett oder keinen Wecker mehr
+                                {
+                                    if(!(check_after_time ("10:00:00")))  // bis 10 Uhr meisten Menschen wach
+                                    {
+                                        Hedwig.deliverNotification("Wecker war gestellt auf "+ gettime (), 99, context,"Wecker");
+                                    }
+                                }
+
+                                //Hedwig.deliverNotification("Driving "+ activity.getConfidence()+"% at: "+time, 0, this, "Driving");
+                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",gettime (), 0, 0, gettime ());
                             }
                             if (check_round_time () == (false)||check_round_time () == (null)){
                                 System.out.println ("#++++++++++++++++++++++++++++++++ keine Runde Zeit");
@@ -1309,7 +1405,20 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
         return time;
     }
+    public static String getJustTime (){
 
+        long date = System.currentTimeMillis();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
+        String time = sdf.format(date);
+
+        //Date date1 = Calendar.getInstance().getTime();
+
+        //System.out.println (date1);
+
+
+        return time;
+    }
     public static Boolean check_after_time (String after){
 
         long date = System.currentTimeMillis();
@@ -1326,11 +1435,11 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
         //System.out.println (date1);
         if (time_now.compareTo(time_border) > 0) {
-            System.out.println("time_now occurs after time_border");
+            System.out.println("time_now occurs after "+ after);
             return true;
         } // compareTo method returns the value greater than 0 if this Date is after the Date argument.
         else if (time_now.compareTo(time_border) < 0) {
-            System.out.println("time_now occurs before time_border");
+            System.out.println("time_now occurs before "+ after);
             return false;
         } // compareTo method returns the value less than 0 if this Date is before the Date argument;
         else if (time_now.compareTo(time_border) == 0) {
@@ -1359,16 +1468,16 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
         //System.out.println (date1);
         if (time_now.compareTo(round) > 0) {
-            System.out.println("time_now occurs after round");
+            //System.out.println("time_now occurs after round");
 
             return false;
         } // compareTo method returns the value greater than 0 if this Date is after the Date argument.
         else if (time_now.compareTo(round) < 0) {
-            System.out.println("time_now occurs before round");
+            //System.out.println("time_now occurs before round");
             return false;
         } // compareTo method returns the value less than 0 if this Date is before the Date argument;
         else if (time_now.compareTo(round) == 0) {
-            System.out.println("Both are round");
+            //System.out.println("Both are round");
             return true;
         } // compareTo method returns the value 0 if the argument Date is equal to the second Date;
         else {
@@ -1384,16 +1493,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         }
         return true;
 
-
-        //to avoid messing the order of the lists we will use a copy
-        //as noted in comments by A. R. S.
-        //one = new ArrayList<ApplicationInfo>(one);
-        //two = new ArrayList<ApplicationInfo>(two);
-
-
-        //Collections.sort(one);
-        //Collections.sort(two);
-        //return one.equals(two);
     }
 
     public void initKidsList () {
