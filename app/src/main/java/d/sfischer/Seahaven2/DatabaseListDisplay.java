@@ -114,7 +114,7 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
                 System.out.println ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + name);
 
 
-                String[] tokens = name.split  ("#");
+                String[] tokens = name.split  ("/");
                 System.out.println ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + tokens[0]);
                 //DatabaseInitializer.getfromAsync (AppDatabase.getAppDatabase (this),tokens[1]);
                 //DatabaseInitializer.getAllfromAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()));
@@ -185,7 +185,21 @@ public class DatabaseListDisplay extends Activity implements View.OnClickListene
                     //databaseText.append(currentHappening.getHappeningName ()).append(" || ").append(currentHappening.getStartDate ()).append(" || ").append (currentHappening.getInfo ()).append(" || ").append (currentHappening.getValue ()).append(
                     //        System.getProperty("line.separator"));
                     //databaseText[i]=(currentHappening.getHappeningName ()+(" || ")+(currentHappening.getStartDate ()+(" || ")+ (currentHappening.getInfo ())+(" || ")+ (currentHappening.getValue ())));
-                    databaseTextList.add(currentHappening.getUid ()+("#")+currentHappening.getHappeningName ()+("#")+ (currentHappening.getInfo ())+("#")+("Nutzer-Feedback: ")+ currentHappening.getUserApproved () );
+                    String zustimmung = "keine Angabe";
+
+
+                    if(currentHappening.getUserApproved ()== 0){
+                        zustimmung = "nein";
+                    }
+                    if(currentHappening.getUserApproved ()== 1){
+                        zustimmung = "ja";
+                    }
+                    if(currentHappening.getUserApproved ()== 2){
+                        zustimmung = "evtl.";
+                    }
+
+
+                    databaseTextList.add(currentHappening.getUid ()+("/")+currentHappening.getHappeningName ()+("/")+ (currentHappening.getInfo ())+("/")+("Nutzer-Zustimmung: ")+ zustimmung );
 
                     // anpassen nur für relevante sachen, aber bachten das das split dadurch geänert sein könnte
                     // databaseTextList.add(currentHappening.getUid ()+(" || ")+currentHappening.getHappeningName ()+(" || ")+(currentHappening.getStartDate ()+(" || ")+ (currentHappening.getInfo ())+(" || ")+ (currentHappening.getValue ())));

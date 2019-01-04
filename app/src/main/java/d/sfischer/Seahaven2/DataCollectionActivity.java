@@ -89,7 +89,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     private float times_unlocked = 0;
     private float screen_checked = 0;
 
-    private int telefonprovider = 0;
+    public static int telefonproviderToggle = 0;
     public static int querytoggle = 0;
 
     public static int vehicleCount = 0;
@@ -99,6 +99,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     public static int runningCount = 0;
     public static int tiltingCount = 0;
     public static int stillCount = 0;
+
+    public static int keepAlive = 0;
 
     public static String vehicleTime = "no time set";
     public static String bicycleTime = "no time set";
@@ -111,6 +113,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     public static int callCount = 0;
     public static int voipCallCount = 0;
     public static int normalAudioCount = 0;
+
+    public static int airplaneCount = 0;
 
     public static int screenOffCount = 0;
     public static int screenOnCount = 0;
@@ -406,7 +410,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
             if (( deltaZ > significantMotionThreshold ) || ( deltaY > significantMotionThreshold ) || ( deltaZ > significantMotionThreshold )) {
                 // v.vibrate (400);
                 System.out.println ("significant motion detected");
-                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significant motion",gettime (), (int) deltaX+ (int)deltaY+ (int)deltaZ, 0, " ");
+                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significant motion",gettime (), (int) deltaX+ (int)deltaY+ (int)deltaZ, 3, " ");
 
                 //stark device abhängig....
             }
@@ -419,27 +423,27 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
             closeness = event.values[0];
 
             // nur werte 0 = close und 8 = far ?
-            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Closeness",gettime (), (int) closeness, 0, " ");
+            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Closeness",gettime (), (int) closeness, 3, " ");
 
             if (closeness > closenessMax) {
                 closenessMax = closeness;
                 //System.out.println ("New closeness Max: "+ closenessMax);
-                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Closeness Max",gettime (), (int) closenessMax, 0," ");
+                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Closeness Max",gettime (), (int) closenessMax, 3," ");
             }
 
             if (closeness < closenessMin) {
                 closenessMin = closeness;
                 //System.out.println ("New closeness Min: "+ closenessMin);
-                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Closeness Min",gettime (), (int) closenessMin, 0," ");
+                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Closeness Min",gettime (), (int) closenessMin, 3," ");
             }
 
             if ( closeness >= significantDistanceThreshold ){
                 //System.out.println ("Significant far distance: "+ closeness);
-                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significant far distance",gettime (), (int) closeness, 0," ");
+                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significant far distance",gettime (), (int) closeness, 3," ");
             }
             if ( closeness < 5 ){
                 //System.out.println ("Significantly close "+ closeness);
-                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significantly close",gettime (), (int) closeness, 0," ");
+                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Significantly close",gettime (), (int) closeness, 3," ");
             }
 
         }
@@ -516,11 +520,11 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     if (toggle == 1) {
                         System.out.println ("Headphone plugged in at: "+ gettime ());
                         toggle = 0;
-                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Headphone in",gettime (), toggle, 0, " ");
+                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Headphone in",gettime (), toggle, 3, " ");
                     } else {
                         System.out.println ("Headphone plugged out at: "+ gettime ());
                         toggle = 1;
-                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Headphone out",gettime (), toggle, 0, " ");
+                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Headphone out",gettime (), toggle, 3, " ");
                     }
                 }
 
@@ -548,7 +552,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                     String RingTiming = getJustTime ();
                     System.out.println ("Ringing. " + RingTiming);
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Ringing",gettime (), 0, 0, " ");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Ringing",gettime (), 0, 3, " ");
 
 
 
@@ -563,7 +567,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         System.out.println ("Telefonat begann: " + callTiming);
                     }
 
-                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv",gettime (), 0, 0,gettime ());
+                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv",gettime (), 0, 3,gettime ());
                     callCount = callCount + 1;
                     //hier toggle setzen wenn ungesetzt daten des calls merken und dann bei audio mode checken ob toggle ist und falls toggle dann telefonat beendetmit neuer zeit?
                     // dann müsste nur  DatabaseInitializer.add bei normal mode wenn toggle war 2 veschiedene toggel einfach für modi?
@@ -579,7 +583,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         System.out.println ("VOIP-Telefonat begann: " + voipTiming);
                     }
 
-                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv",gettime (), 0, 0, gettime ());
+                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv",gettime (), 0, 3, gettime ());
                     voipCallCount = voipCallCount + 1;
                     //hier toggle setzen und bei audio mode checken und falls toggle dann telefonat beendet?
 
@@ -608,7 +612,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     voipCallCount = 0;
                     callCount = 0;
 
-                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Normal Audio",gettime (), 0, 0, " ");
+                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Normal Audio",gettime (), 0, 3, " ");
 
                     // wird oft gebroadcasted (in indle anscheinend alle 30 sek) vllt nicht nötig...jedoch interessant für dauer von gesprächen
                 }
@@ -624,6 +628,314 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                 //sehr viele Infos und möglichkeiten...SSIDS + weitere Infos zu den Netzen und evtl anderes?
                 netConfig = myWM.getConfiguredNetworks ();
+
+
+
+
+
+                /**
+                 *
+                 *
+                 * https://wigle.net/account für Infos
+                 *
+                 * Brauch basic auth bei wigle für query mit
+                 * API NAME:
+                 * API TOKEN:
+                 *
+                 *
+                 */
+
+
+                //String url= "http://ip-api.com/json"; //alternativen?
+
+
+                String urlIpapi= "https://ipapi.co/json/";
+                String urlIpstack= "http://api.ipstack.com/check?access_key=d935baa6586ab5420baad6747fc34763";
+
+                // nur wenn WIFI enabled weil sonst rest keinen Sinn macht
+                if(myWM.isWifiEnabled ()){
+                    //System.out.println ("WIFI ist enabled");
+
+                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wifi enabled",gettime (), 0, 3, " ");
+
+                    WifiInfo connectionInfo = myWM.getConnectionInfo ();    // SSID, BSSID also AP-MAC, (wohl falsch bzw wessen? MAC), Supplicant state: COMPLETED, RSSI: -56, Link speed: 144Mbps, Frequency: 2452MHz, Net ID: 2, Metered hint: false, score: 60
+                    //when SSID häufig genutzt Zuhause oder Arbeit?
+                    // über bssid und wigle.net auch location....
+                    String ssid = connectionInfo.getSSID ();
+                    String bssid = connectionInfo.getBSSID ();
+                    System.out.println("))))))))))))))))))))))))))((((((((((((((((((((((((   SSID: " +ssid+ " BSSID: "+bssid);
+                    if(!ssid.equals ("<unknown ssid>") && !bssid.equals ("02:00:00:00:00:00"))
+                    {
+                        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++   SSID: " +ssid+ " BSSID: "+bssid);
+                        if(!ssid.equals (stillConnectedToSSID))
+                        {
+
+                            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   SSID: " +ssid+ " BSSID: "+bssid+ " stillConnectedToSSID: "+ stillConnectedToSSID);
+                            if (! ssid.equals ("0x"))
+                            {
+                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Verbunden mit WLAN: ", gettime (), 0, 3, ssid);
+                                stillConnectedToSSID = ssid;
+
+                                if (querytoggle == 0)
+                                {
+                                    querytoggle = 1;
+                                    //OkHttpHandler okHttpHandlerIpapi = new OkHttpHandler ();
+                                    //okHttpHandlerIpapi.execute (urlIpapi);
+
+                                    //OkHttpHandler okHttpHandlerIpstack = new OkHttpHandler ();
+                                    //okHttpHandlerIpstack.execute (urlIpstack);
+
+
+                                    // limit beachten...könnte auch mir einfach merken welche ssid bzw bssid wo ist...und nur anfragen bei neuen...bei höhere API nicht mehr möglich
+                                    if (! ssid.equals ("<unknown ssid>") && ! bssid.equals ("02:00:00:00:00:00"))
+                                    {
+                                        System.out.println ("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Query location via BSSID: " + bssid);
+
+
+                                        // DatabaseInitializer.add im executes
+                                        new Authenticate ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&netid=" + bssid, "AID9eec974665aa0c903b7e8b1a882e222b", "710edd26134760027e3d09739f0ecc4f");
+
+                                    }
+                                }
+
+                            }
+
+                            else
+                            {
+                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Nicht verbunden mit einem WLAN ",gettime (), 0, 3, " ");
+                            }
+
+                        }
+                        else{
+                            if(!ssid.equals ("0x"))
+                            {
+                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Weiterhin verbunden mit WLAN: ",gettime (), 0, 3, ssid);
+                                querytoggle = 1;
+                            }
+                            else
+                            {
+                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Nicht verbunden mit einem WLAN ",gettime (), 0, 3, " ");
+                            }
+
+
+                        }
+
+                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Connected to SSID",gettime (), 0, 3, ssid);
+                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Connected to BSSID",gettime (), 0, 3, bssid);
+                    }
+                    else
+                    {
+                        if(connectedToSSID != (null))
+                        {
+                            if(!connectedToSSID.equals (stillConnectedToSSID))
+                            {
+                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Verbunden mit WLAN (via status): ",gettime (), 0, 3, connectedToSSID);
+                                stillConnectedToSSID = connectedToSSID;
+
+                                if (querytoggle == 0)
+                                {
+                                    querytoggle = 1;
+                                    OkHttpHandler okHttpHandlerIpapi = new OkHttpHandler ();
+                                    okHttpHandlerIpapi.execute (urlIpapi);
+
+                                    OkHttpHandler okHttpHandlerIpstack = new OkHttpHandler ();
+                                    okHttpHandlerIpstack.execute (urlIpstack);
+
+
+
+
+
+                                    // limit beachten...könnte auch mir einfach merken welche ssid bzw bssid wo ist...und nur anfragen bei neuen...bei höhere API nicht mehr möglich
+                                    if(!ssid.equals ("<unknown ssid>") && !bssid.equals ("02:00:00:00:00:00"))
+                                    {
+                                        System.out.println("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Query location via BSSID: "+bssid);
+
+
+
+                                        // DatabaseInitializer.add im executes
+                                        new Authenticate ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&netid="+bssid, "AID9eec974665aa0c903b7e8b1a882e222b", "710edd26134760027e3d09739f0ecc4f") ;
+
+                                    }
+                                }
+
+
+                            }
+                            else {
+
+                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Weiterhin verbunden mit WLAN (via status): ",gettime (), 0, 3, connectedToSSID);
+                                querytoggle = 1;
+                            }
+
+                        }
+
+                    }
+
+
+
+
+
+                    isConnected = internetConnectionAvailable (1000);
+
+
+
+
+                    if (isConnected && (!ssid.equals (oldssid)) && (bssid != null))
+                    {
+                        /*
+                        if(!ssid.equals ("<unknown ssid>"))
+                        {
+                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"New WIFI Network with Internet",gettime (), 0, 3, "old SSID: "+ oldssid+ " new SSID: "+ ssid);
+                        }
+                        else if (!connectedToSSID.equals (oldssid))
+                        {
+                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"New WIFI Network with Internet",gettime (), 0, 3, "old SSID: "+ oldssid+ " new SSID: "+ connectedToSSID);
+                        }
+
+                        */
+                        //
+
+
+                        if (!ssid.equals (oldssid))
+                        {
+                            if(!ssid.equals ("<unknown ssid>"))
+                            {
+                                //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ ssid);
+                                oldssid = ssid;
+                            }
+                            else
+                            {
+                                oldssid = connectedToSSID;
+                            }
+
+                        }
+
+                        // jeweils DatabaseInitializer.add in den executes
+
+
+
+
+                        dhcpINFO = myWM.getDhcpInfo ();
+
+
+
+                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP Info ",gettime (), 0, 3, String.valueOf (dhcpINFO));
+
+
+
+
+                    }
+                    else if (!isConnected && (!ssid.equals (oldssid)) && (bssid != null)){
+
+
+
+                        /*
+
+                        if (!bssid.equals ("00:00:00:00:00:00"))
+
+                        {
+
+
+                            if(!ssid.equals ("<unknown ssid>")) {
+                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "New WIFI Network without Internet", gettime (), 0, 3, "old SSID: " + oldssid + " new SSID: " + ssid);
+                                //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ ssid);
+                            }
+                            else if (!oldssid.equals (connectedToSSID))
+                                {
+                                    if (connectedToSSID == null)
+                                    {
+                                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Wifi enabled but not connected", gettime (), 0, 3, "old SSID: " + oldssid + " new SSID: " + connectedToSSID);
+                                    }
+                                    else{
+                                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "New WIFI Network without Internet", gettime (), 0, 3, "old SSID: " + oldssid + " new SSID: " + connectedToSSID);
+                                        }
+
+                                }
+                        }
+                        else
+                        {
+                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"WIFI active but not connected to Network",gettime (), 0, 3, "old SSID: "+ oldssid+ " new SSID: "+ ssid+ "connected to SSID: "+connectedToSSID);
+                        }
+
+
+                        */
+
+                        if(!ssid.equals ("<unknown ssid>"))
+                        {
+                            //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ ssid);
+                            oldssid = ssid;
+                        }
+                        else
+                        {
+                            //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ connectedToSSID);
+                            oldssid = connectedToSSID;
+                        }
+
+
+
+
+
+
+
+
+                        dhcpINFO = myWM.getDhcpInfo ();
+
+
+
+                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP Info ",gettime (), 0, 3, String.valueOf (dhcpINFO));
+
+
+
+
+                    }
+                }
+                else
+                {
+                    //System.out.println ("WIFI ist disabled");
+                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"WIFI disabled",gettime (), 0, 3, " ");
+
+                    stillConnectedToSSID = "not connected to SSID";
+                    //System.out.println ("Checking if other internet connection is available");
+
+                    if (internetConnectionAvailable(1000))
+                    {
+                        isConnected = true;
+                        //System.out.println ("Yes, we have internetz! =)");
+
+                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"aktive Mobile-Daten-Verbindung",gettime (), 0, 3, " ");
+
+
+
+
+                    }
+                    else
+                    {
+                        isConnected = false;
+                        //System.out.println ("No, we have no internetz. =(");
+                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"No Internet Connection",gettime (), 0, 3, "");
+
+                    }
+
+
+
+                }
+
+                // weather api hier nutzen ? https://openweathermap.org/current und https://openweathermap.org/appid
+
+                //int wifiState = myWM.getWifiState ();
+                // System.out.println(wifiState);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                 //System.out.println(netConfig);
@@ -658,7 +970,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                  *
                                  */
                                 //
-                                // DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Gespeichertes WLAN: ", gettime (), 0, 0, currentWifiConfiguration.SSID);
+                                // DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Gespeichertes WLAN: ", gettime (), 0, 3, currentWifiConfiguration.SSID);
 
 
                                 //natürlich auch für jede SSID möglich...
@@ -669,13 +981,14 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                                         connectedToSSID = currentWifiConfiguration.SSID;
                                         connectedToSSID = connectedToSSID.replace ("\"", "");
-                                        System.out.println ("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Query location via SSID: " + connectedToSSID);
+
 
                                         //hier wird woanders während des calls der DatabaseInitializer.add ausgeführt!
                                         if (querytoggle == 0)
                                         {
                                             new Authenticate ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&ssid=" + connectedToSSID, "AID9eec974665aa0c903b7e8b1a882e222b", "710edd26134760027e3d09739f0ecc4f");
-                                            querytoggle =1;
+                                            querytoggle = 1;
+                                            System.out.println ("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Query location via SSID: " + connectedToSSID);
                                         }
 
                                     }
@@ -703,291 +1016,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
 
-                /**
-                 *
-                 *
-                 * https://wigle.net/account für Infos
-                 *
-                 * Brauch basic auth bei wigle für query mit
-                 * API NAME:
-                 * API TOKEN:
-                 *
-                 *
-                 */
-
-
-                //String url= "http://ip-api.com/json"; //alternativen?
-
-
-                String urlIpapi= "https://ipapi.co/json/";
-                String urlIpstack= "http://api.ipstack.com/check?access_key=d935baa6586ab5420baad6747fc34763";
-
-                // nur wenn WIFI enabled weil sonst rest keinen Sinn macht
-                if(myWM.isWifiEnabled ()){
-                    //System.out.println ("WIFI ist enabled");
-
-                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wifi enabled",gettime (), 0, 0, " ");
-
-                    WifiInfo connectionInfo = myWM.getConnectionInfo ();    // SSID, BSSID also AP-MAC, (wohl falsch bzw wessen? MAC), Supplicant state: COMPLETED, RSSI: -56, Link speed: 144Mbps, Frequency: 2452MHz, Net ID: 2, Metered hint: false, score: 60
-                    //when SSID häufig genutzt Zuhause oder Arbeit?
-                    // über bssid und wigle.net auch location....
-                    String ssid = connectionInfo.getSSID ();
-                    String bssid = connectionInfo.getBSSID ();
-                    // System.out.println("SSID: " +ssid+ " BSSID: "+bssid);
-                    if(!ssid.equals ("<unknown ssid>") && !bssid.equals ("02:00:00:00:00:00"))
-                    {
-                        if(!ssid.equals (stillConnectedToSSID))
-                        {
-
-                            if (! ssid.equals ("0x"))
-                            {
-                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Verbunden mit WLAN: ", gettime (), 0, 0, ssid);
-                                stillConnectedToSSID = ssid;
-
-
-                                querytoggle = 1;
-                                OkHttpHandler okHttpHandlerIpapi = new OkHttpHandler ();
-                                okHttpHandlerIpapi.execute (urlIpapi);
-
-                                OkHttpHandler okHttpHandlerIpstack = new OkHttpHandler ();
-                                okHttpHandlerIpstack.execute (urlIpstack);
-
-
-                                // limit beachten...könnte auch mir einfach merken welche ssid bzw bssid wo ist...und nur anfragen bei neuen...bei höhere API nicht mehr möglich
-                                if (! ssid.equals ("<unknown ssid>") && ! bssid.equals ("02:00:00:00:00:00"))
-                                {
-                                    System.out.println ("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Query location via BSSID: " + bssid);
-
-
-                                    // DatabaseInitializer.add im executes
-                                    new Authenticate ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&netid=" + bssid, "AID9eec974665aa0c903b7e8b1a882e222b", "710edd26134760027e3d09739f0ecc4f");
-
-                                }
-                            }
-
-                            else
-                            {
-                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Nicht verbunden mit einem WLAN ",gettime (), 0, 0, " ");
-                            }
-
-                        }
-                        else{
-                            if(!ssid.equals ("0x"))
-                            {
-                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Weiterhin verbunden mit WLAN: ",gettime (), 0, 0, ssid);
-                                querytoggle = 1;
-                            }
-                            else
-                                {
-                                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Nicht verbunden mit einem WLAN ",gettime (), 0, 0, " ");
-                                }
-
-
-                        }
-
-                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Connected to SSID",gettime (), 0, 0, ssid);
-                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Connected to BSSID",gettime (), 0, 0, bssid);
-                    }
-                    else
-                        {
-                            if(connectedToSSID != (null))
-                            {
-                                if(!connectedToSSID.equals (stillConnectedToSSID))
-                                {
-                                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Verbunden mit WLAN (via status): ",gettime (), 0, 0, connectedToSSID);
-                                    stillConnectedToSSID = connectedToSSID;
-
-
-                                        querytoggle = 1;
-                                        OkHttpHandler okHttpHandlerIpapi = new OkHttpHandler ();
-                                        okHttpHandlerIpapi.execute (urlIpapi);
-
-                                        OkHttpHandler okHttpHandlerIpstack = new OkHttpHandler ();
-                                        okHttpHandlerIpstack.execute (urlIpstack);
-
-
-
-
-
-                                        // limit beachten...könnte auch mir einfach merken welche ssid bzw bssid wo ist...und nur anfragen bei neuen...bei höhere API nicht mehr möglich
-                                        if(!ssid.equals ("<unknown ssid>") && !bssid.equals ("02:00:00:00:00:00"))
-                                        {
-                                            System.out.println("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Query location via BSSID: "+bssid);
-
-
-
-                                            // DatabaseInitializer.add im executes
-                                            new Authenticate ().execute ("https://api.wigle.net/api/v2/network/search?onlymine=false&first=0&freenet=false&paynet=false&netid="+bssid, "AID9eec974665aa0c903b7e8b1a882e222b", "710edd26134760027e3d09739f0ecc4f") ;
-
-                                        }
-
-                                }
-                                else {
-
-                                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Weiterhin verbunden mit WLAN (via status): ",gettime (), 0, 0, connectedToSSID);
-                                    querytoggle = 1;
-                                }
-
-                            }
-
-                        }
-
-
-
-
-
-                    isConnected = internetConnectionAvailable (1000);
-
-
-
-
-                    if (isConnected && (!ssid.equals (oldssid)) && (bssid != null))
-                    {
-                        /*
-                        if(!ssid.equals ("<unknown ssid>"))
-                        {
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"New WIFI Network with Internet",gettime (), 0, 0, "old SSID: "+ oldssid+ " new SSID: "+ ssid);
-                        }
-                        else if (!connectedToSSID.equals (oldssid))
-                        {
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"New WIFI Network with Internet",gettime (), 0, 0, "old SSID: "+ oldssid+ " new SSID: "+ connectedToSSID);
-                        }
-
-                        */
-                        //
-
-
-                        if (!ssid.equals (oldssid))
-                        {
-                            if(!ssid.equals ("<unknown ssid>"))
-                            {
-                                //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ ssid);
-                                oldssid = ssid;
-                            }
-                            else
-                                {
-                                    oldssid = connectedToSSID;
-                                }
-
-                        }
-
-                        // jeweils DatabaseInitializer.add in den executes
-
-
-
-
-                        dhcpINFO = myWM.getDhcpInfo ();
-
-
-
-                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP Info ",gettime (), 0, 0, String.valueOf (dhcpINFO));
-
-
-
-
-                    }
-                    else if (!isConnected && (!ssid.equals (oldssid)) && (bssid != null)){
-
-
-
-                        /*
-
-                        if (!bssid.equals ("00:00:00:00:00:00"))
-
-                        {
-
-
-                            if(!ssid.equals ("<unknown ssid>")) {
-                                DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "New WIFI Network without Internet", gettime (), 0, 0, "old SSID: " + oldssid + " new SSID: " + ssid);
-                                //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ ssid);
-                            }
-                            else if (!oldssid.equals (connectedToSSID))
-                                {
-                                    if (connectedToSSID == null)
-                                    {
-                                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Wifi enabled but not connected", gettime (), 0, 0, "old SSID: " + oldssid + " new SSID: " + connectedToSSID);
-                                    }
-                                    else{
-                                        DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "New WIFI Network without Internet", gettime (), 0, 0, "old SSID: " + oldssid + " new SSID: " + connectedToSSID);
-                                        }
-
-                                }
-                        }
-                        else
-                        {
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"WIFI active but not connected to Network",gettime (), 0, 0, "old SSID: "+ oldssid+ " new SSID: "+ ssid+ "connected to SSID: "+connectedToSSID);
-                        }
-
-
-                        */
-
-                        if(!ssid.equals ("<unknown ssid>"))
-                        {
-                            //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ ssid);
-                            oldssid = ssid;
-                        }
-                        else
-                        {
-                            //System.out.println("old SSID: "+ oldssid+ " new SSID: "+ connectedToSSID);
-                            oldssid = connectedToSSID;
-                        }
-
-
-
-
-
-
-
-
-                        dhcpINFO = myWM.getDhcpInfo ();
-
-
-
-                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"DHCP Info ",gettime (), 0, 0, String.valueOf (dhcpINFO));
-
-
-
-
-                    }
-                }
-                else
-                    {
-                        //System.out.println ("WIFI ist disabled");
-                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"WIFI disabled",gettime (), 0, 0, "");
-
-                        stillConnectedToSSID = "not connected to SSID";
-                        //System.out.println ("Checking if other internet connection is available");
-
-                        if (internetConnectionAvailable(1000))
-                        {
-                            isConnected = true;
-                            //System.out.println ("Yes, we have internetz! =)");
-
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"aktive Mobile-Daten-Verbindung",gettime (), 0, 0, " ");
-
-
-
-
-                        }
-                        else
-                            {
-                                isConnected = false;
-                                //System.out.println ("No, we have no internetz. =(");
-                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"No Internet Connection",gettime (), 0, 0, "");
-
-                            }
-
-
-
-                    }
-
-                    // weather api hier nutzen ? https://openweathermap.org/current und https://openweathermap.org/appid
-
-                //int wifiState = myWM.getWifiState ();
-                // System.out.println(wifiState);
-
-
-
 
 
                 /**
@@ -1000,16 +1028,16 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 String telephoneProvider = null; //z.B. telekom.de und NetMobil
                 if (myTM != null) {
                     telephoneProvider = myTM.getSimOperatorName ();
-                    if (telefonprovider != 1){
+                    if (telefonproviderToggle != 1){
                         //System.out.println(telephoneProvider);
                         if(telephoneProvider.equals (""))
                         {
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"keine aktivierte SIM Karte",gettime (), 0, 0, " ");
-                            telefonprovider = 1;
+                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"keine aktivierte SIM Karte",gettime (), 0, 3, " ");
+                            telefonproviderToggle = 1;
                         }
                         else {
-                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefon Provider",gettime (), 0, 0, telephoneProvider);
-                            telefonprovider = 1;
+                            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefon Provider",gettime (), 0, 3, telephoneProvider);
+                            telefonproviderToggle = 1;
                         }
 
                     }
@@ -1020,7 +1048,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                 if (strAction != null && strAction.equals (Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
                     //System.out.println ("AIRPLANE Mode!");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Airplane Mode",gettime (), 0, 0, " ");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Airplane Mode",gettime (), 0, 3, " ");
+                    airplaneCount = airplaneCount +1;
                 }
 
 
@@ -1044,7 +1073,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     //System.out.println ("Battery OKAY!");
 
                     //Hedwig.deliverNotification("Battery OKAY", 10, DataCollectionActivity.this,"Battery Ok");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery OK",gettime (), 0, 0, " ");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery OK",gettime (), 0, 3, " ");
                 }
 
                 */
@@ -1052,7 +1081,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 if (strAction != null && strAction.equals (Intent.ACTION_BATTERY_LOW)) {
                     //System.out.println ("Battery LOW!");
                     //Hedwig.deliverNotification("Battery low low low", 12, DataCollectionActivity.this,"Battery Low");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"niedriger Batteriestatus",gettime (), 0, 0, " ");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"niedriger Batteriestatus",gettime (), 0, 3, " ");
                 }
 
 
@@ -1062,7 +1091,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
                     //System.out.println ("Battery changed!");
-                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery changed",gettime (), 0, 0, " ");
+                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery changed",gettime (), 0, 3, " ");
 
                     //meldet sich häufig beim laden
 
@@ -1070,7 +1099,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     int remain = intent.getIntExtra (BatteryManager.EXTRA_LEVEL, 0);
                     String remainString = Integer.toString (remain) + "%";
                     // System.out.println (remainString);
-                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery status",gettime (), remain, 0, remainString);
+                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery status",gettime (), remain, 3, remainString);
 
                     int plugIn = intent.getIntExtra (BatteryManager.EXTRA_PLUGGED, 0);
                     switch (plugIn) {
@@ -1084,7 +1113,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                         case 0:
                             //System.out.println ("No Connection");
-                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"wird nicht geladen",gettime (), 0, 0, gettime ());
+                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"wird nicht geladen",gettime (), 0, 3, gettime ());
 
                             // noch nicht sicher was mir die Info bringen soll 0 ist eigentlich battery....
                             // kommt aber auch immer wieder zwischendurch...z.B. beim screen on / off
@@ -1093,7 +1122,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         case BatteryManager.BATTERY_PLUGGED_AC:
                             //System.out.println ("Adapter Connected");
                             //Hedwig.deliverNotification("Loading over AC", 13, DataCollectionActivity.this, "Plugged AC");
-                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"geladen via: ",gettime (), 0, 0, "Steckdose");
+                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"geladen via: ",gettime (), 0, 3, "Steckdose");
                             break;
 
 
@@ -1101,7 +1130,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         case BatteryManager.BATTERY_PLUGGED_USB:
                             //System.out.println ("USB Connected");
                             //Hedwig.deliverNotification("Loading over USB", 14, DataCollectionActivity.this,"Plugged USB");
-                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"geladen via: ",gettime (), 0, 0, "USB");
+                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"geladen via: ",gettime (), 0, 3, "USB");
                             break;
                     }
 
@@ -1121,9 +1150,9 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                     List <ApplicationInfo> packages = myPM.getInstalledApplications (PackageManager.GET_META_DATA);
 
 
-                    //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages : " + packages.size ());
+                    System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages : " + packages.size ());
                     if (packages_gotten!= null)
-                        //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages_gotten : " + packages_gotten.size ());
+                        System.out.println ("+++++++++++++++++++++++++++++++++++++++++++  packages_gotten : " + packages_gotten.size ());
 
 
 
@@ -1147,8 +1176,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                     if(appPackageNameMarshal.getPackageName ().equals ( applicationInfo.packageName)){
                                         System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Kiddy-App : " + appPackageNameMarshal.getAppname ()+ " installed!!!!");
                                         //Hedwig.deliverNotification ("Sie haben die Kinder App: "+applicationInfo.packageName+"installiert.", );
-                                        Hedwig.deliverNotification("Kinder-App "+ appPackageNameMarshal.getAppname () +"ist installiert.", 101, context,"Kinder");
-                                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte Kinder-App: ", gettime (), 0, 0, applicationInfo.packageName);
+                                        Hedwig.deliverNotification("Kinder-App "+ appPackageNameMarshal.getAppname () +" ist installiert.", 101, context,"Kinder");
+                                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte Kinder-App: ", gettime (), 0, 3, applicationInfo.packageName);
 
                                     }
 
@@ -1158,8 +1187,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                     if(appPackageNameMarshal.getPackageName ().equals (applicationInfo.packageName)){
                                         System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Dating-App : " + appPackageNameMarshal.getAppname ()+ " installed!!!!");
                                         //Hedwig.deliverNotification ("Sie haben die Dating App: "+applicationInfo.packageName+"installiert.", );
-                                        Hedwig.deliverNotification("Dating-App "+ appPackageNameMarshal.getAppname () +"ist installiert.", 69, context,"Dating");
-                                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte Dating-App: ", gettime (), 0, 0, applicationInfo.packageName);
+                                        Hedwig.deliverNotification("Dating-App "+ appPackageNameMarshal.getAppname () +" ist installiert.", 69, context,"Dating");
+                                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte Dating-App: ", gettime (), 0, 3, applicationInfo.packageName);
                                     }
 
                                 }
@@ -1167,8 +1196,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                     if(appPackageNameMarshal.getPackageName ().equals (applicationInfo.packageName)){
                                         System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Banking-App : " + appPackageNameMarshal.getAppname ()+ " installed!!!!");
                                         //Hedwig.deliverNotification ("Sie haben die Banking App: "+applicationInfo.packageName+"installiert.", );
-                                        Hedwig.deliverNotification("Banking-App "+ appPackageNameMarshal.getAppname () +"ist installiert.", 100, context,"Banking");
-                                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte Banking-App: ", gettime (), 0, 0, applicationInfo.packageName);
+                                        Hedwig.deliverNotification("Banking-App "+ appPackageNameMarshal.getAppname () +" ist installiert.", 100, context,"Banking");
+                                        //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte Banking-App: ", gettime (), 0, 3, applicationInfo.packageName);
                                     }
 
                                 }
@@ -1188,10 +1217,11 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                  *
                                  */
 
-                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte App: ", gettime (), 0, 0, applicationInfo.packageName);
+                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Installierte App: ", gettime (), 0, 3, applicationInfo.packageName);
                             }
                             else{
                                 System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ Installed package : " + applicationInfo.packageName + "was installed before");
+                                keepAlive = keepAlive +1;
                                 //müsste mir noch überlegen ob ich deinstall/reinstall tracken will
                             }
 
@@ -1234,7 +1264,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                            if( strAction.equals (Intent.ACTION_USER_PRESENT) || strAction.equals (Intent.ACTION_SCREEN_OFF))
                             {
                                System.out.println ("#+#+#+#+#+#+#+#+#+#+#+Screen off " + "LOCKED");
-                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Screen locked",gettime (), 0, 0, " ");
+                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Screen locked",gettime (), 0, 3, " ");
                                 /***
                                  * Hier wenn lange kein unlock + still(api) dann schlafender user???
                                  */
@@ -1262,7 +1292,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                 }
 
                                 //Hedwig.deliverNotification("Driving "+ activity.getConfidence()+"% at: "+time, 0, this, "Driving");
-                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",gettime (), 0, 0, gettime ());
+                                //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",gettime (), 0, 3, gettime ());
                             }
                             if (check_round_time () == (false)||check_round_time () == (null)){
                                 System.out.println ("#++++++++++++++++++++++++++++++++ keine Runde Zeit");
@@ -1275,7 +1305,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                             //SimpleDateFormat sdf1 = new SimpleDateFormat ("dd.MM.yyyy kk:mm:ss");
                             String screenDateString = gettime ();
-                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Screen checked",gettime (), (int)screen_checked, 0, "times screen checked: "+ Float.toString (screen_checked));
+                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Screen checked",gettime (), (int)screen_checked, 3, "times screen checked: "+ Float.toString (screen_checked));
 
 
                             /** variable zum sichern wann gechecked wurde damit nicht gleich der unlock time ist*/
@@ -1313,7 +1343,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
 
-                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Screen unlocked",gettime (), (int) times_unlocked, 0, "times screen unlocked: "+ Float.toString (times_unlocked));
+                            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Screen unlocked",gettime (), (int) times_unlocked, 3, "times screen unlocked: "+ Float.toString (times_unlocked));
 
 
                             /**
@@ -1738,6 +1768,13 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
     public void initBankingList () {
+
+
+        /***
+         *
+         * kategorie finanzen top 30 noch!!!!
+         *
+         */
 
         // weil paypal DOH!
         AppPackageNameMarshal PayPal = new AppPackageNameMarshal <> ("PayPal Mobile Cash: Send and Request Money Fast", "com.paypal.android.p2pmobile");

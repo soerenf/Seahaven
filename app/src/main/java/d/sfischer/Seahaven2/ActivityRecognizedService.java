@@ -69,6 +69,10 @@ public class ActivityRecognizedService extends IntentService {
                             if(DataCollectionActivity.vehicleCount > 2 )
                             {
                                 Hedwig.deliverNotification("In einem Fahrzeug von: "+ DataCollectionActivity.vehicleTime + "bis: "+ DataCollectionActivity.walkingTime, 0, this,"Driving");
+                                if (DataCollectionActivity.airplaneCount > 2)
+                                {
+                                    Hedwig.deliverNotification("Im Flugzeug von: "+ DataCollectionActivity.vehicleTime + "bis: "+ DataCollectionActivity.walkingTime, 200, this,"Airplane");
+                                }
 
                             }
                             if(DataCollectionActivity.bicycleCount > 2 )
@@ -83,7 +87,16 @@ public class ActivityRecognizedService extends IntentService {
                             }
                             if(DataCollectionActivity.stillCount > 20 ) //größerer wert und unlock oder so oder einfach danach gehen gleich aufstehen?
                             {
-                                Hedwig.deliverNotification("Augestanden um: "+ DataCollectionActivity.walkingTime, 4, this,"Still");
+                                if(DataCollectionActivity.check_after_time ("04:00:00"))
+
+                                {
+                                    if(!DataCollectionActivity.check_after_time ("10:00:00"))
+
+                                    {
+                                        Hedwig.deliverNotification("Haus verlassen um: "+ DataCollectionActivity.walkingTime, 4, this,"Still");
+                                    }
+                                }
+
 
                             }
                             if(DataCollectionActivity.tiltingCount > 2 )

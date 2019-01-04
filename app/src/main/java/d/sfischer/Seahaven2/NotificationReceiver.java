@@ -45,13 +45,28 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Driving")) {
                     System.out.println ("Driving ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Gefahren mit Fahrzeug: ",gettime (), 0, 1, time);
                     if (manager != null) {
                         manager.cancel (0);
                     }
                 }
+
+                if (extras.containsKey ("Airplane")) {
+                    System.out.println ("Airplane ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Geflogen: ",gettime (), 0, 1, time);
+                    if (manager != null) {
+                        manager.cancel (200);
+                    }
+                }
+
                 if (extras.containsKey ("Bicycle")) {
                     System.out.println ("Bicycle ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Gefahren mit Fahrrad o.ä.: ",gettime (), 0, 1, time);
                     if (manager != null) {
                         manager.cancel (1);
                     }
@@ -59,6 +74,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Foot")) {
                     System.out.println ("Foot ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Zu Fuß: ",gettime (), 0, 1, time);
                     if (manager != null) {
                         manager.cancel (2);
                     }
@@ -66,6 +83,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Running")) {
                     System.out.println ("Running ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Gerannt: ",gettime (), 0, 1, time);
                     if (manager != null) {
                         manager.cancel (3);
                     }
@@ -73,7 +92,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Still")) {
                     System.out.println ("Still ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
-
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Still: ",gettime (), 0, 1, time);
                     //funktioniert, Zeit der Aktion wird festgehalten und nicht Zeit des klickens
                     //Long date = extras.getLong ("timing");
 
@@ -86,6 +106,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Tilting")) {
                     System.out.println ("Tilting ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Geneigt: ",gettime (), 0, 1, time);
                     if (manager != null) {
                         manager.cancel (5);
                     }
@@ -93,6 +115,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Walking")) {
                     System.out.println ("Walking ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Gegangen: ",gettime (), 0, 1, time);
                     if (manager != null) {
                         manager.cancel (6);
                     }
@@ -139,7 +163,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     System.out.println ("Wecker ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",time, 0, 1, time);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",gettime (), 0, 1, time);
                     if (manager != null) {
                         manager.cancel (99);
                     }
@@ -196,6 +220,29 @@ public class NotificationReceiver extends BroadcastReceiver {
                         manager.cancel (100);
                     }
                 }
+
+                if (extras.containsKey ("wigle.net")) {
+                    System.out.println ("wigle.net ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Standort ermittelt",gettime (), 0, 1, time);
+                    if (manager != null) {
+                        manager.cancel (500);
+                    }
+                }
+
+                if (extras.containsKey ("Location")) {
+                    System.out.println ("Location ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"grob Standort ermittelt",gettime (), 0, 1, time);
+                    if (manager != null) {
+                        manager.cancel (501);
+                    }
+                }
+
+
+
             }
         }
         if (action != null && action.equals (Hedwig.NO_ACTION)) {
@@ -206,13 +253,27 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Driving")) {
                     System.out.println ("Driving ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Gefahren mit Fahrzeug: ", gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (0);
+                    }
+                }
+
+                if (extras.containsKey ("Airplane")) {
+                    System.out.println ("Airplane ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Geflogen: ",gettime (), 0, 0, time);
+                    if (manager != null) {
+                        manager.cancel (200);
                     }
                 }
                 if (extras.containsKey ("Bicycle")) {
                     System.out.println ("Bicycle ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Gefahren mit Fahrrad o.ä.: ", gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (1);
                     }
@@ -220,6 +281,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Foot")) {
                     System.out.println ("Foot ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Zu Fuß: ", gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (2);
                     }
@@ -227,6 +290,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Running")) {
                     System.out.println ("Running ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Gerannt: ", gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (3);
                     }
@@ -234,6 +299,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Still")) {
                     System.out.println ("Still ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Still: ", gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (4);
                     }
@@ -242,6 +309,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Tilting")) {
                     System.out.println ("Tilting ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Geneigt: ", gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (5);
                     }
@@ -249,6 +318,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Walking")) {
                     System.out.println ("Walking ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Gegangen: ", gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (6);
                     }
@@ -294,7 +365,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     System.out.println ("Wecker ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",time, 0, 0, time);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (99);
                     }
@@ -351,6 +422,29 @@ public class NotificationReceiver extends BroadcastReceiver {
                         manager.cancel (100);
                     }
                 }
+
+
+                if (extras.containsKey ("wigle.net")) {
+                    System.out.println ("wigle.net ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Standort ermittelt",gettime (), 0, 0, time);
+                    if (manager != null) {
+                        manager.cancel (500);
+                    }
+                }
+
+                if (extras.containsKey ("Location")) {
+                    System.out.println ("Location ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"grob Standort ermittelt",gettime (), 0, 0, time);
+                    if (manager != null) {
+                        manager.cancel (501);
+                    }
+                }
+
+
             }
         }
         if (action != null && action.equals (Hedwig.MAYBE_ACTION)) {
@@ -360,13 +454,28 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Driving")) {
                     System.out.println ("Driving ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Gefahren mit Fahrzeug: ", gettime (), 0, 2, time);
                     if (manager != null) {
                         manager.cancel (0);
                     }
                 }
+
+                if (extras.containsKey ("Airplane")) {
+                    System.out.println ("Airplane ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Geflogen: ",gettime (), 0, 2, time);
+                    if (manager != null) {
+                        manager.cancel (200);
+                    }
+                }
+
                 if (extras.containsKey ("Bicycle")) {
                     System.out.println ("Bicycle ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Gefahren mit Fahrrad o.ä.: ", gettime (), 0, 2, time);
                     if (manager != null) {
                         manager.cancel (1);
                     }
@@ -374,6 +483,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Foot")) {
                     System.out.println ("Foot ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Zu Fuß: ", gettime (), 0, 2, time);
                     if (manager != null) {
                         manager.cancel (2);
                     }
@@ -381,6 +492,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Running")) {
                     System.out.println ("Running ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Gerannt: ", gettime (), 0, 2, time);
                     if (manager != null) {
                         manager.cancel (3);
                     }
@@ -388,6 +501,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Still")) {
                     System.out.println ("Still ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Still: ", gettime (), 0, 2, time);
                     if (manager != null) {
                         manager.cancel (4);
                     }
@@ -396,6 +511,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Tilting")) {
                     System.out.println ("Tilting ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Geneigt: ", gettime (), 0, 2, time);
                     if (manager != null) {
                         manager.cancel (5);
                     }
@@ -403,6 +520,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Walking")) {
                     System.out.println ("Walking ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Gegangen: ", gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (6);
                     }
@@ -448,7 +567,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     System.out.println ("Wecker ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",time, 0, 2, time);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",gettime (), 0, 2, time);
                     if (manager != null) {
                         manager.cancel (99);
                     }
@@ -505,6 +624,29 @@ public class NotificationReceiver extends BroadcastReceiver {
                         manager.cancel (100);
                     }
                 }
+
+                if (extras.containsKey ("wigle.net")) {
+                    System.out.println ("wigle.net ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Standort ermittelt",gettime (), 0, 2, time);
+                    if (manager != null) {
+                        manager.cancel (500);
+                    }
+                }
+
+                if (extras.containsKey ("Location")) {
+                    System.out.println ("Location ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"groben Standort ermittelt",gettime (), 0, 2, time);
+                    if (manager != null) {
+                        manager.cancel (501);
+                    }
+                }
+
+
+
             }
 
         }

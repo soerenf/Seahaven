@@ -1,7 +1,11 @@
 package d.sfischer.Seahaven2;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Authenticator;
 import okhttp3.Credentials;
@@ -51,7 +55,56 @@ public class WebUtils {
             //String returnvalue = response.body ().string ();
             //System.out.println (returnvalue);
 
-            DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"WebUtils", DataCollectionActivity.gettime (), 0, 0, response.body ().string ());
+            //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"WebUtils", DataCollectionActivity.gettime (), 0, 0, response.body ().string ());
+
+            String standort = response.body ().string ();
+            //System.out.println ("!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?: "+standort);
+            Gson gson = new GsonBuilder ().create();
+            ResponseParser responseParser = gson.fromJson(standort, ResponseParser.class);
+            List <ResponseParser.Results> RespList = responseParser.getResults ();
+
+            if(responseParser.getSuccess ())
+            {
+                if(responseParser.getTotalResults () > 3 && responseParser.getTotalResults () < 10 ) //HotSpots mit gleichem Namen, evtl mehrere Städte?
+                {
+                    for(ResponseParser.Results results : RespList) {
+                        System.out.println("!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?: "+ results.getCity ());
+                        Hedwig.deliverNotification ("Standort: "+ results.getCity (), 500, DataCollectionActivity.getAppContext (), "wigle.net");
+                        break;
+                    }
+                }
+                if( responseParser.getTotalResults () > 0 && responseParser.getTotalResults () <= 3 )
+                {
+                    for(ResponseParser.Results results : RespList) {
+                        System.out.println("!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?: "+ results.getCity ()+" "+results.getRoad ()+" "+ results.getHousenumber ());
+                        Hedwig.deliverNotification ("Standort: "+ results.getCity ()+" "+results.getRoad ()+" "+ results.getHousenumber (), 500, DataCollectionActivity.getAppContext (), "wigle.net");
+                        break;
+                    }
+                }
+                if(responseParser.getTotalResults () >= 10 )
+                    {
+                    String urlIpapi= "https://ipapi.co/json/";
+                    OkHttpHandler okHttpHandlerIpapi = new OkHttpHandler ();
+                    okHttpHandlerIpapi.execute (urlIpapi);
+
+                    }
+                }
+
+            else
+                {
+                    String urlIpapi= "https://ipapi.co/json/";
+                    OkHttpHandler okHttpHandlerIpapi = new OkHttpHandler ();
+                    okHttpHandlerIpapi.execute (urlIpapi);
+                }
+
+
+            //System.out.println ("!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?: "+ );
+
+            // in Standort jetzt richtige felder suchen und eintragen in Notification
+
+            // nur ob standort korrekt erkannt wurde tracken nicht genauen standort
+            //oder einzelene Fragen für Stadt und Nähe strasse
+
             return response;
         }
     }
