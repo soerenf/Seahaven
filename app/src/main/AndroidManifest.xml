@@ -76,6 +76,15 @@
         <activity android:name="d.sfischer.Seahaven2.DatabaseListDisplay">
         </activity>
 
+        <activity android:name="d.sfischer.Seahaven2.AppsDisplay">
+        </activity>
+
+        <activity android:name="d.sfischer.Seahaven2.WlansDisplay">
+        </activity>
+
+        <activity android:name="d.sfischer.Seahaven2.InfoDisplay">
+        </activity>
+
         <receiver
             android:name="d.sfischer.Seahaven2.StartMyServiceAtBootReceiver"
             android:label="StartMyServiceAtBootReceiver">

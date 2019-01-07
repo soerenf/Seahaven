@@ -191,7 +191,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     /**
      * Button für Start Big Data?
      * Zeitpunkt des sammelns und ende festhalten bei on exit oder destroy?
-     * was ist wenn phone leer geht? <---dürfte durch datenbank behoben sein...auto restart noch??
+     *
      *
      * */
 
@@ -364,6 +364,37 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 launchActivity (DatabaseListDisplay.class);
             }
         });
+
+        Button buttonInfo = findViewById (R.id.button_info);
+
+        buttonInfo.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick ( View view ) {
+
+                launchActivity (InfoDisplay.class);
+            }
+        });
+
+        Button buttonApps = findViewById (R.id.button_apps);
+
+        buttonApps.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick ( View view ) {
+
+                launchActivity (AppsDisplay.class);
+            }
+        });
+
+        Button buttonWlans = findViewById (R.id.button_wlans);
+
+        buttonWlans.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick ( View view ) {
+
+                launchActivity (WlansDisplay.class);
+            }
+        });
+
 
     }
 
@@ -701,7 +732,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                 System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   SSID: " +ssid+ " BSSID: "+bssid+ " stillConnectedToSSID: "+ stillConnectedToSSID);
                                 if (! ssid.equals ("0x"))
                                 {
-                                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Verbunden mit WLAN: ", gettime (), 0, 3, ssid);
+                                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Verbunden mit WLAN: ", gettime (), 0, 3, ssid);
 
                                     String dummySsid = ssid.replace ("\"", "");
                                     if ((containsWLAN(wlanInitList,dummySsid))!= null){
@@ -1536,7 +1567,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                     {
                                         if(sleepCount == 0)
                                         {
-                                            sleepStart = gettime ();
+                                            sleepStart = getJustTime ();
                                             sleepCount = 1;
                                         }
 
@@ -1546,7 +1577,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                     {
                                         if(sleepCount == 0 )
                                         {
-                                            sleepStart = gettime ();
+                                            sleepStart = getJustTime ();
                                             sleepCount = 1;
                                         }
 
@@ -1569,13 +1600,13 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                             if (check_round_time ()) {
                                 System.out.println ("#++++++++++++++++++++++++++++++++ Runde Zeit");
 
-                                //if(check_after_time ("02:00:00"))       //nach 02 Uhr sollten alle ins Bett oder keinen Wecker mehr
-                                {
+                                //if(check_after_time ("02:00:00"))   {}    //nach 02 Uhr sollten alle ins Bett oder keinen Wecker mehr
+
                                     if((!check_after_time ("10:00:00")))  // bis 10 Uhr meisten Menschen wach !after10 heißt 01:00-9:59
                                     {
                                         Hedwig.deliverNotification("Wecker war gestellt auf "+ getJustTime (), 99, context,"Wecker");
                                     }
-                                }
+
 
                                 //Hedwig.deliverNotification("Driving "+ activity.getConfidence()+"% at: "+time, 0, this, "Driving");
                                 //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Wecker war gestellt auf: ",gettime (), 0, 3, gettime ());
@@ -1727,9 +1758,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy kk:mm:ss");
         String time = sdf.format(date);
 
-        //Date date1 = Calendar.getInstance().getTime();
-
-        //System.out.println (date1);
 
 
         return time;
@@ -1755,12 +1783,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss");
         String time_now = sdf.format(date);
 
-        //SimpleDateFormat border = new SimpleDateFormat("kk:mm:ss");
 
-
-        //Date date1 = Calendar.getInstance().getTime();
-
-        //System.out.println (date1);
         if (time_now.compareTo(after) > 0) {
             System.out.println("time_now occurs after "+ after);
             return true;
@@ -1786,14 +1809,12 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         SimpleDateFormat sdf = new SimpleDateFormat("ss");
         String time_now = sdf.format(date);
 
-        //SimpleDateFormat border = new SimpleDateFormat("kk:mm:ss");
+
         String round = "00";
 
 
 
-        //Date date1 = Calendar.getInstance().getTime();
 
-        //System.out.println (date1);
         if (time_now.compareTo(round) > 0) {
             //System.out.println("time_now occurs after round");
 

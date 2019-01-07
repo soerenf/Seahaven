@@ -75,7 +75,7 @@ public class ActivityRecognizedService extends IntentService {
                                 }
                                 else
                                     {
-                                        Hedwig.deliverNotification("In einem Fahrzeug von: "+ DataCollectionActivity.vehicleTime + "bis: "+ DataCollectionActivity.walkingTime, 0, this,"Driving");
+                                        Hedwig.deliverNotification("In Fahrzeug: "+ DataCollectionActivity.vehicleTime + "-  "+ DataCollectionActivity.walkingTime, 0, this,"Driving");
                                     }
 
 
@@ -83,7 +83,7 @@ public class ActivityRecognizedService extends IntentService {
                             }
                             if(DataCollectionActivity.bicycleCount > 2 )
                             {
-                                Hedwig.deliverNotification("Fahrrad, Skateboard o.ä.: "+ DataCollectionActivity.bicycleTime + " -  "+ DataCollectionActivity.walkingTime, 1, this,"Bicycle");
+                                Hedwig.deliverNotification("Auf Fahrrad o.ä.: "+ DataCollectionActivity.bicycleTime + " -  "+ DataCollectionActivity.walkingTime, 1, this,"Bicycle");
 
                                 if(DataCollectionActivity.acCount > 1)
                                 {
@@ -190,14 +190,14 @@ public class ActivityRecognizedService extends IntentService {
                                     Hedwig.deliverNotification("Powerbank genutzt", 131, this,"Powerbank");
                                 }
 
-
+                                DataCollectionActivity.walkingCount = 0;
                             }
 
 
 
                         }
 
-                        DataCollectionActivity.walkingCount = 0;
+
                         //Hedwig.deliverNotification("Driving "+ activity.getConfidence()+"% at: "+time, 0, this, "Driving");
                         //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"im Fahrzeug", DataCollectionActivity.gettime (), activity.getConfidence(), 0,activity.getConfidence()+"% sicher" );
                         //DataCollectionActivity.vehicleCount = DataCollectionActivity.vehicleCount + 1;
@@ -221,13 +221,13 @@ public class ActivityRecognizedService extends IntentService {
                                     Hedwig.deliverNotification("Powerbank genutzt", 131, this,"Powerbank");
                                 }
 
-
+                                DataCollectionActivity.walkingCount = 0;
                             }
 
 
 
                         }
-                        DataCollectionActivity.walkingCount = 0;
+
                         //Hedwig.deliverNotification("On Bicycle "+ activity.getConfidence()+"% at: "+time, 1, this, "Bicycle");
                         //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"auf dem Rad/Skateboard/o.ä.", DataCollectionActivity.gettime (), activity.getConfidence(), 0,activity.getConfidence()+"% sicher" );
                         //DataCollectionActivity.bicycleCount = DataCollectionActivity.bicycleCount + 1;
@@ -252,13 +252,13 @@ public class ActivityRecognizedService extends IntentService {
                                     Hedwig.deliverNotification("Powerbank genutzt", 131, this,"Powerbank");
                                 }
 
-
+                                DataCollectionActivity.walkingCount = 0;
                             }
 
 
 
                         }
-                        DataCollectionActivity.walkingCount = 0;
+
                         //Hedwig.deliverNotification("Running "+ activity.getConfidence()+"% at: "+time, 3, this,"Running");
                         //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Laufen", DataCollectionActivity.gettime (), activity.getConfidence(), 1,activity.getConfidence()+"% sicher" );
                         //DataCollectionActivity.runningCount = DataCollectionActivity.runningCount + 1;
@@ -282,13 +282,13 @@ public class ActivityRecognizedService extends IntentService {
                                     Hedwig.deliverNotification("Powerbank genutzt", 131, this,"Powerbank");
                                 }
 
-
+                                DataCollectionActivity.walkingCount = 0;
                             }
 
 
 
                         }
-                        DataCollectionActivity.walkingCount = 0;
+
                         //Hedwig.deliverNotification("Standing still "+ activity.getConfidence()+"% at: "+time, 4, this,"Still");
                         //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (this),"Still", DataCollectionActivity.gettime (), activity.getConfidence(), 0,activity.getConfidence()+"% sicher" );
                         //DataCollectionActivity.stillCount = DataCollectionActivity.stillCount + 1;

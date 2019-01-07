@@ -96,7 +96,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     System.out.println ("Still ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Still: ",gettime (), 0, 1, time);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Haus verlassen: ",gettime (), 0, 1, time);
                     //funktioniert, Zeit der Aktion wird festgehalten und nicht Zeit des klickens
                     //Long date = extras.getLong ("timing");
 
@@ -170,6 +170,16 @@ public class NotificationReceiver extends BroadcastReceiver {
                     DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Powerbank genutzt: ",gettime (), 0, 1, time);
                     if (manager != null) {
                         manager.cancel (131);
+                    }
+                }
+
+                if (extras.containsKey ("Reboot")) {
+                    System.out.println ("Reboot ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Smartphone neu gestartet: ",gettime (), 0, 1, time);
+                    if (manager != null) {
+                        manager.cancel (9000);
                     }
                 }
 
@@ -381,7 +391,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     System.out.println ("Still ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Still: ", gettime (), 0, 0, time);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Haus verlassen: ", gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (4);
                     }
@@ -452,6 +462,16 @@ public class NotificationReceiver extends BroadcastReceiver {
                     DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Powerbank genutzt: ",gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (131);
+                    }
+                }
+
+                if (extras.containsKey ("Reboot")) {
+                    System.out.println ("Reboot ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Smartphone neu gestartet: ",gettime (), 0, 0, time);
+                    if (manager != null) {
+                        manager.cancel (9000);
                     }
                 }
 
@@ -661,7 +681,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     System.out.println ("Still ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Still: ", gettime (), 0, 2, time);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context), "Haus verlassen: ", gettime (), 0, 2, time);
                     if (manager != null) {
                         manager.cancel (4);
                     }
@@ -731,6 +751,16 @@ public class NotificationReceiver extends BroadcastReceiver {
                     DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Powerbank genutzt: ",gettime (), 0, 2, time);
                     if (manager != null) {
                         manager.cancel (131);
+                    }
+                }
+
+                if (extras.containsKey ("Reboot")) {
+                    System.out.println ("Reboot ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Smartphone neu gestartet: ",gettime (), 0, 2, time);
+                    if (manager != null) {
+                        manager.cancel (9000);
                     }
                 }
 

@@ -18,10 +18,30 @@
 
 
     <Button
-        android:id="@+id/button_start_data"
+        android:id="@+id/button_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Datensammlung starten"
+        android:text="Informationsübersicht"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+
+
+
+
+
+    <Button
+        android:id="@+id/button_apps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Installierte Apps"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/button_wlans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gespeicherte WLANs"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>
 
@@ -29,9 +49,18 @@
         android:id="@+id/button_database_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Zur Datenbankübersicht"
+        android:text="Datenbankübersicht"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/button_start_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Datensammlung starten"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+
 
 
 
