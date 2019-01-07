@@ -33,7 +33,7 @@ public class DatabaseEditor extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-        btnSave = (Button) findViewById(R.id.btnSave);
+        //btnSave = (Button) findViewById(R.id.btnSave);
         btnDelete = (Button) findViewById(R.id.btnDelete);
         editable_item = (EditText) findViewById(R.id.editable_item);
         //mDatabaseHelper = new DatabaseHelper(this);
@@ -50,9 +50,9 @@ public class DatabaseEditor extends AppCompatActivity {
         selectedText =  receivedIntent.getStringExtra("text");
 
         //set the text to show the current selected name
-        editable_item.setText(selectedName);
+        editable_item.setText(selectedID+ " " + selectedName);
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
+        /*btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String item = editable_item.getText().toString();
@@ -65,7 +65,7 @@ public class DatabaseEditor extends AppCompatActivity {
                     toastMessage("You must enter a name");
                 }
             }
-        });
+        });*/
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +75,7 @@ public class DatabaseEditor extends AppCompatActivity {
 
                 System.out.println ("++++++++++++++ Deleting entry with UID: "+ selectedID+" and name " +selectedName);
                 DatabaseInitializer.removeFromAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()), selectedID);
-                toastMessage("removed from database");
+                toastMessage("Aus Datenbank entfernt");
 
 
                 //DatabaseListDisplay.databaseTextList = DatabaseListDisplay.initDatabaseView ();

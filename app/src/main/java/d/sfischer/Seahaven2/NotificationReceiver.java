@@ -6,9 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import static d.sfischer.Seahaven2.DataCollectionActivity.acTime;
 import static d.sfischer.Seahaven2.DataCollectionActivity.callTiming;
 import static d.sfischer.Seahaven2.DataCollectionActivity.gettime;
 import static d.sfischer.Seahaven2.DataCollectionActivity.normalAudioTiming;
+import static d.sfischer.Seahaven2.DataCollectionActivity.ringTiming;
+import static d.sfischer.Seahaven2.DataCollectionActivity.usbTime;
 import static d.sfischer.Seahaven2.DataCollectionActivity.voipTiming;
 //import android.widget.Toast;
 
@@ -121,16 +124,12 @@ public class NotificationReceiver extends BroadcastReceiver {
                         manager.cancel (6);
                     }
                 }
-                if (extras.containsKey ("WTF")) {
-                    System.out.println ("WTF ");
-                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
-                    if (manager != null) {
-                        manager.cancel (7);
-                    }
-                }
+
                 if (extras.containsKey ("Battery Ok")) {
                     System.out.println ("Battery Ok ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery Ok: ",gettime (), 0, 1, time);
                     if (manager != null) {
                         manager.cancel (10);
                     }
@@ -138,6 +137,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Battery Low")) {
                     System.out.println ("Battery Low ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery Low: ",gettime (), 0, 1, time);
                     if (manager != null) {
                         manager.cancel (12);
                     }
@@ -145,6 +146,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Plugged AC")) {
                     System.out.println ("AC ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Smartphone geladen: ",gettime (), 0, 1, acTime + " - "+ time);
                     if (manager != null) {
                         manager.cancel (13);
                     }
@@ -152,10 +155,22 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Plugged USB")) {
                     System.out.println ("USB ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"An Rechner angeschlossen: ",gettime (), 0, 1, usbTime + " - "+ time);
                     if (manager != null) {
                         manager.cancel (14);
                     }
 
+                }
+
+                if (extras.containsKey ("Powerbank")) {
+                    System.out.println ("Powerbank ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Powerbank genutzt: ",gettime (), 0, 1, time);
+                    if (manager != null) {
+                        manager.cancel (131);
+                    }
                 }
 
                 if (extras.containsKey ("Wecker"))
@@ -169,12 +184,24 @@ public class NotificationReceiver extends BroadcastReceiver {
                     }
                 }
 
+
+                if (extras.containsKey ("Sleep"))
+                {
+                    System.out.println ("Sleep ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Schlafdauer ermittelt",gettime (), 0, 1, time);
+                    if (manager != null) {
+                        manager.cancel (7777);
+                    }
+                }
+
                 if (extras.containsKey ("Telefonat"))
                 {
                     System.out.println ("Telefonat ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv ",gettime (), 0, 1,"von: "+ callTiming + "bis: "+ normalAudioTiming);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv ",gettime (), 0, 1,": "+ callTiming + " - "+ normalAudioTiming);
                     if (manager != null) {
                         manager.cancel (98);
                     }
@@ -185,11 +212,36 @@ public class NotificationReceiver extends BroadcastReceiver {
                     System.out.println ("VOIP-Telefonat ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv ",gettime (), 0, 1, "von: "+ voipTiming + "bis: "+ normalAudioTiming);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv ",gettime (), 0, 1, ": "+ voipTiming + " - "+ normalAudioTiming);
                     if (manager != null) {
                         manager.cancel (97);
                     }
                 }
+
+
+                if (extras.containsKey ("Ringing"))
+                {
+                    System.out.println ("Ringing ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Ringing ",gettime (), 0, 1, ": "+ ringTiming + " - "+ normalAudioTiming);
+                    if (manager != null) {
+                        manager.cancel (96);
+                    }
+                }
+
+                if (extras.containsKey ("Provider"))
+                {
+                    System.out.println ("Provider ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Handy-Provider erkannt ",gettime (), 0, 1, " ");
+                    if (manager != null) {
+                        manager.cancel (700);
+                    }
+                }
+
+
                 if (extras.containsKey ("Kinder"))
                 {
                     System.out.println ("Kinder ");
@@ -235,9 +287,38 @@ public class NotificationReceiver extends BroadcastReceiver {
                     System.out.println ("Location ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"grob Standort ermittelt",gettime (), 0, 1, time);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"In Stadt aufgehalten",gettime (), 0, 1, time);
                     if (manager != null) {
                         manager.cancel (501);
+                    }
+                }
+
+                if (extras.containsKey ("Known Location")) {
+                    System.out.println ("Known Location ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Bekannter Ort erkannt",gettime (), 0, 1, time);
+                    if (manager != null) {
+                        manager.cancel (200);
+                    }
+                }
+
+                if (extras.containsKey ("Home Location")) {
+                    System.out.println ("Home Location ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Zu Hause erkannt",gettime (), 0, 1, time);
+                    if (manager != null) {
+                        manager.cancel (201);
+                    }
+                }
+                if (extras.containsKey ("Home City")) {
+                    System.out.println ("Home City ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Heimatstadt erkannt",gettime (), 0, 1, time);
+                    if (manager != null) {
+                        manager.cancel (2001);
                     }
                 }
 
@@ -324,16 +405,12 @@ public class NotificationReceiver extends BroadcastReceiver {
                         manager.cancel (6);
                     }
                 }
-                if (extras.containsKey ("WTF")) {
-                    System.out.println ("WTF ");
-                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
-                    if (manager != null) {
-                        manager.cancel (7);
-                    }
-                }
+
                 if (extras.containsKey ("Battery Ok")) {
                     System.out.println ("Battery Ok ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery Ok: ",gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (10);
                     }
@@ -341,6 +418,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Battery Low")) {
                     System.out.println ("Battery Low ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery Low: ",gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (12);
                     }
@@ -348,6 +427,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Plugged AC")) {
                     System.out.println ("AC ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Smartphone geladen: ",gettime (), 0, 0, acTime + " - "+ time);
                     if (manager != null) {
                         manager.cancel (13);
                     }
@@ -355,8 +436,22 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Plugged USB")) {
                     System.out.println ("USB ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"An Rechner angeschlossen: ",gettime (), 0, 0, usbTime + " - "+ time);
                     if (manager != null) {
                         manager.cancel (14);
+                    }
+                }
+
+
+
+                if (extras.containsKey ("Powerbank")) {
+                    System.out.println ("Powerbank ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Powerbank genutzt: ",gettime (), 0, 0, time);
+                    if (manager != null) {
+                        manager.cancel (131);
                     }
                 }
 
@@ -371,12 +466,23 @@ public class NotificationReceiver extends BroadcastReceiver {
                     }
                 }
 
+                if (extras.containsKey ("Sleep"))
+                {
+                    System.out.println ("Sleep ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Schlafdauer ermittelt",gettime (), 0, 0, time);
+                    if (manager != null) {
+                        manager.cancel (7777);
+                    }
+                }
+
                 if (extras.containsKey ("Telefonat"))
                 {
                     System.out.println ("Telefonat ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv ",gettime (), 0, 0,"von: "+ callTiming + "bis: "+ normalAudioTiming);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv ",gettime (), 0, 0,": "+ callTiming + " - "+ normalAudioTiming);
                     if (manager != null) {
                         manager.cancel (98);
                     }
@@ -387,11 +493,34 @@ public class NotificationReceiver extends BroadcastReceiver {
                     System.out.println ("VOIP-Telefonat ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv ",gettime (), 0, 0, "von: "+ voipTiming + "bis: "+ normalAudioTiming);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv ",gettime (), 0, 0, ": "+ voipTiming + " - "+ normalAudioTiming);
                     if (manager != null) {
                         manager.cancel (97);
                     }
                 }
+
+                if (extras.containsKey ("Ringing"))
+                {
+                    System.out.println ("Ringing ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Ringing ",gettime (), 0, 0, ": "+ ringTiming + " - "+ normalAudioTiming);
+                    if (manager != null) {
+                        manager.cancel (96);
+                    }
+                }
+
+                if (extras.containsKey ("Provider"))
+                {
+                    System.out.println ("Provider ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Handy-Provider erkannt ",gettime (), 0, 0, " ");
+                    if (manager != null) {
+                        manager.cancel (700);
+                    }
+                }
+
                 if (extras.containsKey ("Kinder"))
                 {
                     System.out.println ("Kinder ");
@@ -441,6 +570,36 @@ public class NotificationReceiver extends BroadcastReceiver {
                     DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"grob Standort ermittelt",gettime (), 0, 0, time);
                     if (manager != null) {
                         manager.cancel (501);
+                    }
+                }
+
+                if (extras.containsKey ("Known Location")) {
+                    System.out.println ("Known Location ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Bekannten Ort erkannt",gettime (), 0, 0, time);
+                    if (manager != null) {
+                        manager.cancel (200);
+                    }
+                }
+
+                if (extras.containsKey ("Home Location")) {
+                    System.out.println ("Home Location ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Zu Hause erkannt",gettime (), 0, 0, time);
+                    if (manager != null) {
+                        manager.cancel (201);
+                    }
+                }
+
+                if (extras.containsKey ("Home City")) {
+                    System.out.println ("Home City ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Heimatstadt erkannt",gettime (), 0, 0, time);
+                    if (manager != null) {
+                        manager.cancel (2001);
                     }
                 }
 
@@ -526,16 +685,12 @@ public class NotificationReceiver extends BroadcastReceiver {
                         manager.cancel (6);
                     }
                 }
-                if (extras.containsKey ("WTF")) {
-                    System.out.println ("WTF ");
-                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
-                    if (manager != null) {
-                        manager.cancel (7);
-                    }
-                }
+
                 if (extras.containsKey ("Battery Ok")) {
                     System.out.println ("Battery Ok ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery Ok: ",gettime (), 0, 2, time);
                     if (manager != null) {
                         manager.cancel (10);
                     }
@@ -543,6 +698,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Battery Low")) {
                     System.out.println ("Battery Low ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery Low: ",gettime (), 0, 2, time);
                     if (manager != null) {
                         manager.cancel (12);
                     }
@@ -550,6 +707,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Plugged AC")) {
                     System.out.println ("AC ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Smartphone geladen: ",gettime (), 0, 2, acTime + " - "+ time);
                     if (manager != null) {
                         manager.cancel (13);
                     }
@@ -557,8 +716,21 @@ public class NotificationReceiver extends BroadcastReceiver {
                 if (extras.containsKey ("Plugged USB")) {
                     System.out.println ("USB ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"An Rechner angeschlossen: ",gettime (), 0, 2, usbTime + " - "+ time);
                     if (manager != null) {
                         manager.cancel (14);
+                    }
+                }
+
+
+                if (extras.containsKey ("Powerbank")) {
+                    System.out.println ("Powerbank ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Powerbank genutzt: ",gettime (), 0, 2, time);
+                    if (manager != null) {
+                        manager.cancel (131);
                     }
                 }
 
@@ -573,12 +745,23 @@ public class NotificationReceiver extends BroadcastReceiver {
                     }
                 }
 
+                if (extras.containsKey ("Sleep"))
+                {
+                    System.out.println ("Sleep ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Schlafdauer ermittelt",gettime (), 0, 2, time);
+                    if (manager != null) {
+                        manager.cancel (7777);
+                    }
+                }
+
                 if (extras.containsKey ("Telefonat"))
                 {
                     System.out.println ("Telefonat ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv ",gettime (), 0, 2,"von: "+ callTiming + "bis: "+ normalAudioTiming);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Telefonat aktiv ",gettime (), 0, 2,": "+ callTiming + " - "+ normalAudioTiming);
                     if (manager != null) {
                         manager.cancel (98);
                     }
@@ -589,11 +772,34 @@ public class NotificationReceiver extends BroadcastReceiver {
                     System.out.println ("VOIP-Telefonat ");
                     NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
                     String time = extras.getString ("timing");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv ",gettime (), 0, 2, "von: "+ voipTiming + "bis: "+ normalAudioTiming);
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"VOIP-Telefonat aktiv ",gettime (), 0, 2, ": "+ voipTiming + " - "+ normalAudioTiming);
                     if (manager != null) {
                         manager.cancel (97);
                     }
                 }
+
+                if (extras.containsKey ("Ringing"))
+                {
+                    System.out.println ("Ringing ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Ringing ",gettime (), 0, 2, ": "+ ringTiming + " - "+ normalAudioTiming);
+                    if (manager != null) {
+                        manager.cancel (96);
+                    }
+                }
+
+                if (extras.containsKey ("Provider"))
+                {
+                    System.out.println ("Provider ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Handy-Provider erkannt ",gettime (), 0, 2, " ");
+                    if (manager != null) {
+                        manager.cancel (700);
+                    }
+                }
+
                 if (extras.containsKey ("Kinder"))
                 {
                     System.out.println ("Kinder ");
@@ -645,7 +851,35 @@ public class NotificationReceiver extends BroadcastReceiver {
                     }
                 }
 
+                if (extras.containsKey ("Known Location")) {
+                    System.out.println ("Known Location ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Bekannten Ort aufgesucht",gettime (), 0, 2, time);
+                    if (manager != null) {
+                        manager.cancel (200);
+                    }
+                }
 
+                if (extras.containsKey ("Home Location")) {
+                    System.out.println ("Home Location ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Zu Hause aufgehalten",gettime (), 0, 2, time);
+                    if (manager != null) {
+                        manager.cancel (201);
+                    }
+                }
+
+                if (extras.containsKey ("Home City")) {
+                    System.out.println ("Home City ");
+                    NotificationManager manager = (NotificationManager) context.getSystemService (Context.NOTIFICATION_SERVICE);
+                    String time = extras.getString ("timing");
+                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Heimatstadt erkannt",gettime (), 0, 2, time);
+                    if (manager != null) {
+                        manager.cancel (2001);
+                    }
+                }
 
             }
 

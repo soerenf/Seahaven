@@ -69,7 +69,16 @@ public class WebUtils {
                 {
                     for(ResponseParser.Results results : RespList) {
                         System.out.println("!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?: "+ results.getCity ());
-                        Hedwig.deliverNotification ("Standort: "+ results.getCity (), 500, DataCollectionActivity.getAppContext (), "wigle.net");
+                        if(!(DataCollectionActivity.homeWlan.equals (DataCollectionActivity.connectedToSSID)  || DataCollectionActivity.homeBssid.equals (DataCollectionActivity.bssid) ))
+                        {
+                            Hedwig.deliverNotification ("Standort: "+ results.getCity (), 500, DataCollectionActivity.getAppContext (), "wigle.net");
+                            //System.out.println ("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Thread-hometoggle: " + DataCollectionActivity.homeToggle);
+                        }
+                        if(DataCollectionActivity.homeWlan.equals (DataCollectionActivity.connectedToSSID)  || DataCollectionActivity.homeBssid.equals (DataCollectionActivity.bssid))
+                        {
+                            Hedwig.deliverNotification ("zu Hause: "+ results.getCity (), 5000, DataCollectionActivity.getAppContext (), "Home Location");
+                            //System.out.println ("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Thread-hometoggle: " + DataCollectionActivity.homeToggle);
+                        }
                         break;
                     }
                 }
@@ -77,7 +86,19 @@ public class WebUtils {
                 {
                     for(ResponseParser.Results results : RespList) {
                         System.out.println("!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?: "+ results.getCity ()+" "+results.getRoad ()+" "+ results.getHousenumber ());
-                        Hedwig.deliverNotification ("Standort: "+ results.getCity ()+" "+results.getRoad ()+" "+ results.getHousenumber (), 500, DataCollectionActivity.getAppContext (), "wigle.net");
+                        if(!(DataCollectionActivity.homeWlan.equals (DataCollectionActivity.connectedToSSID)  || DataCollectionActivity.homeBssid.equals (DataCollectionActivity.bssid)))
+                        {
+                            Hedwig.deliverNotification ("Standort: " + results.getCity () + " " + results.getRoad () + " " + results.getHousenumber (), 500, DataCollectionActivity.getAppContext (), "wigle.net");
+                            //System.out.println ("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Thread-hometoggle: " + DataCollectionActivity.homeToggle);
+                        }
+                        if(DataCollectionActivity.homeWlan.equals (DataCollectionActivity.connectedToSSID)  || DataCollectionActivity.homeBssid.equals (DataCollectionActivity.bssid)) //DataCollectionActivity.homeWlan == DataCollectionActivity.connectedToSSID || DataCollectionActivity.homeBssid == DataCollectionActivity.bssid
+                        {
+                            Hedwig.deliverNotification ("zu Hause: " + results.getCity () + " " + results.getRoad () + " " + results.getHousenumber (), 201, DataCollectionActivity.getAppContext (), "Home Location");
+                            //System.out.println ("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Thread-hometoggle: " + DataCollectionActivity.homeToggle);
+
+                        }
+
+
                         break;
                     }
                 }
