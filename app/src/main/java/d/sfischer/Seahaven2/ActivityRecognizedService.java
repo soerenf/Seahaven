@@ -20,7 +20,7 @@ import java.util.List;
 public class ActivityRecognizedService extends IntentService {
 
 
-// test 
+    int i = 5;
 
     public ActivityRecognizedService() {
         super("ActivityRecognizedService");
