@@ -393,7 +393,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         }
 
 
-
+        registerBroadcastReceiver ();
 
     }
 
@@ -401,6 +401,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     protected void onPause ( ) {
 
         super.onPause ();
+        registerBroadcastReceiver ();
 
     }
 
