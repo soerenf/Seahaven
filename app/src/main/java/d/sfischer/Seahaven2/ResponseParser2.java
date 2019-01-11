@@ -1,6 +1,5 @@
 package d.sfischer.Seahaven2;
 
-import java.util.List;
 
 public class ResponseParser2 {
 
@@ -15,6 +14,7 @@ public class ResponseParser2 {
 
     String ip;
     String city;
+    /*
     String region;
     String region_code;
     String country;
@@ -31,6 +31,7 @@ public class ResponseParser2 {
     String languages;
     String asn;
     String org;
+    */
 
 
 

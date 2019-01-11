@@ -18,8 +18,6 @@ public class WlansDisplay extends Activity implements View.OnClickListener {
 
     private static final String TAG = "InfoDisplay";
 
-    private Button ButtonSensorData;
-
     @Override
     public void onCreate ( Bundle savedInstanceState )
     {
@@ -27,16 +25,16 @@ public class WlansDisplay extends Activity implements View.OnClickListener {
 
         setContentView (R.layout.activity_wlans);
 
-        ButtonSensorData = findViewById(R.id.button_sensor_data);
+        Button buttonSensorData = findViewById (R.id.button_sensor_data);
 
-        ButtonSensorData.setOnClickListener(this);
+        buttonSensorData.setOnClickListener (this);
         List<WifiConfiguration> netConfig;
 
 
 
         StringBuilder wlanText = new StringBuilder();
 
-        wlanText.append("Hier werden alle Namen (SSIDs) gespeicherter WLANs angezeigt. \n \n \n ");
+        wlanText.append ("Hier werden alle Namen (SSIDs) gespeicherter WLANs angezeigt. \n \n \n");
 
         WifiManager myWM = (WifiManager) getApplicationContext ().getSystemService (WIFI_SERVICE);
 
@@ -55,19 +53,17 @@ public class WlansDisplay extends Activity implements View.OnClickListener {
                     String ssid = currentWifiConfiguration.SSID.replace ("\"", "");
 
                     i= i+1;
-                    wlanText.append (i+ ". "+ssid + " \n");
+                    wlanText.append (i).append (". ").append (ssid).append ("\n");
                 }
             }
         }
         else
             {
-                wlanText.append ("Keine WLANs gespeichert. \n");
+                wlanText.append ("Keine WLANs gespeichert.\n");
             }
 
 
-
-
-        wlanText.append("\n \n \n \n \n \n \n \n\n \n \n \n");
+        wlanText.append ("\n \n \n \n \n \n \n \n");
 
         TextView wlanTextView = findViewById(R.id.text_wlans);
         wlanTextView.setText(wlanText);

@@ -46,15 +46,14 @@ public class OkHttpHandler extends AsyncTask <String, Void, String>{
         ResponseParser2 responseParser2 = gson.fromJson(s, ResponseParser2.class);
 
         //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()),"OkHttpHandler",gettime (), 0, 0, s);
-        if(!(DataCollectionActivity.homeWlan.equals (DataCollectionActivity.connectedToSSID)  || DataCollectionActivity.homeBssid.equals (DataCollectionActivity.bssid)))
-        {
-            Hedwig.deliverNotification ("In Stadt: " + responseParser2.getCity (), 501, DataCollectionActivity.getAppContext (), "Location");
-        }
+
         if(DataCollectionActivity.homeWlan.equals (DataCollectionActivity.connectedToSSID)  || DataCollectionActivity.homeBssid.equals (DataCollectionActivity.bssid))
         {
             Hedwig.deliverNotification ("Heimatstadt: " + responseParser2.getCity (), 2001, DataCollectionActivity.getAppContext (), "Home City");
+        } else {
+            Hedwig.deliverNotification ("In Stadt: " + responseParser2.getCity (), 501, DataCollectionActivity.getAppContext (), "Location");
         }
-        // hier operationen auf s um das zu splitten? vllt abhängig von call?
+
     }
 
 

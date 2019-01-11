@@ -6,16 +6,16 @@ public class AppPackageNameMarshal<Appname, PackageName> {
     private String appname;
     private String packageName;
 
-    public AppPackageNameMarshal ( String appname, String packageName ) {
+    AppPackageNameMarshal ( String appname, String packageName ) {
         this.appname = appname;
         this.packageName = packageName;
     }
 
-    public String getAppname ( ) {
+    String getAppname ( ) {
         return appname;
     }
 
-    public String getPackageName ( ) {
+    String getPackageName ( ) {
         return packageName;
     }
 

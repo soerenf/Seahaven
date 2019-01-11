@@ -63,9 +63,7 @@
         android:roundIcon="@mipmap/ba_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        >
-        <activity android:name="d.sfischer.Seahaven2.MainActivity">
-        </activity>
+        android:persistent="true">
         <activity android:name="d.sfischer.Seahaven2.DataCollectionActivity" android:label="Seahaven">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -84,6 +82,7 @@
 
         <activity android:name="d.sfischer.Seahaven2.InfoDisplay">
         </activity>
+
 
         <receiver
             android:name="d.sfischer.Seahaven2.StartMyServiceAtBootReceiver"

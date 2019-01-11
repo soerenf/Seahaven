@@ -1,54 +1,44 @@
 package d.sfischer.Seahaven2;
 
-import java.util.List;
 
-public class WlanNameAndCount {
+class WlanNameAndCount {
 
 
-    public WlanNameAndCount()
-    {
+    WlanNameAndCount ( ) {
 
     }
 
 
-
-    String mSsid;
-    int mTimesConnectedOverall;
-    int mTimesConnectedAtNight;
-
+    private String mSsid;
+    private int mTimesConnectedOverall;
+    private int mTimesConnectedAtNight;
 
 
-
-    public String getSsid() {
+    String getSsid ( ) {
         return mSsid;
     }
 
-    public int getTimesConnectedOverall() {
+    int getTimesConnectedOverall ( ) {
         return mTimesConnectedOverall;
     }
 
-    public int getTimesConnectedAtNight() {
+    int getTimesConnectedAtNight ( ) {
         return mTimesConnectedAtNight;
     }
 
-    public void setSsid(String ssid) {
+    void setSsid ( String ssid ) {
 
         mSsid = ssid;
     }
 
-    public void setTimesConnectedOverall() {
+    void setTimesConnectedOverall ( ) {
         mTimesConnectedOverall = mTimesConnectedOverall+1;
 
     }
 
-    public void setTimesConnectedAtNight() {
+    void setTimesConnectedAtNight ( ) {
         mTimesConnectedAtNight = mTimesConnectedAtNight+1;
     }
-
-
-
-
-
 
 
 }

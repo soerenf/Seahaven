@@ -81,14 +81,13 @@ public class WebUtils {
                         }
                         break;
                     }
-                }
-                if( responseParser.getTotalResults () > 0 && responseParser.getTotalResults () <= 3 )
+                } else if (responseParser.getTotalResults () > 0 && responseParser.getTotalResults () <= 3)
                 {
                     for(ResponseParser.Results results : RespList) {
-                        System.out.println("!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?: "+ results.getCity ()+" "+results.getRoad ()+" "+ results.getHousenumber ());
+                        System.out.println ("!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!?!?!?!?: " + results.getCity () + " " + results.getRoad ());
                         if(!(DataCollectionActivity.homeWlan.equals (DataCollectionActivity.connectedToSSID)  || DataCollectionActivity.homeBssid.equals (DataCollectionActivity.bssid)))
                         {
-                            Hedwig.deliverNotification ("Standort: " + results.getCity () + " " + results.getRoad () + " " + results.getHousenumber (), 500, DataCollectionActivity.getAppContext (), "wigle.net");
+                            Hedwig.deliverNotification ("Standort: " + results.getCity () + " " + results.getRoad (), 500, DataCollectionActivity.getAppContext (), "wigle.net");
                             //System.out.println ("+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+ Thread-hometoggle: " + DataCollectionActivity.homeToggle);
                         }
                         if(DataCollectionActivity.homeWlan.equals (DataCollectionActivity.connectedToSSID)  || DataCollectionActivity.homeBssid.equals (DataCollectionActivity.bssid)) //DataCollectionActivity.homeWlan == DataCollectionActivity.connectedToSSID || DataCollectionActivity.homeBssid == DataCollectionActivity.bssid
@@ -101,8 +100,7 @@ public class WebUtils {
 
                         break;
                     }
-                }
-                if(responseParser.getTotalResults () >= 10 )
+                } else if (responseParser.getTotalResults () >= 10)
                     {
                     String urlIpapi= "https://ipapi.co/json/";
                     OkHttpHandler okHttpHandlerIpapi = new OkHttpHandler ();

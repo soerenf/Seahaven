@@ -25,13 +25,6 @@ public class QueryURL {
 
 
 
-        //new MakeNetworkCall().execute ("http://androidpala.com/" + "tutorial/http.php?get=1", "Get");
-        //new MakeNetworkCall().execute ("http://androidpala.com/" + "tutorial/http.php?post=1", "Post");
-
-
-
-
-
         public static InputStream ByGetMethod ( String ServerURL ){
 
             InputStream DataInputStream = null;

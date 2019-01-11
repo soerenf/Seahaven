@@ -17,26 +17,24 @@ public class AppsDisplay extends Activity implements View.OnClickListener {
 
         private static final String TAG = "InfoDisplay";
 
-        private Button ButtonSensorData;
-
-        @Override
+    @Override
         public void onCreate ( Bundle savedInstanceState )
         {
             super.onCreate (savedInstanceState);
 
             setContentView (R.layout.activity_apps);
 
-            ButtonSensorData = findViewById(R.id.button_sensor_data);
+            Button buttonSensorData = findViewById (R.id.button_sensor_data);
 
-            ButtonSensorData.setOnClickListener(this);
+            buttonSensorData.setOnClickListener (this);
 
 
 
             StringBuilder appsText = new StringBuilder();
 
-            appsText.append("Hier sind alle Paket-Namen der installierten Apps aufgeführt. \n");
-            appsText.append("Der Paket Name der App der Uni Bonn lautet zum Beispiel `de.unibonn.android`. \n");
-            appsText.append("Liste der gespeicherte Apps: \n \n \n \n ");
+            appsText.append ("Hier sind alle Paket-Namen der installierten Apps aufgeführt.\n");
+            appsText.append ("Der Paket Name der App der Uni Bonn lautet zum Beispiel `de.unibonn.android`.\n\n");
+            appsText.append ("Liste der gespeicherte Apps: \n \n \n");
 
 
 
@@ -50,11 +48,11 @@ public class AppsDisplay extends Activity implements View.OnClickListener {
                 for (ApplicationInfo applicationInfo : packages) {
 
                     i = i+ 1;
-                    appsText.append (i+ ". "+ applicationInfo.packageName + " \n");
+                    appsText.append (i).append (". ").append (applicationInfo.packageName).append (" \n");
                 }
             }
 
-            appsText.append("\n \n \n \n \n \n \n \n\n \n \n \n");
+            appsText.append ("\n \n \n \n \n \n \n \n");
 
 
 

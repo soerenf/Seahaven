@@ -14,15 +14,15 @@
     <!--
     android:inputType="textPersonName"
     -->
-    <EditText
+    <TextView
+
+        android:text="(placeholder)"
+        android:textSize="20sp"
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="78dp"
         android:id="@+id/editable_item"/>
 
     <LinearLayout
@@ -37,20 +37,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="DELETE"
+            android:text="Löschen"
             android:id="@+id/btnDelete"/>
 
-        <!--
+
          <Button
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_marginTop="10dp"
-             android:text="SAVE"
+             android:text="Abbrechen"
              android:layout_toRightOf="@+id/btnDelete"
-             android:id="@+id/btnSave"/>
-         -->
+             android:id="@+id/btnCancel" />
 
 
-     </LinearLayout>
+    </LinearLayout>
 
  </RelativeLayout>

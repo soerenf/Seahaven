@@ -3,27 +3,24 @@ package d.sfischer.Seahaven2;
 // aus https://github.com/mitchtabian/SaveReadWriteDeleteSQLite
 
 
-import android.arch.persistence.room.Database;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
+
 import android.widget.Button;
-import android.widget.EditText;
+
+import android.widget.TextView;
 import android.widget.Toast;
 
-import static d.sfischer.Seahaven2.DataCollectionActivity.gettime;
 
 public class DatabaseEditor extends AppCompatActivity {
 
     private static final String TAG = "DatabaseEditor";
 
-    private Button btnSave,btnDelete;
-    private EditText editable_item;
-
-    Happening mDatabaseHelper;
+    private TextView editable_item;
 
     private String selectedName;
     private String selectedText;
@@ -33,9 +30,9 @@ public class DatabaseEditor extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-        //btnSave = (Button) findViewById(R.id.btnSave);
-        btnDelete = (Button) findViewById(R.id.btnDelete);
-        editable_item = (EditText) findViewById(R.id.editable_item);
+        Button btnCancel = findViewById (R.id.btnCancel);
+        Button btnDelete = findViewById (R.id.btnDelete);
+        editable_item = findViewById (R.id.editable_item);
         //mDatabaseHelper = new DatabaseHelper(this);
 
         //get the intent extra from the ListDataActivity
@@ -50,22 +47,20 @@ public class DatabaseEditor extends AppCompatActivity {
         selectedText =  receivedIntent.getStringExtra("text");
 
         //set the text to show the current selected name
-        editable_item.setText(selectedID+ " " + selectedName);
-
-        /*btnSave.setOnClickListener(new View.OnClickListener() {
+        //editable_item.setText(selectedID+ " " + selectedName+ " " + selectedText);
+        editable_item.setText (selectedText);
+        btnCancel.setOnClickListener (new View.OnClickListener () {
             @Override
             public void onClick(View view) {
-                String item = editable_item.getText().toString();
-                if(!item.equals("")){
-                   // mDatabaseHelper.updateName(item,selectedID,selectedName);
-                    Intent DatabaseListDisplayIntent = new Intent(DatabaseEditor.this, DatabaseListDisplay.class);
+
+
+                Intent DatabaseListDisplayIntent = new Intent(DatabaseEditor.this, DatabaseListDisplay.class);
                     startActivity(DatabaseListDisplayIntent);
 
-                }else{
-                    toastMessage("You must enter a name");
-                }
+
             }
-        });*/
+        });
+
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +70,7 @@ public class DatabaseEditor extends AppCompatActivity {
 
                 System.out.println ("++++++++++++++ Deleting entry with UID: "+ selectedID+" and name " +selectedName);
                 DatabaseInitializer.removeFromAsync (AppDatabase.getAppDatabase (DataCollectionActivity.getAppContext ()), selectedID);
-                toastMessage("Aus Datenbank entfernt");
+                toastMessage ("Eintrag: " + selectedID + " aus Datenbank entfernt.");
 
 
                 //DatabaseListDisplay.databaseTextList = DatabaseListDisplay.initDatabaseView ();
@@ -91,10 +86,7 @@ public class DatabaseEditor extends AppCompatActivity {
 
     }
 
-    /**
-     * customizable toast
-     * @param message
-     */
+
     private void toastMessage(String message){
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
     }

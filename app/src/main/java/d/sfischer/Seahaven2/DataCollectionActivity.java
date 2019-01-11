@@ -74,10 +74,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     private float deltaY = 0;
     private float deltaZ = 0;
 
-    private float closeness = 0;
-
-    private float closenessMax = 0;
-    private float closenessMin = 9001;
 
     private float significantMotionThreshold = 0;
     private float significantDistanceThreshold = 0;
@@ -159,11 +155,11 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
     private static Context context;
 
-    public DhcpInfo oldDhcpInfo;
+
     public DhcpInfo dhcpINFO;
 
     public  List<WifiConfiguration> netConfig;
-    public  List<WifiConfiguration> netConfig2;
+
 
     public static List<String> ssidList = new ArrayList <> ();
     public List<ApplicationInfo> packagesList = new ArrayList <> ();
@@ -184,8 +180,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     public GoogleApiClient mApiClient;
       //neu?: public ActivityRecognitionClient mApiClient;
 
-    // für https
-    OkHttpClient client = new OkHttpClient();
+
 
 
     /**
@@ -204,19 +199,12 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         DataCollectionActivity.context = getApplicationContext();
         setContentView (R.layout.activity_second);
 
-        //check_after_time ("14:00:00");
-        //check_after_time ("24:00:00");
-        //check_after_time ("01:00:00");
 
-        //check_round_time ();
 
         initKidsList ();
         initBankingList ();
         initDatingList ();
 
-        //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ kidsListSize : " + kidsList.size ());
-        //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ datingListSize : " + datingList.size ());
-        //System.out.println ("+++++++++++++++++++++++++++++++++++++++++++ bankingListSize : " + bankingList.size ());
 
 
         //für actvity recog von: https://code.tutsplus.com/tutorials/how-to-recognize-user-activity-with-activity-recognition--cms-25851
@@ -230,30 +218,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         mApiClient.connect();
 
 
-        /**
-         *
-         *
-         * http://api.openweathermap.org/data/2.5/forecast?id=  {City ID}  &units=metric &APPID= {API Key}
-         * my API Key auf seite
-         * ID für Köln = 2886242
-         *
-         * geht aber auch mit:
-         *
-         * "http://api.openweathermap.org/data/2.5/forecast?zip=    {City ZIP,Country Code}    &units=metric   &APPID=   ";
-         *
-         * City ZIP,Country Code = z.B. 50674,de
-         *
-         * Link zu File mit adressen IDs http://bulk.openweathermap.org/sample/
-         *
-         *
-         **Funktioniert, aber strenge richtlinien nur einmal alle 10 minuten und aus JSON noch zu parsen die response....
-         */
 
-        //String urlWeather = "http://api.openweathermap.org/data/2.5/forecast?id=2886242&APPID=695c223bff9c8cb1baa8a600456b08c3";
-
-        //String urlWeather = "http://api.openweathermap.org/data/2.5/forecast?zip=50674,de&units=metric&APPID=695c223bff9c8cb1baa8a600456b08c3";
-        //OkHttpHandler okHttpHandlerWeather= new OkHttpHandler();
-        //okHttpHandlerWeather.execute(urlWeather);
 
 
         sensorManager = (SensorManager) getSystemService (Context.SENSOR_SERVICE);
@@ -478,7 +443,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     }
 
 
-    private void registerBroadcastReceiver() {
+    private void registerBroadcastReceiver ( ) {
 
         final IntentFilter theFilter = new IntentFilter();
 
@@ -704,7 +669,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                  */
 
 
-                //String url= "http://ip-api.com/json"; //alternativen?
+                //String url= "http://ip-api.com/json";
 
 
                 String urlIpapi= "https://ipapi.co/json/";
@@ -1217,7 +1182,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                             /***
                              *
-                             * status hinzugefügt falls ich mal hierrüber tracken will das mit anderem Netzwerk verbunden weil status die aus angibt
+                             * status hinzugefügt falls ich mal hier rüber tracken will das mit anderem Netzwerk verbunden weil status die aus angibt
                              * Status:  CURRENT network currently connected to Value: 0, DISABLED supplicant will not attempt to use this network Value: 1, ENABLED supplicant will consider this network available for association  Value: 2
                              */
 
@@ -1332,28 +1297,10 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                  * Battery
                  */
 
-                // könnte lowesten wert tracken nach dem motto "geht nie aus oder doch?"
+
                 // von: https://www.programcreek.com/java-api-examples/?class=android.os.BatteryManager&method=BATTERY_PLUGGED_AC
 
-                //BatteryManager myBM = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
 
-
-
-               /*
-                if (strAction != null && strAction.equals (Intent.ACTION_BATTERY_OKAY)) {
-                    //System.out.println ("Battery OKAY!");
-
-                    //Hedwig.deliverNotification("Battery OKAY", 10, DataCollectionActivity.this,"Battery Ok");
-                    DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery OK",gettime (), 0, 3, " ");
-                }
-
-                */
-
-                if (strAction != null && strAction.equals (Intent.ACTION_BATTERY_LOW)) {
-                    //System.out.println ("Battery LOW!");
-                    //Hedwig.deliverNotification("Battery low low low", 12, DataCollectionActivity.this,"Battery Low");
-                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"niedriger Batteriestatus",gettime (), 0, 3, " ");
-                }
 
 
 
@@ -1361,10 +1308,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                 if (strAction != null && strAction.equals (Intent.ACTION_BATTERY_CHANGED)) {
 
 
-                    //System.out.println ("Battery changed!");
-                    //DatabaseInitializer.addToAsync (AppDatabase.getAppDatabase (context),"Battery changed",gettime (), 0, 3, " ");
 
-                    //meldet sich häufig beim laden
 
 
                     int remain = intent.getIntExtra (BatteryManager.EXTRA_LEVEL, 0);
@@ -1598,11 +1542,11 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                         {
                             //System.out.println ("#+#+#+#+#+#+#+#+#+#+#+Screen on");
                             if (check_round_time ()) {
-                                System.out.println ("#++++++++++++++++++++++++++++++++ Runde Zeit");
+                                //System.out.println ("#++++++++++++++++++++++++++++++++ Runde Zeit");
 
                                 //if(check_after_time ("02:00:00"))   {}    //nach 02 Uhr sollten alle ins Bett oder keinen Wecker mehr
 
-                                    if((!check_after_time ("10:00:00")))  // bis 10 Uhr meisten Menschen wach !after10 heißt 01:00-9:59
+                                //if(!check_after_time ("10:00:00"))  // bis 10 Uhr meisten Menschen wach !after10 heißt 01:00-9:59
                                     {
                                         Hedwig.deliverNotification("Wecker war gestellt auf "+ getJustTime (), 99, context,"Wecker");
                                     }
@@ -1636,7 +1580,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                             oldScreenDateString = screenDateString;
 
-
+                            sleepCount = 0;
                         }
                         }
 
@@ -1685,7 +1629,7 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
 
     // für activity recog von: https://code.tutsplus.com/tutorials/how-to-recognize-user-activity-with-activity-recognition--cms-25851
-    // mit 3000 ok funktioniert, mit 0 scheint gut zu funktionieren...testen ist immer gut ^^
+
     @Override
     public void onConnected(@Nullable Bundle bundle)
     {
@@ -1709,10 +1653,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
-
-
-    // bis hier
 
 
     // von: https://stackoverflow.com/questions/9570237/android-check-internet-connection
@@ -1924,8 +1864,6 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
     }
 
     public void initDatingList () {
-        //AppPackageNameMarshal kicker = new AppPackageNameMarshal <> ("kicker", "com.netbiscuits.kicker");
-        //datingList.add (kicker);
 
         AppPackageNameMarshal Parship = new AppPackageNameMarshal <> ("Parship – Partnersuche", "com.parship.android");
         datingList.add (Parship);
@@ -2046,8 +1984,8 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         AppPackageNameMarshal DeutscheChatDatingKostenlos = new AppPackageNameMarshal <> ("Deutsche Chat & Dating Kostenlos", "com.oneschat.germany");
         datingList.add (DeutscheChatDatingKostenlos);
 
-        //da fehlen welche die nicht unter der dating-kategorie laufen.....lifestyle, social
-        // gute auflistung unter https://www.smartmobil.de/magazin/dating-apps-im-test stand 19.12.2018
+        //Es fehlen welche die nicht unter der dating-kategorie laufen.....lifestyle, social
+        // Daher Auflistung unter https://www.smartmobil.de/magazin/dating-apps-im-test genutzt stand 19.12.2018
 
         AppPackageNameMarshal Grindr = new AppPackageNameMarshal <> ("Grindr - Gay chat", "com.grindrapp.android");
         datingList.add (Grindr);
@@ -2099,6 +2037,116 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
         // weil paypal DOH!
         AppPackageNameMarshal PayPal = new AppPackageNameMarshal <> ("PayPal Mobile Cash: Send and Request Money Fast", "com.paypal.android.p2pmobile");
         bankingList.add (PayPal);
+
+
+        // Top 30 aus finanzen 11.01.2019
+
+        //  1. com.starfinanz.smob.android.sfinanzstatus Sparkasse Ihre mobile Filiale              - schon drin
+        //  2. com.paypal.android.p2pmobile PayPal Mobile Cash: Send and Request Money Fast         - schon drin
+        //  3. com.starfinanz.mobile.android.pushtan S-pushTAN
+        AppPackageNameMarshal SpushTAN = new AppPackageNameMarshal <> ("S-pushTAN", "com.starfinanz.mobile.android.pushtan");
+        bankingList.add (SpushTAN);
+
+        //  4. de.deutschepost.postident POSTIDENT
+        AppPackageNameMarshal POSTIDENT = new AppPackageNameMarshal <> ("POSTIDENT", "de.deutschepost.postident");
+        bankingList.add (POSTIDENT);
+
+
+        //  5. de.check24.check24 CHECK24 Vergleiche
+
+        AppPackageNameMarshal CHECK24 = new AppPackageNameMarshal <> ("CHECK24 Vergleiche", "de.check24.check24");
+        bankingList.add (CHECK24);
+
+
+        //  6. com.myklarnamobile Klarna - Smoooth Payments
+        AppPackageNameMarshal Klarna = new AppPackageNameMarshal <> ("Klarna - Smoooth Payments", "com.myklarnamobile Klarna");
+        bankingList.add (Klarna);
+
+        //  7. com.google.android.apps.walletnfcrel Google Pay
+        AppPackageNameMarshal GooglePay = new AppPackageNameMarshal <> ("Google Pay", "com.google.android.apps.walletnfcrel");
+        bankingList.add (GooglePay);
+
+
+        //  8. de.fiducia.smartphone.android.banking.vr VR-Banking                                  - schon drin
+
+
+        //  9. com.db.pbc.phototan.db Deutsche Bank photoTAN                                        - schon drin
+
+        // 10. com.commerzbank.photoTAN Commerzbank photoTAN                                         - schon drin
+
+        // 11. com.starfinanz.mobile.android.dkbpushtan DKB-TAN2go
+        AppPackageNameMarshal DKBTAN2go = new AppPackageNameMarshal <> ("DKB-TAN2go", "com.starfinanz.mobile.android.dkbpushtan");
+        bankingList.add (DKBTAN2go);
+
+
+        // 12. de.commerzbanking.mobil Commerzbank Banking App                                      - schon drin
+
+        // 13. de.taxfix Taxfix – Simple German tax declaration via app
+
+        AppPackageNameMarshal Taxfix = new AppPackageNameMarshal <> ("Taxfix – Simple German tax declaration via app", "de.taxfix");
+        bankingList.add (Taxfix);
+
+        // 14. com.s_payment.mobiles_bezahlen Mobiles Bezahlen - Ihre digitale Geldbörse
+
+        AppPackageNameMarshal MobilesBezahlen = new AppPackageNameMarshal <> ("Mobiles Bezahlen - Ihre digitale Geldbörse", "com.s_payment.mobiles_bezahlen");
+        bankingList.add (MobilesBezahlen);
+
+        // 15. de.fiducia.smartphone.android.securego.vr VR-SecureGo
+        AppPackageNameMarshal VRSecureGo = new AppPackageNameMarshal <> ("VR-SecureGo", "de.fiducia.smartphone.android.securego.vr");
+        bankingList.add (VRSecureGo);
+
+        // 16. de.ingdiba.bankingapp ING Banking to go                                      - schon drin
+
+        // 17. de.webidsolutions.webident WebIDent
+        AppPackageNameMarshal WebIDent = new AppPackageNameMarshal <> ("WebIDent", "de.webidsolutions.webident");
+        bankingList.add (WebIDent);
+
+
+        // 18. com.westernunion.moneytransferr3app.eu Western Union International: Send Money & Transfer
+
+        AppPackageNameMarshal westernunion = new AppPackageNameMarshal <> ("Western Union International: Send Money & Transfer", "com.westernunion.moneytransferr3app.eu");
+        bankingList.add (westernunion);
+
+        // 19. com.entersekt.authapp.sparkasse S-ID-Check
+        AppPackageNameMarshal SIDCheck = new AppPackageNameMarshal <> ("S-ID-Check", "com.entersekt.authapp.sparkasse");
+        bankingList.add (SIDCheck);
+
+        // 20. de.comdirect.app comdirect
+        AppPackageNameMarshal comdirect = new AppPackageNameMarshal <> ("comdirect", "de.comdirect.app");
+        bankingList.add (comdirect);
+
+        // 21. de.dwins.financeguru Finanzguru
+        AppPackageNameMarshal Finanzguru = new AppPackageNameMarshal <> ("Finanzguru", "de.dwins.financeguru");
+        bankingList.add (Finanzguru);
+
+        // 22. com.db.pwcc.dbmobile Deutsche Bank Mobile                                       - schon drin
+
+        // 23. de.number26.android N26 – The Mobile Bank                                       - schon drin
+
+        // 24. de.dkb.portalapp DKB-Banking                                     - schon drin
+
+        // 25. de.postbank.finanzassistent Postbank Finanzassistent                                   - schon drin
+
+        // 26. com.getbux.android BUX - Mobile Trading
+        AppPackageNameMarshal BUX = new AppPackageNameMarshal <> ("BUX - Mobile Trading", "com.getbux.android");
+        bankingList.add (BUX);
+
+        // 27. com.comdirect.phototan comdirect photoTAN App
+        AppPackageNameMarshal comdirectphotoTANApp = new AppPackageNameMarshal <> ("comdirect photoTAN App", "com.comdirect.phototan");
+        bankingList.add (comdirectphotoTANApp);
+
+        // 28. com.ibm.de.ish.gesapp.pbeakk.prod PBeaKK EinreichungsApp
+        AppPackageNameMarshal PBeaKKEinreichungsApp = new AppPackageNameMarshal <> ("PBeaKK EinreichungsApp", "com.ibm.de.ish.gesapp.pbeakk.prod");
+        bankingList.add (PBeaKKEinreichungsApp);
+
+        // 29. de.consorsfinanz.onlinebanking Consors Finanz Mobile Banking
+        AppPackageNameMarshal ConsorsFinanzMobileBanking = new AppPackageNameMarshal <> ("Consors Finanz Mobile Banking", "de.consorsfinanz.onlinebanking");
+        bankingList.add (ConsorsFinanzMobileBanking);
+
+        // 30. com.realbyteapps.moneymanagerfree Money Manager Expense & Budget
+        AppPackageNameMarshal MoneyManagerExpenseBudget = new AppPackageNameMarshal <> ("Money Manager Expense & Budget", "com.realbyteapps.moneymanagerfree");
+        bankingList.add (MoneyManagerExpenseBudget);
+
 
         // nach Banking gesucht
 
