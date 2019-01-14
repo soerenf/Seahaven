@@ -844,14 +844,17 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
                                             }
                                         }
 
-                                        if(containsWLAN(wlanInitList,dummySsid).getTimesConnectedAtNight () >2)
-                                        {
-                                            //Hedwig.deliverNotification("Zu Hause (WLAN: "+ dummySsid + ")", 201, context,"Home Location");
-                                            System.out.println ("HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::3");
-                                            homeWlan = dummySsid;
+                                        if (containsWLAN (wlanInitList, dummySsid) != null) {
+                                            if (containsWLAN (wlanInitList, dummySsid).getTimesConnectedAtNight () > 2) {
+                                                //Hedwig.deliverNotification("Zu Hause (WLAN: "+ dummySsid + ")", 201, context,"Home Location");
+                                                System.out.println ("HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::HOME::3");
+                                                homeWlan = dummySsid;
 
-                                            homeToggle = 1;
+                                                homeToggle = 1;
+                                            }
+
                                         }
+
                                     }
 
 
@@ -1547,9 +1550,10 @@ public class DataCollectionActivity extends Activity implements SensorEventListe
 
                                 //if(check_after_time ("02:00:00"))   {}    //nach 02 Uhr sollten alle ins Bett oder keinen Wecker mehr
 
-                                //if(!check_after_time ("10:00:00"))  // bis 10 Uhr meisten Menschen wach !after10 heißt 01:00-9:59
+                                if (! check_after_time ("10:00:00"))  // bis 10 Uhr meisten Menschen wach !after10 heißt 01:00-9:59
                                     {
                                         Hedwig.deliverNotification("Wecker war gestellt auf "+ getJustTime (), 99, context,"Wecker");
+                                        // klappt anscheinend nur bei angeschlossener Stromquelle...auf meinen Geräten..sonst zeitlicher Versatz zu hoch?
                                     }
 
 

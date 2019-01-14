@@ -12,7 +12,8 @@ import java.util.List;
 // bzw: https://github.com/ajaysaini-sgvu/room-persistence-sample/blob/master/app/src/main/java/com/nagarro/persistence/
 
 @Dao
-public interface HappeningDao {
+public interface
+HappeningDao {
 
     @Query("SELECT * FROM Happening")
     List<Happening> getAll();
